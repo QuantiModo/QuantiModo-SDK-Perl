@@ -1,5 +1,5 @@
 #
-# Copyright 2015 Reverb Technologies, Inc.
+# Copyright 2015 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,12 +27,8 @@ use Exporter;
 use Carp qw( croak );
 use Log::Any qw($log);
 
-
-#use WWW::Swagger::Model::Category;
-#use WWW::Swagger::Model::Pet;
-
-
-use WWW::SwaggerClient::APIClient;
+use WWW::SwaggerClient::ApiClient;
+use WWW::SwaggerClient::Configuration;
 
 our @EXPORT_OK = qw(
   oauth2_accesstoken_get 
@@ -42,7 +38,7 @@ our @EXPORT_OK = qw(
 
 sub new {
     my $class   = shift;
-    my $default_api_client = WWW::SwaggerClient::APIClient->new;
+    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
         'api_client' => $default_api_client,
         @_
@@ -122,24 +118,24 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'response_type'}) {
-        $query_params->{'response_type'} = WWW::::APIClient::to_query_value($args{'response_type'});
-      } # query params
+        $query_params->{'response_type'} = $self->{api_client}->to_query_value($args{'response_type'});
+      }# query params
       if ( exists $args{'redirect_uri'}) {
-        $query_params->{'redirect_uri'} = WWW::::APIClient::to_query_value($args{'redirect_uri'});
-      } # query params
+        $query_params->{'redirect_uri'} = $self->{api_client}->to_query_value($args{'redirect_uri'});
+      }# query params
       if ( exists $args{'realm'}) {
-        $query_params->{'realm'} = WWW::::APIClient::to_query_value($args{'realm'});
-      } # query params
+        $query_params->{'realm'} = $self->{api_client}->to_query_value($args{'realm'});
+      }# query params
       if ( exists $args{'client_id'}) {
-        $query_params->{'client_id'} = WWW::::APIClient::to_query_value($args{'client_id'});
-      } # query params
+        $query_params->{'client_id'} = $self->{api_client}->to_query_value($args{'client_id'});
+      }# query params
       if ( exists $args{'scope'}) {
-        $query_params->{'scope'} = WWW::::APIClient::to_query_value($args{'scope'});
-      } # query params
+        $query_params->{'scope'} = $self->{api_client}->to_query_value($args{'scope'});
+      }# query params
       if ( exists $args{'state'}) {
-        $query_params->{'state'} = WWW::::APIClient::to_query_value($args{'state'});
+        $query_params->{'state'} = $self->{api_client}->to_query_value($args{'state'});
       }
       
       
@@ -147,14 +143,14 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       
       $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       return;
       
   }
@@ -223,24 +219,24 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'client_id'}) {
-        $query_params->{'client_id'} = WWW::::APIClient::to_query_value($args{'client_id'});
-      } # query params
+        $query_params->{'client_id'} = $self->{api_client}->to_query_value($args{'client_id'});
+      }# query params
       if ( exists $args{'realm'}) {
-        $query_params->{'realm'} = WWW::::APIClient::to_query_value($args{'realm'});
-      } # query params
+        $query_params->{'realm'} = $self->{api_client}->to_query_value($args{'realm'});
+      }# query params
       if ( exists $args{'redirect_uri'}) {
-        $query_params->{'redirect_uri'} = WWW::::APIClient::to_query_value($args{'redirect_uri'});
-      } # query params
+        $query_params->{'redirect_uri'} = $self->{api_client}->to_query_value($args{'redirect_uri'});
+      }# query params
       if ( exists $args{'response_type'}) {
-        $query_params->{'response_type'} = WWW::::APIClient::to_query_value($args{'response_type'});
-      } # query params
+        $query_params->{'response_type'} = $self->{api_client}->to_query_value($args{'response_type'});
+      }# query params
       if ( exists $args{'scope'}) {
-        $query_params->{'scope'} = WWW::::APIClient::to_query_value($args{'scope'});
-      } # query params
+        $query_params->{'scope'} = $self->{api_client}->to_query_value($args{'scope'});
+      }# query params
       if ( exists $args{'state'}) {
-        $query_params->{'state'} = WWW::::APIClient::to_query_value($args{'state'});
+        $query_params->{'state'} = $self->{api_client}->to_query_value($args{'state'});
       }
       
       
@@ -248,14 +244,14 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       
       $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       return;
       
   }

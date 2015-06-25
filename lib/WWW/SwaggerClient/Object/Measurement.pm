@@ -25,7 +25,8 @@ my $swagger_types = {
       'timestamp' => 'int',
       'value' => 'double',
       'unit' => 'string',
-      'note' => 'string'
+      'stored_value' => 'double',
+      'stored_unit' => 'string'
 };
 
 my $attribute_map = {
@@ -34,7 +35,8 @@ my $attribute_map = {
       'timestamp' => 'timestamp',
       'value' => 'value',
       'unit' => 'unit',
-      'note' => 'note'
+      'stored_value' => 'storedValue',
+      'stored_unit' => 'storedUnit'
 };
 
 # new object
@@ -47,12 +49,14 @@ sub new {
         'source' => $args{'source'}, 
         #Timestamp for the measurement event in epoch time
         'timestamp' => $args{'timestamp'}, 
-        #Measurement value
+        #Converted measurement value in requested unit
         'value' => $args{'value'}, 
-        #Unit of Measurement
+        #Unit of measurement as requested in GET request
         'unit' => $args{'unit'}, 
-        #Optional note supplied with the measurement. Can be up to 255 characters in length.
-        'note' => $args{'note'}
+        #Measurement value in the unit as orignally submitted
+        'stored_value' => $args{'storedValue'}, 
+        #Unit of measurement as originally submitted
+        'stored_unit' => $args{'storedUnit'}
     }; 
 
     return bless $self, $class; 

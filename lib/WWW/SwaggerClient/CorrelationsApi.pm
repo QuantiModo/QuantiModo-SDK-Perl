@@ -1,5 +1,5 @@
 #
-# Copyright 2015 Reverb Technologies, Inc.
+# Copyright 2015 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,12 +27,8 @@ use Exporter;
 use Carp qw( croak );
 use Log::Any qw($log);
 
-
-#use WWW::Swagger::Model::Category;
-#use WWW::Swagger::Model::Pet;
-
-
-use WWW::SwaggerClient::APIClient;
+use WWW::SwaggerClient::ApiClient;
+use WWW::SwaggerClient::Configuration;
 
 our @EXPORT_OK = qw(
   correlations_get 
@@ -49,7 +45,7 @@ our @EXPORT_OK = qw(
 
 sub new {
     my $class   = shift;
-    my $default_api_client = WWW::SwaggerClient::APIClient->new;
+    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
         'api_client' => $default_api_client,
         @_
@@ -95,12 +91,12 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'effect'}) {
-        $query_params->{'effect'} = WWW::::APIClient::to_query_value($args{'effect'});
-      } # query params
+        $query_params->{'effect'} = $self->{api_client}->to_query_value($args{'effect'});
+      }# query params
       if ( exists $args{'cause'}) {
-        $query_params->{'cause'} = WWW::::APIClient::to_query_value($args{'cause'});
+        $query_params->{'cause'} = $self->{api_client}->to_query_value($args{'cause'});
       }
       
       
@@ -108,18 +104,18 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       if (!$response) {
         return;
       }
-  		my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
-  		return $_response_object;
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
+      return $_response_object;
       
   }
   
@@ -163,33 +159,33 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'effect_or_cause'}) {
-        $query_params->{'effectOrCause'} = WWW::::APIClient::to_query_value($args{'effect_or_cause'});
+        $query_params->{'effectOrCause'} = $self->{api_client}->to_query_value($args{'effect_or_cause'});
       }
       
-       # path params
+      # path params
       if ( exists $args{'search'}) {
         my $_base_variable = "{" . "search" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'search'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'search'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       if (!$response) {
         return;
       }
-  		my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
-  		return $_response_object;
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
+      return $_response_object;
       
   }
   
@@ -232,19 +228,19 @@ sub new {
       
       
       my $_body_data;
-       # body params
+      # body params
       if ( exists $args{'body'}) {
         $_body_data = $args{'body'};
       }
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       
       $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       return;
       
   }
@@ -302,46 +298,46 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'organization_token'}) {
-        $query_params->{'organization_token'} = WWW::::APIClient::to_query_value($args{'organization_token'});
-      } # query params
+        $query_params->{'organization_token'} = $self->{api_client}->to_query_value($args{'organization_token'});
+      }# query params
       if ( exists $args{'include_public'}) {
-        $query_params->{'include_public'} = WWW::::APIClient::to_query_value($args{'include_public'});
+        $query_params->{'include_public'} = $self->{api_client}->to_query_value($args{'include_public'});
       }
       
-       # path params
+      # path params
       if ( exists $args{'organization_id'}) {
         my $_base_variable = "{" . "organizationId" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'organization_id'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'organization_id'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      } # path params
+      }# path params
       if ( exists $args{'user_id'}) {
         my $_base_variable = "{" . "userId" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'user_id'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'user_id'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      } # path params
+      }# path params
       if ( exists $args{'variable_name'}) {
         my $_base_variable = "{" . "variableName" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'variable_name'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'variable_name'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       if (!$response) {
         return;
       }
-  		my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
-  		return $_response_object;
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
+      return $_response_object;
       
   }
   
@@ -398,46 +394,46 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'organization_token'}) {
-        $query_params->{'organization_token'} = WWW::::APIClient::to_query_value($args{'organization_token'});
-      } # query params
+        $query_params->{'organization_token'} = $self->{api_client}->to_query_value($args{'organization_token'});
+      }# query params
       if ( exists $args{'include_public'}) {
-        $query_params->{'include_public'} = WWW::::APIClient::to_query_value($args{'include_public'});
+        $query_params->{'include_public'} = $self->{api_client}->to_query_value($args{'include_public'});
       }
       
-       # path params
+      # path params
       if ( exists $args{'organization_id'}) {
         my $_base_variable = "{" . "organizationId" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'organization_id'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'organization_id'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      } # path params
+      }# path params
       if ( exists $args{'user_id'}) {
         my $_base_variable = "{" . "userId" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'user_id'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'user_id'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      } # path params
+      }# path params
       if ( exists $args{'variable_name'}) {
         my $_base_variable = "{" . "variableName" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'variable_name'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'variable_name'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       if (!$response) {
         return;
       }
-  		my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
-  		return $_response_object;
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
+      return $_response_object;
       
   }
   
@@ -477,28 +473,28 @@ sub new {
 
       
       
-       # path params
+      # path params
       if ( exists $args{'variable_name'}) {
         my $_base_variable = "{" . "variableName" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'variable_name'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'variable_name'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       if (!$response) {
         return;
       }
-  		my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
-  		return $_response_object;
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
+      return $_response_object;
       
   }
   
@@ -538,28 +534,28 @@ sub new {
 
       
       
-       # path params
+      # path params
       if ( exists $args{'variable_name'}) {
         my $_base_variable = "{" . "variableName" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'variable_name'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'variable_name'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       if (!$response) {
         return;
       }
-  		my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
-  		return $_response_object;
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
+      return $_response_object;
       
   }
   
@@ -599,28 +595,28 @@ sub new {
 
       
       
-       # path params
+      # path params
       if ( exists $args{'variable_name'}) {
         my $_base_variable = "{" . "variableName" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'variable_name'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'variable_name'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       if (!$response) {
         return;
       }
-  		my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
-  		return $_response_object;
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
+      return $_response_object;
       
   }
   
@@ -660,28 +656,28 @@ sub new {
 
       
       
-       # path params
+      # path params
       if ( exists $args{'variable_name'}) {
         my $_base_variable = "{" . "variableName" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'variable_name'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'variable_name'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       if (!$response) {
         return;
       }
-  		my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
-  		return $_response_object;
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
+      return $_response_object;
       
   }
   

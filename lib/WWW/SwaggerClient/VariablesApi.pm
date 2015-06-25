@@ -1,5 +1,5 @@
 #
-# Copyright 2015 Reverb Technologies, Inc.
+# Copyright 2015 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,12 +27,8 @@ use Exporter;
 use Carp qw( croak );
 use Log::Any qw($log);
 
-
-#use WWW::Swagger::Model::Category;
-#use WWW::Swagger::Model::Pet;
-
-
-use WWW::SwaggerClient::APIClient;
+use WWW::SwaggerClient::ApiClient;
+use WWW::SwaggerClient::Configuration;
 
 our @EXPORT_OK = qw(
   correlations_post 
@@ -49,7 +45,7 @@ our @EXPORT_OK = qw(
 
 sub new {
     my $class   = shift;
-    my $default_api_client = WWW::SwaggerClient::APIClient->new;
+    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
         'api_client' => $default_api_client,
         @_
@@ -117,18 +113,18 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'cause'}) {
-        $query_params->{'cause'} = WWW::::APIClient::to_query_value($args{'cause'});
-      } # query params
+        $query_params->{'cause'} = $self->{api_client}->to_query_value($args{'cause'});
+      }# query params
       if ( exists $args{'effect'}) {
-        $query_params->{'effect'} = WWW::::APIClient::to_query_value($args{'effect'});
-      } # query params
+        $query_params->{'effect'} = $self->{api_client}->to_query_value($args{'effect'});
+      }# query params
       if ( exists $args{'correlationcoefficient'}) {
-        $query_params->{'correlationcoefficient'} = WWW::::APIClient::to_query_value($args{'correlationcoefficient'});
-      } # query params
+        $query_params->{'correlationcoefficient'} = $self->{api_client}->to_query_value($args{'correlationcoefficient'});
+      }# query params
       if ( exists $args{'vote'}) {
-        $query_params->{'vote'} = WWW::::APIClient::to_query_value($args{'vote'});
+        $query_params->{'vote'} = $self->{api_client}->to_query_value($args{'vote'});
       }
       
       
@@ -136,14 +132,14 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       
       $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       return;
       
   }
@@ -153,7 +149,7 @@ sub new {
     #
     # Get public variables
     # 
-    # @return void
+    # @return Variable
     #
     sub public_variables_get {
       my ($self, %args) = @_;
@@ -183,15 +179,18 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
+      my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
-      return;
+                                             $header_params, $_body_data, $auth_settings);
+      if (!$response) {
+        return;
+      }
+      my $_response_object = $self->{api_client}->deserialize('Variable', $response);
+      return $_response_object;
       
   }
   
@@ -202,7 +201,7 @@ sub new {
     # 
     # @param string $search Search query can be some fraction of a variable name. (required)
     # @param string $effect_or_cause Allows us to specify which column in the `correlations` table will be searched. Choices are effect or cause. (required)
-    # @return void
+    # @return Variable
     #
     sub public_variables_search_search_get {
       my ($self, %args) = @_;
@@ -230,30 +229,33 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'effect_or_cause'}) {
-        $query_params->{'effectOrCause'} = WWW::::APIClient::to_query_value($args{'effect_or_cause'});
+        $query_params->{'effectOrCause'} = $self->{api_client}->to_query_value($args{'effect_or_cause'});
       }
       
-       # path params
+      # path params
       if ( exists $args{'search'}) {
         my $_base_variable = "{" . "search" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'search'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'search'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
+      my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
-      return;
+                                             $header_params, $_body_data, $auth_settings);
+      if (!$response) {
+        return;
+      }
+      my $_response_object = $self->{api_client}->deserialize('Variable', $response);
+      return $_response_object;
       
   }
   
@@ -262,7 +264,7 @@ sub new {
     #
     # Get variable categories
     # 
-    # @return void
+    # @return ARRAY[VariableCategory]
     #
     sub variable_categories_get {
       my ($self, %args) = @_;
@@ -292,15 +294,18 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
+      my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
-      return;
+                                             $header_params, $_body_data, $auth_settings);
+      if (!$response) {
+        return;
+      }
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[VariableCategory]', $response);
+      return $_response_object;
       
   }
   
@@ -309,7 +314,7 @@ sub new {
     #
     # Update User Settings for a Variable
     # 
-    # @param ARRAY[VariableUserSettings] $sharing_data Variable user settings data (required)
+    # @param VariableUserSettings $sharing_data Variable user settings data (required)
     # @return void
     #
     sub variable_user_settings_post {
@@ -343,19 +348,19 @@ sub new {
       
       
       my $_body_data;
-       # body params
+      # body params
       if ( exists $args{'sharing_data'}) {
         $_body_data = $args{'sharing_data'};
       }
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       
       $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       return;
       
   }
@@ -367,7 +372,7 @@ sub new {
     # 
     # @param int $user_id User id (required)
     # @param string $category_name Category name (required)
-    # @return void
+    # @return Variable
     #
     sub variables_get {
       my ($self, %args) = @_;
@@ -390,12 +395,12 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'user_id'}) {
-        $query_params->{'userId'} = WWW::::APIClient::to_query_value($args{'user_id'});
-      } # query params
+        $query_params->{'userId'} = $self->{api_client}->to_query_value($args{'user_id'});
+      }# query params
       if ( exists $args{'category_name'}) {
-        $query_params->{'categoryName'} = WWW::::APIClient::to_query_value($args{'category_name'});
+        $query_params->{'categoryName'} = $self->{api_client}->to_query_value($args{'category_name'});
       }
       
       
@@ -403,15 +408,18 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['basicAuth', 'oauth2'];
 
       # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
+      my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
-      return;
+                                             $header_params, $_body_data, $auth_settings);
+      if (!$response) {
+        return;
+      }
+      my $_response_object = $self->{api_client}->deserialize('Variable', $response);
+      return $_response_object;
       
   }
   
@@ -420,7 +428,7 @@ sub new {
     #
     # Set variable
     # 
-    # @param ARRAY[Variable] $variable_name Original name for the variable. (required)
+    # @param VariablesNew $variable_name Original name for the variable. (required)
     # @return void
     #
     sub variables_post {
@@ -454,19 +462,19 @@ sub new {
       
       
       my $_body_data;
-       # body params
+      # body params
       if ( exists $args{'variable_name'}) {
         $_body_data = $args{'variable_name'};
       }
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       
       $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       return;
       
   }
@@ -481,7 +489,7 @@ sub new {
     # @param string $source Specify a data source name to only return variables from a specific data source. (required)
     # @param int $limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. (required)
     # @param int $offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10. (required)
-    # @return void
+    # @return ARRAY[Variable]
     #
     sub variables_search_search_get {
       my ($self, %args) = @_;
@@ -509,39 +517,42 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'category_name'}) {
-        $query_params->{'categoryName'} = WWW::::APIClient::to_query_value($args{'category_name'});
-      } # query params
+        $query_params->{'categoryName'} = $self->{api_client}->to_query_value($args{'category_name'});
+      }# query params
       if ( exists $args{'source'}) {
-        $query_params->{'source'} = WWW::::APIClient::to_query_value($args{'source'});
-      } # query params
+        $query_params->{'source'} = $self->{api_client}->to_query_value($args{'source'});
+      }# query params
       if ( exists $args{'limit'}) {
-        $query_params->{'limit'} = WWW::::APIClient::to_query_value($args{'limit'});
-      } # query params
+        $query_params->{'limit'} = $self->{api_client}->to_query_value($args{'limit'});
+      }# query params
       if ( exists $args{'offset'}) {
-        $query_params->{'offset'} = WWW::::APIClient::to_query_value($args{'offset'});
+        $query_params->{'offset'} = $self->{api_client}->to_query_value($args{'offset'});
       }
       
-       # path params
+      # path params
       if ( exists $args{'search'}) {
         my $_base_variable = "{" . "search" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'search'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'search'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
+      my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
-      return;
+                                             $header_params, $_body_data, $auth_settings);
+      if (!$response) {
+        return;
+      }
+      my $_response_object = $self->{api_client}->deserialize('ARRAY[Variable]', $response);
+      return $_response_object;
       
   }
   
@@ -551,7 +562,7 @@ sub new {
     # Get info about a variable
     # 
     # @param string $variable_name Variable name (required)
-    # @return void
+    # @return Variable
     #
     sub variables_variable_name_get {
       my ($self, %args) = @_;
@@ -581,25 +592,28 @@ sub new {
 
       
       
-       # path params
+      # path params
       if ( exists $args{'variable_name'}) {
         my $_base_variable = "{" . "variableName" . "}";
-        my $_base_value = WWW::SwaggerClient::APIClient::to_path_value($args{'variable_name'});
+        my $_base_value = $self->{api_client}->to_path_value($args{'variable_name'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
       }
       
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
+      my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
-      return;
+                                             $header_params, $_body_data, $auth_settings);
+      if (!$response) {
+        return;
+      }
+      my $_response_object = $self->{api_client}->deserialize('Variable', $response);
+      return $_response_object;
       
   }
   

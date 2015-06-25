@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::ConversionStep;
+package WWW::SwaggerClient::Object::ValueObject;
 
 require 5.6.0;
 use strict;
@@ -20,23 +20,27 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-      'operation' => 'string',
-      'value' => 'double'
+      'timestamp' => 'int',
+      'value' => 'double',
+      'note' => 'string'
 };
 
 my $attribute_map = {
-      'operation' => 'operation',
-      'value' => 'value'
+      'timestamp' => 'timestamp',
+      'value' => 'value',
+      'note' => 'note'
 };
 
 # new object
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
-        #ADD or MULTIPLY
-        'operation' => $args{'operation'}, 
-        #This specifies the order of conversion steps starting with 0
-        'value' => $args{'value'}
+        #Timestamp for the measurement event in epoch time (unixtime)
+        'timestamp' => $args{'timestamp'}, 
+        #Measurement value
+        'value' => $args{'value'}, 
+        #Optional note to include with the measurement
+        'note' => $args{'note'}
     }; 
 
     return bless $self, $class; 

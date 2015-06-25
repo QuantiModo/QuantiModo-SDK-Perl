@@ -1,5 +1,5 @@
 #
-# Copyright 2015 Reverb Technologies, Inc.
+# Copyright 2015 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,12 +27,8 @@ use Exporter;
 use Carp qw( croak );
 use Log::Any qw($log);
 
-
-#use WWW::Swagger::Model::Category;
-#use WWW::Swagger::Model::Pet;
-
-
-use WWW::SwaggerClient::APIClient;
+use WWW::SwaggerClient::ApiClient;
+use WWW::SwaggerClient::Configuration;
 
 our @EXPORT_OK = qw(
   measurement_sources_get 
@@ -45,7 +41,7 @@ our @EXPORT_OK = qw(
 
 sub new {
     my $class   = shift;
-    my $default_api_client = WWW::SwaggerClient::APIClient->new;
+    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
         'api_client' => $default_api_client,
         @_
@@ -66,7 +62,7 @@ sub new {
     #
     # Get measurement sources
     # 
-    # @return void
+    # @return MeasurementSource
     #
     sub measurement_sources_get {
       my ($self, %args) = @_;
@@ -96,15 +92,18 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
+      my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
-      return;
+                                             $header_params, $_body_data, $auth_settings);
+      if (!$response) {
+        return;
+      }
+      my $_response_object = $self->{api_client}->deserialize('MeasurementSource', $response);
+      return $_response_object;
       
   }
   
@@ -113,7 +112,7 @@ sub new {
     #
     # Add a data source
     # 
-    # @param ARRAY[MeasurementSource] $name An array of names of data sources you want to add. (required)
+    # @param MeasurementSource $name An array of names of data sources you want to add. (required)
     # @return void
     #
     sub measurement_sources_post {
@@ -147,19 +146,19 @@ sub new {
       
       
       my $_body_data;
-       # body params
+      # body params
       if ( exists $args{'name'}) {
         $_body_data = $args{'name'};
       }
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       
       $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       return;
       
   }
@@ -175,7 +174,7 @@ sub new {
     # @param string $end_time The upper limit of measurements returned (Epoch) (required)
     # @param int $grouping_width The time (in seconds) over which measurements are grouped together (required)
     # @param string $grouping_timezone The time (in seconds) over which measurements are grouped together (required)
-    # @return void
+    # @return Measurement
     #
     sub measurements_get {
       my ($self, %args) = @_;
@@ -203,24 +202,24 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'variable_name'}) {
-        $query_params->{'variableName'} = WWW::::APIClient::to_query_value($args{'variable_name'});
-      } # query params
+        $query_params->{'variableName'} = $self->{api_client}->to_query_value($args{'variable_name'});
+      }# query params
       if ( exists $args{'unit'}) {
-        $query_params->{'unit'} = WWW::::APIClient::to_query_value($args{'unit'});
-      } # query params
+        $query_params->{'unit'} = $self->{api_client}->to_query_value($args{'unit'});
+      }# query params
       if ( exists $args{'start_time'}) {
-        $query_params->{'startTime'} = WWW::::APIClient::to_query_value($args{'start_time'});
-      } # query params
+        $query_params->{'startTime'} = $self->{api_client}->to_query_value($args{'start_time'});
+      }# query params
       if ( exists $args{'end_time'}) {
-        $query_params->{'endTime'} = WWW::::APIClient::to_query_value($args{'end_time'});
-      } # query params
+        $query_params->{'endTime'} = $self->{api_client}->to_query_value($args{'end_time'});
+      }# query params
       if ( exists $args{'grouping_width'}) {
-        $query_params->{'groupingWidth'} = WWW::::APIClient::to_query_value($args{'grouping_width'});
-      } # query params
+        $query_params->{'groupingWidth'} = $self->{api_client}->to_query_value($args{'grouping_width'});
+      }# query params
       if ( exists $args{'grouping_timezone'}) {
-        $query_params->{'groupingTimezone'} = WWW::::APIClient::to_query_value($args{'grouping_timezone'});
+        $query_params->{'groupingTimezone'} = $self->{api_client}->to_query_value($args{'grouping_timezone'});
       }
       
       
@@ -228,24 +227,27 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
+      my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
-      return;
+                                             $header_params, $_body_data, $auth_settings);
+      if (!$response) {
+        return;
+      }
+      my $_response_object = $self->{api_client}->deserialize('Measurement', $response);
+      return $_response_object;
       
   }
   
     #
     # measurements_v2_post
     #
-    # Post a new set of measurements to the database
+    # Post a new set or update existing measurements to the database
     # 
-    # @param ARRAY[Measurement] $measurements An array of measurements you want to insert. (required)
+    # @param MeasurementSet $measurements An array of measurements you want to insert. (required)
     # @return void
     #
     sub measurements_v2_post {
@@ -279,19 +281,19 @@ sub new {
       
       
       my $_body_data;
-       # body params
+      # body params
       if ( exists $args{'measurements'}) {
         $_body_data = $args{'measurements'};
       }
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
       
       $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
+                                             $header_params, $_body_data, $auth_settings);
       return;
       
   }
@@ -303,7 +305,7 @@ sub new {
     # 
     # @param string $sources Enter source name to limit to specific source (varchar) (required)
     # @param int $user If not specified, uses currently logged in user (bigint) (required)
-    # @return void
+    # @return MeasurementRange
     #
     sub measurements_range_get {
       my ($self, %args) = @_;
@@ -326,12 +328,12 @@ sub new {
       }
       $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-       # query params
+      # query params
       if ( exists $args{'sources'}) {
-        $query_params->{'sources'} = WWW::::APIClient::to_query_value($args{'sources'});
-      } # query params
+        $query_params->{'sources'} = $self->{api_client}->to_query_value($args{'sources'});
+      }# query params
       if ( exists $args{'user'}) {
-        $query_params->{'user'} = WWW::::APIClient::to_query_value($args{'user'});
+        $query_params->{'user'} = $self->{api_client}->to_query_value($args{'user'});
       }
       
       
@@ -339,15 +341,18 @@ sub new {
       my $_body_data;
       
 
-      # for HTTP post (form)
-      #$_body_data = $_body ? undef : $form_params;
+      # authentication setting, if any
+      my $auth_settings = ['oauth2'];
 
       # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
+      my $response = $self->{api_client}->call_api($_resource_path, $_method,
                                              $query_params, $form_params,
-                                             $header_params, $_body_data);
-      return;
+                                             $header_params, $_body_data, $auth_settings);
+      if (!$response) {
+        return;
+      }
+      my $_response_object = $self->{api_client}->deserialize('MeasurementRange', $response);
+      return $_response_object;
       
   }
   
