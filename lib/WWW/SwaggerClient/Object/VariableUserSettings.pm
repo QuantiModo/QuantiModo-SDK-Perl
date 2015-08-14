@@ -20,29 +20,29 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-      'user' => 'int',
-      'variable' => 'string',
-      'duration_of_action' => 'int',
-      'filling_value' => 'int',
-      'join_with' => 'string',
-      'maximum_value' => 'double',
-      'minimum_value' => 'double',
-      'name' => 'string',
-      'onset_delay' => 'int',
-      'unit' => 'string'
+    'user' => 'int',
+    'variable' => 'string',
+    'duration_of_action' => 'int',
+    'filling_value' => 'int',
+    'join_with' => 'string',
+    'maximum_value' => 'double',
+    'minimum_value' => 'double',
+    'name' => 'string',
+    'onset_delay' => 'int',
+    'unit' => 'string'
 };
 
 my $attribute_map = {
-      'user' => 'user',
-      'variable' => 'variable',
-      'duration_of_action' => 'durationOfAction',
-      'filling_value' => 'fillingValue',
-      'join_with' => 'joinWith',
-      'maximum_value' => 'maximumValue',
-      'minimum_value' => 'minimumValue',
-      'name' => 'name',
-      'onset_delay' => 'onsetDelay',
-      'unit' => 'unit'
+    'user' => 'user',
+    'variable' => 'variable',
+    'duration_of_action' => 'durationOfAction',
+    'filling_value' => 'fillingValue',
+    'join_with' => 'joinWith',
+    'maximum_value' => 'maximumValue',
+    'minimum_value' => 'minimumValue',
+    'name' => 'name',
+    'onset_delay' => 'onsetDelay',
+    'unit' => 'unit'
 };
 
 # new object
@@ -76,12 +76,12 @@ sub new {
 
 # get swagger type of the attribute
 sub get_swagger_types {
-  return $swagger_types;
+    return $swagger_types;
 }
 
 # get attribute mappping
 sub get_attribute_map {
-  return $attribute_map;
+    return $attribute_map;
 }
 
 1;

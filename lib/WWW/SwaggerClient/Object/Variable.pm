@@ -20,33 +20,75 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-      'name' => 'string',
-      'original_name' => 'string',
-      'category' => 'string',
-      'unit' => 'string',
-      'sources' => 'string',
-      'minimum_value' => 'double',
-      'maximum_value' => 'double',
-      'combination_operation' => 'string',
-      'filling_value' => 'double'
+    'id' => 'int',
+    'name' => 'string',
+    'original_name' => 'string',
+    'category' => 'string',
+    'unit' => 'string',
+    'sources' => 'string',
+    'minimum_value' => 'double',
+    'maximum_value' => 'double',
+    'combination_operation' => 'string',
+    'filling_value' => 'double',
+    'join_with' => 'string',
+    'joined_variables' => 'ARRAY[Variable]',
+    'parent' => 'int',
+    'sub_variables' => 'ARRAY[Variable]',
+    'onset_delay' => 'int',
+    'duration_of_action' => 'int',
+    'earliest_measurement_time' => 'int',
+    'latest_measurement_time' => 'int',
+    'updated' => 'int',
+    'cause_only' => 'int',
+    'number_of_correlations' => 'int',
+    'outcome' => 'int',
+    'measurements_at_last_analysis' => 'int',
+    'number_of_measurements' => 'int',
+    'last_unit' => 'int',
+    'last_value' => 'int',
+    'most_common_value' => 'int',
+    'most_common_unit' => 'int',
+    'last_source' => 'int'
 };
 
 my $attribute_map = {
-      'name' => 'name',
-      'original_name' => 'originalName',
-      'category' => 'category',
-      'unit' => 'unit',
-      'sources' => 'sources',
-      'minimum_value' => 'minimumValue',
-      'maximum_value' => 'maximumValue',
-      'combination_operation' => 'combinationOperation',
-      'filling_value' => 'fillingValue'
+    'id' => 'id',
+    'name' => 'name',
+    'original_name' => 'originalName',
+    'category' => 'category',
+    'unit' => 'unit',
+    'sources' => 'sources',
+    'minimum_value' => 'minimumValue',
+    'maximum_value' => 'maximumValue',
+    'combination_operation' => 'combinationOperation',
+    'filling_value' => 'fillingValue',
+    'join_with' => 'joinWith',
+    'joined_variables' => 'joinedVariables',
+    'parent' => 'parent',
+    'sub_variables' => 'subVariables',
+    'onset_delay' => 'onsetDelay',
+    'duration_of_action' => 'durationOfAction',
+    'earliest_measurement_time' => 'earliestMeasurementTime',
+    'latest_measurement_time' => 'latestMeasurementTime',
+    'updated' => 'updated',
+    'cause_only' => 'causeOnly',
+    'number_of_correlations' => 'numberOfCorrelations',
+    'outcome' => 'outcome',
+    'measurements_at_last_analysis' => 'measurementsAtLastAnalysis',
+    'number_of_measurements' => 'numberOfMeasurements',
+    'last_unit' => 'lastUnit',
+    'last_value' => 'lastValue',
+    'most_common_value' => 'mostCommonValue',
+    'most_common_unit' => 'mostCommonUnit',
+    'last_source' => 'lastSource'
 };
 
 # new object
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
+        #Variable ID
+        'id' => $args{'id'}, 
         #User-defined variable display name.
         'name' => $args{'name'}, 
         #Name used when the variable was originally created in the `variables` table.
@@ -64,7 +106,45 @@ sub new {
         #How to aggregate measurements over time.
         'combination_operation' => $args{'combinationOperation'}, 
         #Value for replacing null measurements
-        'filling_value' => $args{'fillingValue'}
+        'filling_value' => $args{'fillingValue'}, 
+        #The Variable this Variable should be joined with. If the variable is joined with some other variable then it is not shown to user in the list of variables.
+        'join_with' => $args{'joinWith'}, 
+        #Array of Variables that are joined with this Variable
+        'joined_variables' => $args{'joinedVariables'}, 
+        #Id of the parent variable if this variable has any parent
+        'parent' => $args{'parent'}, 
+        #Array of Variables that are sub variables to this Variable
+        'sub_variables' => $args{'subVariables'}, 
+        #How long it takes for a measurement in this variable to take effect
+        'onset_delay' => $args{'onsetDelay'}, 
+        #How long the effect of a measurement in this variable lasts
+        'duration_of_action' => $args{'durationOfAction'}, 
+        #Earliest measurement time
+        'earliest_measurement_time' => $args{'earliestMeasurementTime'}, 
+        #Latest measurement time
+        'latest_measurement_time' => $args{'latestMeasurementTime'}, 
+        #When this variable or its settings were last updated
+        'updated' => $args{'updated'}, 
+        #A value of 1 indicates that this variable is generally a cause in a causal relationship.  An example of a causeOnly variable would be a variable such as Cloud Cover which would generally not be influenced by the behaviour of the user.
+        'cause_only' => $args{'causeOnly'}, 
+        #Number of correlations
+        'number_of_correlations' => $args{'numberOfCorrelations'}, 
+        #Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables.
+        'outcome' => $args{'outcome'}, 
+        #The number of measurements that a given user had for this variable the last time a correlation calculation was performed. Generally correlation values are only updated once the current number of measurements for a variable is more than 10% greater than the measurementsAtLastAnalysis.  This avoids a computationally-demanding recalculation when there's not enough new data to make a significant difference in the correlation.
+        'measurements_at_last_analysis' => $args{'measurementsAtLastAnalysis'}, 
+        #Number of measurements
+        'number_of_measurements' => $args{'numberOfMeasurements'}, 
+        #Last unit
+        'last_unit' => $args{'lastUnit'}, 
+        #Last value
+        'last_value' => $args{'lastValue'}, 
+        #Most common value
+        'most_common_value' => $args{'mostCommonValue'}, 
+        #Most common unit
+        'most_common_unit' => $args{'mostCommonUnit'}, 
+        #Last source
+        'last_source' => $args{'lastSource'}
     }; 
 
     return bless $self, $class; 
@@ -72,12 +152,12 @@ sub new {
 
 # get swagger type of the attribute
 sub get_swagger_types {
-  return $swagger_types;
+    return $swagger_types;
 }
 
 # get attribute mappping
 sub get_attribute_map {
-  return $attribute_map;
+    return $attribute_map;
 }
 
 1;

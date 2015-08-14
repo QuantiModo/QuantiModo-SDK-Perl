@@ -30,12 +30,6 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
-our @EXPORT_OK = qw(
-  v1_connect/js_get 
-  v1_connect_mobile_get 
-  
-);
-
 sub new {
     my $class   = shift;
     my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
@@ -53,119 +47,111 @@ sub new {
 
 }
 
+#
+# v1_connect/js_get
+#
+# Get embeddable connect javascript
+# 
+# @param string $t User token (optional)
+# @return void
+#
+sub v1_connect/js_get {
+    my ($self, %args) = @_;
+
     
-    #
-    # v1_connect/js_get
-    #
-    # Get embeddable connect javascript
-    # 
-    # @param string $t User token (required)
-    # @return void
-    #
-    sub v1_connect/js_get {
-      my ($self, %args) = @_;
 
-      
-      # verify the required parameter 't' is set
-      unless (exists $args{'t'}) {
-        croak("Missing the required parameter 't' when calling v1_connect/js_get");
-      }
-      
+    # parse inputs
+    my $_resource_path = '/v1/connect.js';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # parse inputs
-      my $_resource_path = '/v1/connect.js';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
-
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/x-javascript');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/x-javascript');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'t'}) {
+    # query params
+    if ( exists $args{'t'}) {
         $query_params->{'t'} = $self->{api_client}->to_query_value($args{'t'});
-      }
-      
-      
-      
-      my $_body_data;
-      
+    }
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
-    #
-    # v1_connect_mobile_get
-    #
-    # Mobile connect page
-    # 
-    # @param string $t User token (required)
-    # @return void
-    #
-    sub v1_connect_mobile_get {
-      my ($self, %args) = @_;
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
+# v1_connect_mobile_get
+#
+# Mobile connect page
+# 
+# @param string $t User token (required)
+# @return void
+#
+sub v1_connect_mobile_get {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 't' is set
-      unless (exists $args{'t'}) {
-        croak("Missing the required parameter 't' when calling v1_connect_mobile_get");
-      }
-      
+    
+    # verify the required parameter 't' is set
+    unless (exists $args{'t'}) {
+      croak("Missing the required parameter 't' when calling v1_connect_mobile_get");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/v1/connect/mobile';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/v1/connect/mobile';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('text/html');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('text/html');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'t'}) {
+    # query params
+    if ( exists $args{'t'}) {
         $query_params->{'t'} = $self->{api_client}->to_query_value($args{'t'});
-      }
-      
-      
-      
-      my $_body_data;
-      
+    }
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = [];
+    # authentication setting, if any
+    my $auth_settings = [];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
 
 
 1;

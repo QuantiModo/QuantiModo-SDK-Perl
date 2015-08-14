@@ -20,15 +20,15 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-      'timestamp' => 'int',
-      'value' => 'double',
-      'note' => 'string'
+    'timestamp' => 'int',
+    'value' => 'double',
+    'note' => 'string'
 };
 
 my $attribute_map = {
-      'timestamp' => 'timestamp',
-      'value' => 'value',
-      'note' => 'note'
+    'timestamp' => 'timestamp',
+    'value' => 'value',
+    'note' => 'note'
 };
 
 # new object
@@ -48,12 +48,12 @@ sub new {
 
 # get swagger type of the attribute
 sub get_swagger_types {
-  return $swagger_types;
+    return $swagger_types;
 }
 
 # get attribute mappping
 sub get_attribute_map {
-  return $attribute_map;
+    return $attribute_map;
 }
 
 1;

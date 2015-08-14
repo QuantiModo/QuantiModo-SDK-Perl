@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::PostCorrelation;
+package WWW::SwaggerClient::Object::CommonResponse;
 
 require 5.6.0;
 use strict;
@@ -20,31 +20,27 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-    'cause' => 'string',
-    'effect' => 'string',
-    'correlation' => 'double',
-    'vote' => 'int'
+    'status' => 'int',
+    'message' => 'string',
+    'success' => 'boolean'
 };
 
 my $attribute_map = {
-    'cause' => 'cause',
-    'effect' => 'effect',
-    'correlation' => 'correlation',
-    'vote' => 'vote'
+    'status' => 'status',
+    'message' => 'message',
+    'success' => 'success'
 };
 
 # new object
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
-        #Cause variable name
-        'cause' => $args{'cause'}, 
-        #Effect variable name
-        'effect' => $args{'effect'}, 
-        #Correlation value
-        'correlation' => $args{'correlation'}, 
-        #Vote: 0 or 1
-        'vote' => $args{'vote'}
+        #Status code
+        'status' => $args{'status'}, 
+        #Message
+        'message' => $args{'message'}, 
+        #
+        'success' => $args{'success'}
     }; 
 
     return bless $self, $class; 

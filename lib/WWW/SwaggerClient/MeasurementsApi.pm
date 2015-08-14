@@ -30,15 +30,6 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
-our @EXPORT_OK = qw(
-  measurement_sources_get 
-  measurement_sources_post 
-  measurements_get 
-  measurements_v2_post 
-  measurements_range_get 
-  
-);
-
 sub new {
     my $class   = shift;
     my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
@@ -56,306 +47,312 @@ sub new {
 
 }
 
+#
+# measurement_sources_get
+#
+# Get measurement sources
+# 
+# @return MeasurementSource
+#
+sub measurement_sources_get {
+    my ($self, %args) = @_;
+
     
-    #
-    # measurement_sources_get
-    #
-    # Get measurement sources
-    # 
-    # @return MeasurementSource
-    #
-    sub measurement_sources_get {
-      my ($self, %args) = @_;
 
-      
+    # parse inputs
+    my $_resource_path = '/measurementSources';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # parse inputs
-      my $_resource_path = '/measurementSources';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
-
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      
-      
-      
-      
-      my $_body_data;
-      
+    
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('MeasurementSource', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # measurement_sources_post
-    #
-    # Add a data source
-    # 
-    # @param MeasurementSource $name An array of names of data sources you want to add. (required)
-    # @return void
-    #
-    sub measurement_sources_post {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('MeasurementSource', $response);
+    return $_response_object;
+    
+}
+#
+# measurement_sources_post
+#
+# Add a data source
+# 
+# @param MeasurementSource $name An array of names of data sources you want to add. (required)
+# @return void
+#
+sub measurement_sources_post {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'name' is set
-      unless (exists $args{'name'}) {
-        croak("Missing the required parameter 'name' when calling measurement_sources_post");
-      }
-      
+    
+    # verify the required parameter 'name' is set
+    unless (exists $args{'name'}) {
+      croak("Missing the required parameter 'name' when calling measurement_sources_post");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/measurementSources';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/measurementSources';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'POST';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'POST';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      
-      
-      
-      
-      my $_body_data;
-      # body params
-      if ( exists $args{'name'}) {
+    
+    
+    
+    
+    my $_body_data;
+    # body params
+    if ( exists $args{'name'}) {
         $_body_data = $args{'name'};
-      }
+    }
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
-    #
-    # measurements_get
-    #
-    # Get measurements for this user
-    # 
-    # @param string $variable_name Name of the variable you want measurements for (required)
-    # @param string $unit The unit your want the measurements in (required)
-    # @param string $start_time The lower limit of measurements returned (Epoch) (required)
-    # @param string $end_time The upper limit of measurements returned (Epoch) (required)
-    # @param int $grouping_width The time (in seconds) over which measurements are grouped together (required)
-    # @param string $grouping_timezone The time (in seconds) over which measurements are grouped together (required)
-    # @return Measurement
-    #
-    sub measurements_get {
-      my ($self, %args) = @_;
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
+# measurements_get
+#
+# Get measurements for this user
+# 
+# @param string $variable_name Name of the variable you want measurements for (required)
+# @param string $unit The unit your want the measurements in (optional)
+# @param string $start_time The lower limit of measurements returned (Epoch) (optional)
+# @param string $end_time The upper limit of measurements returned (Epoch) (optional)
+# @param int $grouping_width The time (in seconds) over which measurements are grouped together (optional)
+# @param string $grouping_timezone The time (in seconds) over which measurements are grouped together (optional)
+# @param int $limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. (optional)
+# @param int $offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10. (optional)
+# @param int $sort Sort by given field. If the field is prefixed with `-, it will sort in descending order. (optional)
+# @return Measurement
+#
+sub measurements_get {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'variable_name' is set
-      unless (exists $args{'variable_name'}) {
-        croak("Missing the required parameter 'variable_name' when calling measurements_get");
-      }
-      
+    
+    # verify the required parameter 'variable_name' is set
+    unless (exists $args{'variable_name'}) {
+      croak("Missing the required parameter 'variable_name' when calling measurements_get");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/measurements';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/measurements';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'variable_name'}) {
+    # query params
+    if ( exists $args{'variable_name'}) {
         $query_params->{'variableName'} = $self->{api_client}->to_query_value($args{'variable_name'});
-      }# query params
-      if ( exists $args{'unit'}) {
+    }# query params
+    if ( exists $args{'unit'}) {
         $query_params->{'unit'} = $self->{api_client}->to_query_value($args{'unit'});
-      }# query params
-      if ( exists $args{'start_time'}) {
+    }# query params
+    if ( exists $args{'start_time'}) {
         $query_params->{'startTime'} = $self->{api_client}->to_query_value($args{'start_time'});
-      }# query params
-      if ( exists $args{'end_time'}) {
+    }# query params
+    if ( exists $args{'end_time'}) {
         $query_params->{'endTime'} = $self->{api_client}->to_query_value($args{'end_time'});
-      }# query params
-      if ( exists $args{'grouping_width'}) {
+    }# query params
+    if ( exists $args{'grouping_width'}) {
         $query_params->{'groupingWidth'} = $self->{api_client}->to_query_value($args{'grouping_width'});
-      }# query params
-      if ( exists $args{'grouping_timezone'}) {
+    }# query params
+    if ( exists $args{'grouping_timezone'}) {
         $query_params->{'groupingTimezone'} = $self->{api_client}->to_query_value($args{'grouping_timezone'});
-      }
-      
-      
-      
-      my $_body_data;
-      
+    }# query params
+    if ( exists $args{'limit'}) {
+        $query_params->{'limit'} = $self->{api_client}->to_query_value($args{'limit'});
+    }# query params
+    if ( exists $args{'offset'}) {
+        $query_params->{'offset'} = $self->{api_client}->to_query_value($args{'offset'});
+    }# query params
+    if ( exists $args{'sort'}) {
+        $query_params->{'sort'} = $self->{api_client}->to_query_value($args{'sort'});
+    }
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('Measurement', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # measurements_v2_post
-    #
-    # Post a new set or update existing measurements to the database
-    # 
-    # @param MeasurementSet $measurements An array of measurements you want to insert. (required)
-    # @return void
-    #
-    sub measurements_v2_post {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('Measurement', $response);
+    return $_response_object;
+    
+}
+#
+# measurements_v2_post
+#
+# Post a new set or update existing measurements to the database
+# 
+# @param MeasurementSet $measurements An array of measurements you want to insert. (required)
+# @return void
+#
+sub measurements_v2_post {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'measurements' is set
-      unless (exists $args{'measurements'}) {
-        croak("Missing the required parameter 'measurements' when calling measurements_v2_post");
-      }
-      
+    
+    # verify the required parameter 'measurements' is set
+    unless (exists $args{'measurements'}) {
+      croak("Missing the required parameter 'measurements' when calling measurements_v2_post");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/measurements/v2';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/measurements/v2';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'POST';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'POST';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      
-      
-      
-      
-      my $_body_data;
-      # body params
-      if ( exists $args{'measurements'}) {
+    
+    
+    
+    
+    my $_body_data;
+    # body params
+    if ( exists $args{'measurements'}) {
         $_body_data = $args{'measurements'};
-      }
+    }
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
-    #
-    # measurements_range_get
-    #
-    # Get measurements range for this user
-    # 
-    # @param string $sources Enter source name to limit to specific source (varchar) (required)
-    # @param int $user If not specified, uses currently logged in user (bigint) (required)
-    # @return MeasurementRange
-    #
-    sub measurements_range_get {
-      my ($self, %args) = @_;
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
+# measurements_range_get
+#
+# Get measurements range for this user
+# 
+# @param string $sources Enter source name to limit to specific source (varchar) (optional)
+# @param int $user If not specified, uses currently logged in user (bigint) (optional)
+# @return MeasurementRange
+#
+sub measurements_range_get {
+    my ($self, %args) = @_;
 
-      
+    
 
-      # parse inputs
-      my $_resource_path = '/measurementsRange';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/measurementsRange';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'sources'}) {
+    # query params
+    if ( exists $args{'sources'}) {
         $query_params->{'sources'} = $self->{api_client}->to_query_value($args{'sources'});
-      }# query params
-      if ( exists $args{'user'}) {
+    }# query params
+    if ( exists $args{'user'}) {
         $query_params->{'user'} = $self->{api_client}->to_query_value($args{'user'});
-      }
-      
-      
-      
-      my $_body_data;
-      
+    }
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('MeasurementRange', $response);
-      return $_response_object;
-      
-  }
-  
+    }
+    my $_response_object = $self->{api_client}->deserialize('MeasurementRange', $response);
+    return $_response_object;
+    
+}
 
 
 1;

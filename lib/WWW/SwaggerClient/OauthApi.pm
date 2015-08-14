@@ -30,12 +30,6 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
-our @EXPORT_OK = qw(
-  oauth2_accesstoken_get 
-  oauth2_authorize_get 
-  
-);
-
 sub new {
     my $class   = shift;
     my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
@@ -53,209 +47,193 @@ sub new {
 
 }
 
+#
+# oauth2_accesstoken_get
+#
+# Access Token
+# 
+# @param string $client_id Client id (required)
+# @param string $client_secret Client secret (required)
+# @param string $grant_type Grant Type can be &#39;authorization_code&#39; or &#39;refresh_token&#39; (required)
+# @param string $response_type Response type (optional)
+# @param string $scope Scope (optional)
+# @param string $redirect_uri Redirect uri (optional)
+# @param string $state State (optional)
+# @param string $realm Realm (optional)
+# @return void
+#
+sub oauth2_accesstoken_get {
+    my ($self, %args) = @_;
+
     
-    #
-    # oauth2_accesstoken_get
-    #
-    # Access Token
-    # 
-    # @param string $response_type Response type (required)
-    # @param string $redirect_uri Redirect uri (required)
-    # @param string $realm Realm (required)
-    # @param string $client_id Client id (required)
-    # @param string $scope Scope (required)
-    # @param string $state State (required)
-    # @return void
-    #
-    sub oauth2_accesstoken_get {
-      my ($self, %args) = @_;
+    # verify the required parameter 'client_id' is set
+    unless (exists $args{'client_id'}) {
+      croak("Missing the required parameter 'client_id' when calling oauth2_accesstoken_get");
+    }
+    
+    # verify the required parameter 'client_secret' is set
+    unless (exists $args{'client_secret'}) {
+      croak("Missing the required parameter 'client_secret' when calling oauth2_accesstoken_get");
+    }
+    
+    # verify the required parameter 'grant_type' is set
+    unless (exists $args{'grant_type'}) {
+      croak("Missing the required parameter 'grant_type' when calling oauth2_accesstoken_get");
+    }
+    
 
-      
-      # verify the required parameter 'response_type' is set
-      unless (exists $args{'response_type'}) {
-        croak("Missing the required parameter 'response_type' when calling oauth2_accesstoken_get");
-      }
-      
-      # verify the required parameter 'redirect_uri' is set
-      unless (exists $args{'redirect_uri'}) {
-        croak("Missing the required parameter 'redirect_uri' when calling oauth2_accesstoken_get");
-      }
-      
-      # verify the required parameter 'realm' is set
-      unless (exists $args{'realm'}) {
-        croak("Missing the required parameter 'realm' when calling oauth2_accesstoken_get");
-      }
-      
-      # verify the required parameter 'client_id' is set
-      unless (exists $args{'client_id'}) {
-        croak("Missing the required parameter 'client_id' when calling oauth2_accesstoken_get");
-      }
-      
-      # verify the required parameter 'scope' is set
-      unless (exists $args{'scope'}) {
-        croak("Missing the required parameter 'scope' when calling oauth2_accesstoken_get");
-      }
-      
-      # verify the required parameter 'state' is set
-      unless (exists $args{'state'}) {
-        croak("Missing the required parameter 'state' when calling oauth2_accesstoken_get");
-      }
-      
+    # parse inputs
+    my $_resource_path = '/oauth2/accesstoken';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # parse inputs
-      my $_resource_path = '/oauth2/accesstoken';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
-
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'response_type'}) {
-        $query_params->{'response_type'} = $self->{api_client}->to_query_value($args{'response_type'});
-      }# query params
-      if ( exists $args{'redirect_uri'}) {
-        $query_params->{'redirect_uri'} = $self->{api_client}->to_query_value($args{'redirect_uri'});
-      }# query params
-      if ( exists $args{'realm'}) {
-        $query_params->{'realm'} = $self->{api_client}->to_query_value($args{'realm'});
-      }# query params
-      if ( exists $args{'client_id'}) {
+    # query params
+    if ( exists $args{'client_id'}) {
         $query_params->{'client_id'} = $self->{api_client}->to_query_value($args{'client_id'});
-      }# query params
-      if ( exists $args{'scope'}) {
+    }# query params
+    if ( exists $args{'client_secret'}) {
+        $query_params->{'client_secret'} = $self->{api_client}->to_query_value($args{'client_secret'});
+    }# query params
+    if ( exists $args{'grant_type'}) {
+        $query_params->{'grant_type'} = $self->{api_client}->to_query_value($args{'grant_type'});
+    }# query params
+    if ( exists $args{'response_type'}) {
+        $query_params->{'response_type'} = $self->{api_client}->to_query_value($args{'response_type'});
+    }# query params
+    if ( exists $args{'scope'}) {
         $query_params->{'scope'} = $self->{api_client}->to_query_value($args{'scope'});
-      }# query params
-      if ( exists $args{'state'}) {
+    }# query params
+    if ( exists $args{'redirect_uri'}) {
+        $query_params->{'redirect_uri'} = $self->{api_client}->to_query_value($args{'redirect_uri'});
+    }# query params
+    if ( exists $args{'state'}) {
         $query_params->{'state'} = $self->{api_client}->to_query_value($args{'state'});
-      }
-      
-      
-      
-      my $_body_data;
-      
+    }# query params
+    if ( exists $args{'realm'}) {
+        $query_params->{'realm'} = $self->{api_client}->to_query_value($args{'realm'});
+    }
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
-    #
-    # oauth2_authorize_get
-    #
-    # Authorize
-    # 
-    # @param string $client_id This is the unique ID that QuantiModo uses to identify your application. Obtain a client id by emailing info@quantimo.do. (required)
-    # @param string $realm Name of the realm representing the users of your distributed applications and services. A \&quot;realm\&quot; attribute MAY be included to indicate the scope of protection. (required)
-    # @param string $redirect_uri The redirect URI is the URL within your client application that will receive the OAuth2 credentials. (required)
-    # @param string $response_type If the value is code, launches a Basic flow, requiring a POST to the token endpoint to obtain the tokens. If the value is token id_token or id_token token, launches an Implicit flow, requiring the use of Javascript at the redirect URI to retrieve tokens from the URI #fragment. (required)
-    # @param string $scope Scopes include basic, readmeasurements, and writemeasurements. The \&quot;basic\&quot; scope allows you to read user info (displayname, email, etc). The \&quot;readmeasurements\&quot; scope allows one to read a user&#39;s data. The \&quot;writemeasurements\&quot; scope allows you to write user data. Separate multiple scopes by a space. (required)
-    # @param string $state An opaque string that is round-tripped in the protocol; that is to say, it is returned as a URI parameter in the Basic flow, and in the URI (required)
-    # @return void
-    #
-    sub oauth2_authorize_get {
-      my ($self, %args) = @_;
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
+# oauth2_authorize_get
+#
+# Authorize
+# 
+# @param string $client_id This is the unique ID that QuantiModo uses to identify your application. Obtain a client id by emailing info@quantimo.do. (required)
+# @param string $client_secret This is the secret for your obtained clietn_id. QuantiModo uses this to validate that only your application uses the client_id. (required)
+# @param string $response_type If the value is code, launches a Basic flow, requiring a POST to the token endpoint to obtain the tokens. If the value is token id_token or id_token token, launches an Implicit flow, requiring the use of Javascript at the redirect URI to retrieve tokens from the URI #fragment. (required)
+# @param string $scope Scopes include basic, readmeasurements, and writemeasurements. The \&quot;basic\&quot; scope allows you to read user info (displayname, email, etc). The \&quot;readmeasurements\&quot; scope allows one to read a user&#39;s data. The \&quot;writemeasurements\&quot; scope allows you to write user data. Separate multiple scopes by a space. (required)
+# @param string $redirect_uri The redirect URI is the URL within your client application that will receive the OAuth2 credentials. (optional)
+# @param string $state An opaque string that is round-tripped in the protocol; that is to say, it is returned as a URI parameter in the Basic flow, and in the URI (optional)
+# @param string $realm Name of the realm representing the users of your distributed applications and services. A \&quot;realm\&quot; attribute MAY be included to indicate the scope of protection. (optional)
+# @return void
+#
+sub oauth2_authorize_get {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'client_id' is set
-      unless (exists $args{'client_id'}) {
-        croak("Missing the required parameter 'client_id' when calling oauth2_authorize_get");
-      }
-      
-      # verify the required parameter 'realm' is set
-      unless (exists $args{'realm'}) {
-        croak("Missing the required parameter 'realm' when calling oauth2_authorize_get");
-      }
-      
-      # verify the required parameter 'redirect_uri' is set
-      unless (exists $args{'redirect_uri'}) {
-        croak("Missing the required parameter 'redirect_uri' when calling oauth2_authorize_get");
-      }
-      
-      # verify the required parameter 'response_type' is set
-      unless (exists $args{'response_type'}) {
-        croak("Missing the required parameter 'response_type' when calling oauth2_authorize_get");
-      }
-      
-      # verify the required parameter 'scope' is set
-      unless (exists $args{'scope'}) {
-        croak("Missing the required parameter 'scope' when calling oauth2_authorize_get");
-      }
-      
-      # verify the required parameter 'state' is set
-      unless (exists $args{'state'}) {
-        croak("Missing the required parameter 'state' when calling oauth2_authorize_get");
-      }
-      
+    
+    # verify the required parameter 'client_id' is set
+    unless (exists $args{'client_id'}) {
+      croak("Missing the required parameter 'client_id' when calling oauth2_authorize_get");
+    }
+    
+    # verify the required parameter 'client_secret' is set
+    unless (exists $args{'client_secret'}) {
+      croak("Missing the required parameter 'client_secret' when calling oauth2_authorize_get");
+    }
+    
+    # verify the required parameter 'response_type' is set
+    unless (exists $args{'response_type'}) {
+      croak("Missing the required parameter 'response_type' when calling oauth2_authorize_get");
+    }
+    
+    # verify the required parameter 'scope' is set
+    unless (exists $args{'scope'}) {
+      croak("Missing the required parameter 'scope' when calling oauth2_authorize_get");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/oauth2/authorize';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/oauth2/authorize';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'client_id'}) {
+    # query params
+    if ( exists $args{'client_id'}) {
         $query_params->{'client_id'} = $self->{api_client}->to_query_value($args{'client_id'});
-      }# query params
-      if ( exists $args{'realm'}) {
-        $query_params->{'realm'} = $self->{api_client}->to_query_value($args{'realm'});
-      }# query params
-      if ( exists $args{'redirect_uri'}) {
-        $query_params->{'redirect_uri'} = $self->{api_client}->to_query_value($args{'redirect_uri'});
-      }# query params
-      if ( exists $args{'response_type'}) {
+    }# query params
+    if ( exists $args{'client_secret'}) {
+        $query_params->{'client_secret'} = $self->{api_client}->to_query_value($args{'client_secret'});
+    }# query params
+    if ( exists $args{'response_type'}) {
         $query_params->{'response_type'} = $self->{api_client}->to_query_value($args{'response_type'});
-      }# query params
-      if ( exists $args{'scope'}) {
+    }# query params
+    if ( exists $args{'scope'}) {
         $query_params->{'scope'} = $self->{api_client}->to_query_value($args{'scope'});
-      }# query params
-      if ( exists $args{'state'}) {
+    }# query params
+    if ( exists $args{'redirect_uri'}) {
+        $query_params->{'redirect_uri'} = $self->{api_client}->to_query_value($args{'redirect_uri'});
+    }# query params
+    if ( exists $args{'state'}) {
         $query_params->{'state'} = $self->{api_client}->to_query_value($args{'state'});
-      }
-      
-      
-      
-      my $_body_data;
-      
+    }# query params
+    if ( exists $args{'realm'}) {
+        $query_params->{'realm'} = $self->{api_client}->to_query_value($args{'realm'});
+    }
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
 
 
 1;

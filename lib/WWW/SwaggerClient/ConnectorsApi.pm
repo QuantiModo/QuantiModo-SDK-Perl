@@ -30,17 +30,6 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
-our @EXPORT_OK = qw(
-  connectors_list_get 
-  connectors_connector_connect_get 
-  connectors_connector_connect_instructions_get 
-  connectors_connector_connect_parameter_get 
-  connectors_connector_disconnect_get 
-  connectors_connector_info_get 
-  connectors_connector_update_get 
-  
-);
-
 sub new {
     my $class   = shift;
     my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
@@ -58,486 +47,478 @@ sub new {
 
 }
 
+#
+# connectors_list_get
+#
+# List of Connectors
+# 
+# @return ARRAY[Connector]
+#
+sub connectors_list_get {
+    my ($self, %args) = @_;
+
     
-    #
-    # connectors_list_get
-    #
-    # List of Connectors
-    # 
-    # @return ARRAY[Connector]
-    #
-    sub connectors_list_get {
-      my ($self, %args) = @_;
 
-      
+    # parse inputs
+    my $_resource_path = '/connectors/list';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # parse inputs
-      my $_resource_path = '/connectors/list';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
-
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      
-      
-      
-      
-      my $_body_data;
-      
+    
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('ARRAY[Connector]', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # connectors_connector_connect_get
-    #
-    # Obtain a token from 3rd party data source
-    # 
-    # @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
-    # @return void
-    #
-    sub connectors_connector_connect_get {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('ARRAY[Connector]', $response);
+    return $_response_object;
+    
+}
+#
+# connectors_connector_connect_get
+#
+# Obtain a token from 3rd party data source
+# 
+# @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
+# @return void
+#
+sub connectors_connector_connect_get {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'connector' is set
-      unless (exists $args{'connector'}) {
-        croak("Missing the required parameter 'connector' when calling connectors_connector_connect_get");
-      }
-      
+    
+    # verify the required parameter 'connector' is set
+    unless (exists $args{'connector'}) {
+      croak("Missing the required parameter 'connector' when calling connectors_connector_connect_get");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/connectors/{connector}/connect';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/connectors/{connector}/connect';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      
-      
-      # path params
-      if ( exists $args{'connector'}) {
+    
+    
+    # path params
+    if ( exists $args{'connector'}) {
         my $_base_variable = "{" . "connector" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'connector'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      
+    }
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
-    #
-    # connectors_connector_connect_instructions_get
-    #
-    # Get connection parameters
-    # 
-    # @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
-    # @param string $url URL which should be used to enable the connector (required)
-    # @param ARRAY[string] $parameters Array of Parameters for the request to enable connector (required)
-    # @param boolean $use_popup Should use popup when enabling connector (required)
-    # @return void
-    #
-    sub connectors_connector_connect_instructions_get {
-      my ($self, %args) = @_;
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
+# connectors_connector_connect_instructions_get
+#
+# Get connection parameters
+# 
+# @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
+# @param string $url URL which should be used to enable the connector (required)
+# @param ARRAY[string] $parameters Array of Parameters for the request to enable connector (required)
+# @param boolean $use_popup Should use popup when enabling connector (required)
+# @return void
+#
+sub connectors_connector_connect_instructions_get {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'connector' is set
-      unless (exists $args{'connector'}) {
-        croak("Missing the required parameter 'connector' when calling connectors_connector_connect_instructions_get");
-      }
-      
-      # verify the required parameter 'url' is set
-      unless (exists $args{'url'}) {
-        croak("Missing the required parameter 'url' when calling connectors_connector_connect_instructions_get");
-      }
-      
-      # verify the required parameter 'parameters' is set
-      unless (exists $args{'parameters'}) {
-        croak("Missing the required parameter 'parameters' when calling connectors_connector_connect_instructions_get");
-      }
-      
-      # verify the required parameter 'use_popup' is set
-      unless (exists $args{'use_popup'}) {
-        croak("Missing the required parameter 'use_popup' when calling connectors_connector_connect_instructions_get");
-      }
-      
+    
+    # verify the required parameter 'connector' is set
+    unless (exists $args{'connector'}) {
+      croak("Missing the required parameter 'connector' when calling connectors_connector_connect_instructions_get");
+    }
+    
+    # verify the required parameter 'url' is set
+    unless (exists $args{'url'}) {
+      croak("Missing the required parameter 'url' when calling connectors_connector_connect_instructions_get");
+    }
+    
+    # verify the required parameter 'parameters' is set
+    unless (exists $args{'parameters'}) {
+      croak("Missing the required parameter 'parameters' when calling connectors_connector_connect_instructions_get");
+    }
+    
+    # verify the required parameter 'use_popup' is set
+    unless (exists $args{'use_popup'}) {
+      croak("Missing the required parameter 'use_popup' when calling connectors_connector_connect_instructions_get");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/connectors/{connector}/connectInstructions';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/connectors/{connector}/connectInstructions';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'url'}) {
+    # query params
+    if ( exists $args{'url'}) {
         $query_params->{'url'} = $self->{api_client}->to_query_value($args{'url'});
-      }# query params
-      if ( exists $args{'parameters'}) {
+    }# query params
+    if ( exists $args{'parameters'}) {
         $query_params->{'parameters'} = $self->{api_client}->to_query_value($args{'parameters'});
-      }# query params
-      if ( exists $args{'use_popup'}) {
+    }# query params
+    if ( exists $args{'use_popup'}) {
         $query_params->{'usePopup'} = $self->{api_client}->to_query_value($args{'use_popup'});
-      }
-      
-      # path params
-      if ( exists $args{'connector'}) {
+    }
+    
+    # path params
+    if ( exists $args{'connector'}) {
         my $_base_variable = "{" . "connector" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'connector'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      
+    }
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
-    #
-    # connectors_connector_connect_parameter_get
-    #
-    # Get connection parameters
-    # 
-    # @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
-    # @param string $display_name Name of the parameter that is user visible in the form (required)
-    # @param string $key Name of the property that the user has to enter such as username or password Connector (used in HTTP request) TODO What&#39;s a connector key? (required)
-    # @param boolean $use_popup Should use popup when enabling connector (required)
-    # @param string $type Type of input field such as those found here http://www.w3schools.com/tags/tag_input.asp (required)
-    # @param string $placeholder Placeholder hint value for the parameter input tag (required)
-    # @param string $default_value Default parameter value (required)
-    # @return void
-    #
-    sub connectors_connector_connect_parameter_get {
-      my ($self, %args) = @_;
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
+# connectors_connector_connect_parameter_get
+#
+# Get connection parameters
+# 
+# @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
+# @param string $display_name Name of the parameter that is user visible in the form (required)
+# @param string $key Name of the property that the user has to enter such as username or password Connector (used in HTTP request) TODO What&#39;s a connector key? (required)
+# @param boolean $use_popup Should use popup when enabling connector (required)
+# @param string $type Type of input field such as those found here http://www.w3schools.com/tags/tag_input.asp (required)
+# @param string $placeholder Placeholder hint value for the parameter input tag (required)
+# @param string $default_value Default parameter value (required)
+# @return void
+#
+sub connectors_connector_connect_parameter_get {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'connector' is set
-      unless (exists $args{'connector'}) {
-        croak("Missing the required parameter 'connector' when calling connectors_connector_connect_parameter_get");
-      }
-      
-      # verify the required parameter 'display_name' is set
-      unless (exists $args{'display_name'}) {
-        croak("Missing the required parameter 'display_name' when calling connectors_connector_connect_parameter_get");
-      }
-      
-      # verify the required parameter 'key' is set
-      unless (exists $args{'key'}) {
-        croak("Missing the required parameter 'key' when calling connectors_connector_connect_parameter_get");
-      }
-      
-      # verify the required parameter 'use_popup' is set
-      unless (exists $args{'use_popup'}) {
-        croak("Missing the required parameter 'use_popup' when calling connectors_connector_connect_parameter_get");
-      }
-      
-      # verify the required parameter 'type' is set
-      unless (exists $args{'type'}) {
-        croak("Missing the required parameter 'type' when calling connectors_connector_connect_parameter_get");
-      }
-      
-      # verify the required parameter 'placeholder' is set
-      unless (exists $args{'placeholder'}) {
-        croak("Missing the required parameter 'placeholder' when calling connectors_connector_connect_parameter_get");
-      }
-      
-      # verify the required parameter 'default_value' is set
-      unless (exists $args{'default_value'}) {
-        croak("Missing the required parameter 'default_value' when calling connectors_connector_connect_parameter_get");
-      }
-      
+    
+    # verify the required parameter 'connector' is set
+    unless (exists $args{'connector'}) {
+      croak("Missing the required parameter 'connector' when calling connectors_connector_connect_parameter_get");
+    }
+    
+    # verify the required parameter 'display_name' is set
+    unless (exists $args{'display_name'}) {
+      croak("Missing the required parameter 'display_name' when calling connectors_connector_connect_parameter_get");
+    }
+    
+    # verify the required parameter 'key' is set
+    unless (exists $args{'key'}) {
+      croak("Missing the required parameter 'key' when calling connectors_connector_connect_parameter_get");
+    }
+    
+    # verify the required parameter 'use_popup' is set
+    unless (exists $args{'use_popup'}) {
+      croak("Missing the required parameter 'use_popup' when calling connectors_connector_connect_parameter_get");
+    }
+    
+    # verify the required parameter 'type' is set
+    unless (exists $args{'type'}) {
+      croak("Missing the required parameter 'type' when calling connectors_connector_connect_parameter_get");
+    }
+    
+    # verify the required parameter 'placeholder' is set
+    unless (exists $args{'placeholder'}) {
+      croak("Missing the required parameter 'placeholder' when calling connectors_connector_connect_parameter_get");
+    }
+    
+    # verify the required parameter 'default_value' is set
+    unless (exists $args{'default_value'}) {
+      croak("Missing the required parameter 'default_value' when calling connectors_connector_connect_parameter_get");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/connectors/{connector}/connectParameter';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/connectors/{connector}/connectParameter';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'display_name'}) {
+    # query params
+    if ( exists $args{'display_name'}) {
         $query_params->{'displayName'} = $self->{api_client}->to_query_value($args{'display_name'});
-      }# query params
-      if ( exists $args{'key'}) {
+    }# query params
+    if ( exists $args{'key'}) {
         $query_params->{'key'} = $self->{api_client}->to_query_value($args{'key'});
-      }# query params
-      if ( exists $args{'use_popup'}) {
+    }# query params
+    if ( exists $args{'use_popup'}) {
         $query_params->{'usePopup'} = $self->{api_client}->to_query_value($args{'use_popup'});
-      }# query params
-      if ( exists $args{'type'}) {
+    }# query params
+    if ( exists $args{'type'}) {
         $query_params->{'type'} = $self->{api_client}->to_query_value($args{'type'});
-      }# query params
-      if ( exists $args{'placeholder'}) {
+    }# query params
+    if ( exists $args{'placeholder'}) {
         $query_params->{'placeholder'} = $self->{api_client}->to_query_value($args{'placeholder'});
-      }# query params
-      if ( exists $args{'default_value'}) {
+    }# query params
+    if ( exists $args{'default_value'}) {
         $query_params->{'defaultValue'} = $self->{api_client}->to_query_value($args{'default_value'});
-      }
-      
-      # path params
-      if ( exists $args{'connector'}) {
+    }
+    
+    # path params
+    if ( exists $args{'connector'}) {
         my $_base_variable = "{" . "connector" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'connector'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      
+    }
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
-    #
-    # connectors_connector_disconnect_get
-    #
-    # Delete stored connection info
-    # 
-    # @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
-    # @return void
-    #
-    sub connectors_connector_disconnect_get {
-      my ($self, %args) = @_;
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
+# connectors_connector_disconnect_get
+#
+# Delete stored connection info
+# 
+# @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
+# @return void
+#
+sub connectors_connector_disconnect_get {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'connector' is set
-      unless (exists $args{'connector'}) {
-        croak("Missing the required parameter 'connector' when calling connectors_connector_disconnect_get");
-      }
-      
+    
+    # verify the required parameter 'connector' is set
+    unless (exists $args{'connector'}) {
+      croak("Missing the required parameter 'connector' when calling connectors_connector_disconnect_get");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/connectors/{connector}/disconnect';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/connectors/{connector}/disconnect';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      
-      
-      # path params
-      if ( exists $args{'connector'}) {
+    
+    
+    # path params
+    if ( exists $args{'connector'}) {
         my $_base_variable = "{" . "connector" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'connector'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      
+    }
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
-    #
-    # connectors_connector_info_get
-    #
-    # Get connector info for user
-    # 
-    # @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
-    # @return void
-    #
-    sub connectors_connector_info_get {
-      my ($self, %args) = @_;
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
+# connectors_connector_info_get
+#
+# Get connector info for user
+# 
+# @param string $connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint. (required)
+# @return void
+#
+sub connectors_connector_info_get {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'connector' is set
-      unless (exists $args{'connector'}) {
-        croak("Missing the required parameter 'connector' when calling connectors_connector_info_get");
-      }
-      
+    
+    # verify the required parameter 'connector' is set
+    unless (exists $args{'connector'}) {
+      croak("Missing the required parameter 'connector' when calling connectors_connector_info_get");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/connectors/{connector}/info';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/connectors/{connector}/info';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      
-      
-      # path params
-      if ( exists $args{'connector'}) {
+    
+    
+    # path params
+    if ( exists $args{'connector'}) {
         my $_base_variable = "{" . "connector" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'connector'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      
+    }
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
-    #
-    # connectors_connector_update_get
-    #
-    # Sync with data source
-    # 
-    # @param string $connector Lowercase system name of the source application or device (required)
-    # @return void
-    #
-    sub connectors_connector_update_get {
-      my ($self, %args) = @_;
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
+# connectors_connector_update_get
+#
+# Sync with data source
+# 
+# @param string $connector Lowercase system name of the source application or device (required)
+# @return void
+#
+sub connectors_connector_update_get {
+    my ($self, %args) = @_;
 
-      
-      # verify the required parameter 'connector' is set
-      unless (exists $args{'connector'}) {
-        croak("Missing the required parameter 'connector' when calling connectors_connector_update_get");
-      }
-      
+    
+    # verify the required parameter 'connector' is set
+    unless (exists $args{'connector'}) {
+      croak("Missing the required parameter 'connector' when calling connectors_connector_update_get");
+    }
+    
 
-      # parse inputs
-      my $_resource_path = '/connectors/{connector}/update';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/connectors/{connector}/update';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      
-      
-      # path params
-      if ( exists $args{'connector'}) {
+    
+    
+    # path params
+    if ( exists $args{'connector'}) {
         my $_base_variable = "{" . "connector" . "}";
         my $_base_value = $self->{api_client}->to_path_value($args{'connector'});
         $_resource_path =~ s/$_base_variable/$_base_value/g;
-      }
-      
-      my $_body_data;
-      
+    }
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      
-      $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      return;
-      
-  }
-  
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
 
 
 1;

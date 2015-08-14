@@ -20,29 +20,29 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-      'id' => 'int',
-      'name' => 'string',
-      'display_name' => 'string',
-      'image' => 'string',
-      'get_it_url' => 'string',
-      'connected' => 'string',
-      'connect_instructions' => 'string',
-      'last_update' => 'int',
-      'latest_data' => 'int',
-      'no_data_yet' => 'boolean'
+    'id' => 'int',
+    'name' => 'string',
+    'display_name' => 'string',
+    'image' => 'string',
+    'get_it_url' => 'string',
+    'connected' => 'string',
+    'connect_instructions' => 'string',
+    'last_update' => 'int',
+    'latest_data' => 'int',
+    'no_data_yet' => 'boolean'
 };
 
 my $attribute_map = {
-      'id' => 'id',
-      'name' => 'name',
-      'display_name' => 'displayName',
-      'image' => 'image',
-      'get_it_url' => 'getItUrl',
-      'connected' => 'connected',
-      'connect_instructions' => 'connectInstructions',
-      'last_update' => 'lastUpdate',
-      'latest_data' => 'latestData',
-      'no_data_yet' => 'noDataYet'
+    'id' => 'id',
+    'name' => 'name',
+    'display_name' => 'displayName',
+    'image' => 'image',
+    'get_it_url' => 'getItUrl',
+    'connected' => 'connected',
+    'connect_instructions' => 'connectInstructions',
+    'last_update' => 'lastUpdate',
+    'latest_data' => 'latestData',
+    'no_data_yet' => 'noDataYet'
 };
 
 # new object
@@ -76,12 +76,12 @@ sub new {
 
 # get swagger type of the attribute
 sub get_swagger_types {
-  return $swagger_types;
+    return $swagger_types;
 }
 
 # get attribute mappping
 sub get_attribute_map {
-  return $attribute_map;
+    return $attribute_map;
 }
 
 1;

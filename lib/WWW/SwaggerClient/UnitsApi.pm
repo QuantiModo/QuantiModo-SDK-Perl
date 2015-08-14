@@ -30,12 +30,6 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
-our @EXPORT_OK = qw(
-  unit_categories_get 
-  units_get 
-  
-);
-
 sub new {
     my $class   = shift;
     my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
@@ -53,119 +47,181 @@ sub new {
 
 }
 
+#
+# unit_categories_get
+#
+# Get unit categories
+# 
+# @return UnitCategory
+#
+sub unit_categories_get {
+    my ($self, %args) = @_;
+
     
-    #
-    # unit_categories_get
-    #
-    # Get unit categories
-    # 
-    # @return UnitCategory
-    #
-    sub unit_categories_get {
-      my ($self, %args) = @_;
 
-      
+    # parse inputs
+    my $_resource_path = '/unitCategories';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      # parse inputs
-      my $_resource_path = '/unitCategories';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
-
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      
-      
-      
-      
-      my $_body_data;
-      
+    
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('UnitCategory', $response);
-      return $_response_object;
-      
-  }
-  
-    #
-    # units_get
-    #
-    # Get all available units
-    # 
-    # @param string $unit_name Unit name (required)
-    # @param string $abbreviated_unit_name Restrict the results to a specific unit by providing the unit abbreviation. (required)
-    # @param string $category_name Restrict the results to a specific unit category by providing the unit category name. (required)
-    # @return ARRAY[Unit]
-    #
-    sub units_get {
-      my ($self, %args) = @_;
+    }
+    my $_response_object = $self->{api_client}->deserialize('UnitCategory', $response);
+    return $_response_object;
+    
+}
+#
+# units_get
+#
+# Get all available units
+# 
+# @param string $unit_name Unit name (optional)
+# @param string $abbreviated_unit_name Restrict the results to a specific unit by providing the unit abbreviation. (optional)
+# @param string $category_name Restrict the results to a specific unit category by providing the unit category name. (optional)
+# @return ARRAY[Unit]
+#
+sub units_get {
+    my ($self, %args) = @_;
 
-      
+    
 
-      # parse inputs
-      my $_resource_path = '/units';
-      $_resource_path =~ s/{format}/json/; # default format to json
+    # parse inputs
+    my $_resource_path = '/units';
+    $_resource_path =~ s/{format}/json/; # default format to json
 
-      my $_method = 'GET';
-      my $query_params = {};
-      my $header_params = {};
-      my $form_params = {};
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
 
-      # 'Accept' and 'Content-Type' header
-      my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-      if ($_header_accept) {
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
         $header_params->{'Accept'} = $_header_accept;
-      }
-      $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
-      # query params
-      if ( exists $args{'unit_name'}) {
+    # query params
+    if ( exists $args{'unit_name'}) {
         $query_params->{'unitName'} = $self->{api_client}->to_query_value($args{'unit_name'});
-      }# query params
-      if ( exists $args{'abbreviated_unit_name'}) {
+    }# query params
+    if ( exists $args{'abbreviated_unit_name'}) {
         $query_params->{'abbreviatedUnitName'} = $self->{api_client}->to_query_value($args{'abbreviated_unit_name'});
-      }# query params
-      if ( exists $args{'category_name'}) {
+    }# query params
+    if ( exists $args{'category_name'}) {
         $query_params->{'categoryName'} = $self->{api_client}->to_query_value($args{'category_name'});
-      }
-      
-      
-      
-      my $_body_data;
-      
+    }
+    
+    
+    
+    my $_body_data;
+    
 
-      # authentication setting, if any
-      my $auth_settings = ['oauth2'];
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
 
-      # make the API Call
-      my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                             $query_params, $form_params,
-                                             $header_params, $_body_data, $auth_settings);
-      if (!$response) {
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
         return;
-      }
-      my $_response_object = $self->{api_client}->deserialize('ARRAY[Unit]', $response);
-      return $_response_object;
-      
-  }
-  
+    }
+    my $_response_object = $self->{api_client}->deserialize('ARRAY[Unit]', $response);
+    return $_response_object;
+    
+}
+#
+# units_variable_get
+#
+# Units for Variable
+# 
+# @param string $unit_name Name of Unit you want to retrieve (optional)
+# @param string $abbreviated_unit_name Abbreviated Unit Name of the unit you want (optional)
+# @param string $category_name Name of the category you want units for (optional)
+# @param string $variable Name of the variable you want units for (optional)
+# @return ARRAY[Unit]
+#
+sub units_variable_get {
+    my ($self, %args) = @_;
+
+    
+
+    # parse inputs
+    my $_resource_path = '/unitsVariable';
+    $_resource_path =~ s/{format}/json/; # default format to json
+
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
+        $header_params->{'Accept'} = $_header_accept;
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+
+    # query params
+    if ( exists $args{'unit_name'}) {
+        $query_params->{'unitName'} = $self->{api_client}->to_query_value($args{'unit_name'});
+    }# query params
+    if ( exists $args{'abbreviated_unit_name'}) {
+        $query_params->{'abbreviatedUnitName'} = $self->{api_client}->to_query_value($args{'abbreviated_unit_name'});
+    }# query params
+    if ( exists $args{'category_name'}) {
+        $query_params->{'categoryName'} = $self->{api_client}->to_query_value($args{'category_name'});
+    }# query params
+    if ( exists $args{'variable'}) {
+        $query_params->{'variable'} = $self->{api_client}->to_query_value($args{'variable'});
+    }
+    
+    
+    
+    my $_body_data;
+    
+
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
+
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
+        return;
+    }
+    my $_response_object = $self->{api_client}->deserialize('ARRAY[Unit]', $response);
+    return $_response_object;
+    
+}
 
 
 1;

@@ -20,13 +20,13 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-      'user' => 'UserTokenRequestInnerUserField',
-      'organization_access_token' => 'string'
+    'user' => 'UserTokenRequestInnerUserField',
+    'organization_access_token' => 'string'
 };
 
 my $attribute_map = {
-      'user' => 'user',
-      'organization_access_token' => 'organization_access_token'
+    'user' => 'user',
+    'organization_access_token' => 'organization_access_token'
 };
 
 # new object
@@ -44,12 +44,12 @@ sub new {
 
 # get swagger type of the attribute
 sub get_swagger_types {
-  return $swagger_types;
+    return $swagger_types;
 }
 
 # get attribute mappping
 sub get_attribute_map {
-  return $attribute_map;
+    return $attribute_map;
 }
 
 1;

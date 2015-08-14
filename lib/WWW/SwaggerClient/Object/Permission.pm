@@ -20,23 +20,23 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-      'target' => 'int',
-      'variable_name' => 'string',
-      'min_timestamp' => 'int',
-      'max_timestamp' => 'int',
-      'min_time_of_day' => 'int',
-      'max_time_of_day' => 'int',
-      'week' => 'string'
+    'target' => 'int',
+    'variable_name' => 'string',
+    'min_timestamp' => 'int',
+    'max_timestamp' => 'int',
+    'min_time_of_day' => 'int',
+    'max_time_of_day' => 'int',
+    'week' => 'string'
 };
 
 my $attribute_map = {
-      'target' => 'target',
-      'variable_name' => 'variableName',
-      'min_timestamp' => 'min_timestamp',
-      'max_timestamp' => 'max_timestamp',
-      'min_time_of_day' => 'min_time_of_day',
-      'max_time_of_day' => 'max_time_of_day',
-      'week' => 'week'
+    'target' => 'target',
+    'variable_name' => 'variableName',
+    'min_timestamp' => 'min_timestamp',
+    'max_timestamp' => 'max_timestamp',
+    'min_time_of_day' => 'min_time_of_day',
+    'max_time_of_day' => 'max_time_of_day',
+    'week' => 'week'
 };
 
 # new object
@@ -64,12 +64,12 @@ sub new {
 
 # get swagger type of the attribute
 sub get_swagger_types {
-  return $swagger_types;
+    return $swagger_types;
 }
 
 # get attribute mappping
 sub get_attribute_map {
-  return $attribute_map;
+    return $attribute_map;
 }
 
 1;

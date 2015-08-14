@@ -20,35 +20,35 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-      'correlation_coefficient' => 'number',
-      'cause' => 'string',
-      'effect' => 'string',
-      'onset_delay' => 'double',
-      'duration_of_action' => 'number',
-      'number_of_pairs' => 'number',
-      'effect_size' => 'string',
-      'statistical_significance' => 'string',
-      'timestamp' => 'number',
-      'reverse_correlation' => 'number',
-      'causality_factor' => 'number',
-      'cause_category' => 'string',
-      'effect_category' => 'string'
+    'correlation_coefficient' => 'number',
+    'cause' => 'string',
+    'effect' => 'string',
+    'onset_delay' => 'double',
+    'duration_of_action' => 'number',
+    'number_of_pairs' => 'number',
+    'effect_size' => 'string',
+    'statistical_significance' => 'string',
+    'timestamp' => 'number',
+    'reverse_correlation' => 'number',
+    'causality_factor' => 'number',
+    'cause_category' => 'string',
+    'effect_category' => 'string'
 };
 
 my $attribute_map = {
-      'correlation_coefficient' => 'correlationCoefficient',
-      'cause' => 'cause',
-      'effect' => 'effect',
-      'onset_delay' => 'onsetDelay',
-      'duration_of_action' => 'durationOfAction',
-      'number_of_pairs' => 'numberOfPairs',
-      'effect_size' => 'effectSize',
-      'statistical_significance' => 'statisticalSignificance',
-      'timestamp' => 'timestamp',
-      'reverse_correlation' => 'reverseCorrelation',
-      'causality_factor' => 'causalityFactor',
-      'cause_category' => 'causeCategory',
-      'effect_category' => 'effectCategory'
+    'correlation_coefficient' => 'correlationCoefficient',
+    'cause' => 'cause',
+    'effect' => 'effect',
+    'onset_delay' => 'onsetDelay',
+    'duration_of_action' => 'durationOfAction',
+    'number_of_pairs' => 'numberOfPairs',
+    'effect_size' => 'effectSize',
+    'statistical_significance' => 'statisticalSignificance',
+    'timestamp' => 'timestamp',
+    'reverse_correlation' => 'reverseCorrelation',
+    'causality_factor' => 'causalityFactor',
+    'cause_category' => 'causeCategory',
+    'effect_category' => 'effectCategory'
 };
 
 # new object
@@ -88,12 +88,12 @@ sub new {
 
 # get swagger type of the attribute
 sub get_swagger_types {
-  return $swagger_types;
+    return $swagger_types;
 }
 
 # get attribute mappping
 sub get_attribute_map {
-  return $attribute_map;
+    return $attribute_map;
 }
 
 1;

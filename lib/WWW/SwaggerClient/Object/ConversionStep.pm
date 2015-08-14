@@ -20,13 +20,13 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-      'operation' => 'string',
-      'value' => 'double'
+    'operation' => 'string',
+    'value' => 'double'
 };
 
 my $attribute_map = {
-      'operation' => 'operation',
-      'value' => 'value'
+    'operation' => 'operation',
+    'value' => 'value'
 };
 
 # new object
@@ -44,12 +44,12 @@ sub new {
 
 # get swagger type of the attribute
 sub get_swagger_types {
-  return $swagger_types;
+    return $swagger_types;
 }
 
 # get attribute mappping
 sub get_attribute_map {
-  return $attribute_map;
+    return $attribute_map;
 }
 
 1;
