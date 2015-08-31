@@ -28,7 +28,7 @@ my $swagger_types = {
     'connected' => 'string',
     'connect_instructions' => 'string',
     'last_update' => 'int',
-    'latest_data' => 'int',
+    'total_measurements_in_last_update' => 'int',
     'no_data_yet' => 'boolean'
 };
 
@@ -41,7 +41,7 @@ my $attribute_map = {
     'connected' => 'connected',
     'connect_instructions' => 'connectInstructions',
     'last_update' => 'lastUpdate',
-    'latest_data' => 'latestData',
+    'total_measurements_in_last_update' => 'totalMeasurementsInLastUpdate',
     'no_data_yet' => 'noDataYet'
 };
 
@@ -66,7 +66,7 @@ sub new {
         #Epoch timestamp of last sync
         'last_update' => $args{'lastUpdate'}, 
         #Number of measurements obtained during latest update
-        'latest_data' => $args{'latestData'}, 
+        'total_measurements_in_last_update' => $args{'totalMeasurementsInLastUpdate'}, 
         #True if user has no measurements for this connector
         'no_data_yet' => $args{'noDataYet'}
     }; 

@@ -26,7 +26,7 @@ my $swagger_types = {
     'value' => 'double',
     'unit' => 'string',
     'stored_value' => 'double',
-    'stored_unit' => 'string'
+    'stored_abbreviated_unit_name' => 'string'
 };
 
 my $attribute_map = {
@@ -36,7 +36,7 @@ my $attribute_map = {
     'value' => 'value',
     'unit' => 'unit',
     'stored_value' => 'storedValue',
-    'stored_unit' => 'storedUnit'
+    'stored_abbreviated_unit_name' => 'storedAbbreviatedUnitName'
 };
 
 # new object
@@ -56,7 +56,7 @@ sub new {
         #Measurement value in the unit as orignally submitted
         'stored_value' => $args{'storedValue'}, 
         #Unit of measurement as originally submitted
-        'stored_unit' => $args{'storedUnit'}
+        'stored_abbreviated_unit_name' => $args{'storedAbbreviatedUnitName'}
     }; 
 
     return bless $self, $class; 

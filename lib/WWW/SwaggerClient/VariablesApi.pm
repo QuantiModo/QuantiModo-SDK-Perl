@@ -255,6 +255,61 @@ sub public_variables_search_search_get {
     
 }
 #
+# v1_user_variables_post
+#
+# Update User Settings for a Variable
+# 
+# @param UserVariables $sharing_data Variable user settings data (required)
+# @return void
+#
+sub v1_user_variables_post {
+    my ($self, %args) = @_;
+
+    
+    # verify the required parameter 'sharing_data' is set
+    unless (exists $args{'sharing_data'}) {
+      croak("Missing the required parameter 'sharing_data' when calling v1_user_variables_post");
+    }
+    
+
+    # parse inputs
+    my $_resource_path = '/v1/userVariables';
+    $_resource_path =~ s/{format}/json/; # default format to json
+
+    my $_method = 'POST';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
+        $header_params->{'Accept'} = $_header_accept;
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+
+    
+    
+    
+    
+    my $_body_data;
+    # body params
+    if ( exists $args{'sharing_data'}) {
+        $_body_data = $args{'sharing_data'};
+    }
+
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
+
+    # make the API Call
+    
+    $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    return;
+    
+}
+#
 # variable_categories_get
 #
 # Variable categories
@@ -301,61 +356,6 @@ sub variable_categories_get {
     }
     my $_response_object = $self->{api_client}->deserialize('ARRAY[VariableCategory]', $response);
     return $_response_object;
-    
-}
-#
-# variable_user_settings_post
-#
-# Update User Settings for a Variable
-# 
-# @param VariableUserSettings $sharing_data Variable user settings data (required)
-# @return void
-#
-sub variable_user_settings_post {
-    my ($self, %args) = @_;
-
-    
-    # verify the required parameter 'sharing_data' is set
-    unless (exists $args{'sharing_data'}) {
-      croak("Missing the required parameter 'sharing_data' when calling variable_user_settings_post");
-    }
-    
-
-    # parse inputs
-    my $_resource_path = '/variableUserSettings';
-    $_resource_path =~ s/{format}/json/; # default format to json
-
-    my $_method = 'POST';
-    my $query_params = {};
-    my $header_params = {};
-    my $form_params = {};
-
-    # 'Accept' and 'Content-Type' header
-    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-    if ($_header_accept) {
-        $header_params->{'Accept'} = $_header_accept;
-    }
-    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
-
-    
-    
-    
-    
-    my $_body_data;
-    # body params
-    if ( exists $args{'sharing_data'}) {
-        $_body_data = $args{'sharing_data'};
-    }
-
-    # authentication setting, if any
-    my $auth_settings = ['oauth2'];
-
-    # make the API Call
-    
-    $self->{api_client}->call_api($_resource_path, $_method,
-                                           $query_params, $form_params,
-                                           $header_params, $_body_data, $auth_settings);
-    return;
     
 }
 #
