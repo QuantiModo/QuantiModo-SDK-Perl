@@ -48,101 +48,19 @@ sub new {
 }
 
 #
-# correlations_post
-#
-# Store or Update a Correlation
-# 
-# @param string $cause  (required)
-# @param string $effect  (required)
-# @param string $correlationcoefficient  (required)
-# @param string $vote  (required)
-# @return void
-#
-sub correlations_post {
-    my ($self, %args) = @_;
-
-    
-    # verify the required parameter 'cause' is set
-    unless (exists $args{'cause'}) {
-      croak("Missing the required parameter 'cause' when calling correlations_post");
-    }
-    
-    # verify the required parameter 'effect' is set
-    unless (exists $args{'effect'}) {
-      croak("Missing the required parameter 'effect' when calling correlations_post");
-    }
-    
-    # verify the required parameter 'correlationcoefficient' is set
-    unless (exists $args{'correlationcoefficient'}) {
-      croak("Missing the required parameter 'correlationcoefficient' when calling correlations_post");
-    }
-    
-    # verify the required parameter 'vote' is set
-    unless (exists $args{'vote'}) {
-      croak("Missing the required parameter 'vote' when calling correlations_post");
-    }
-    
-
-    # parse inputs
-    my $_resource_path = '/correlations';
-    $_resource_path =~ s/{format}/json/; # default format to json
-
-    my $_method = 'POST';
-    my $query_params = {};
-    my $header_params = {};
-    my $form_params = {};
-
-    # 'Accept' and 'Content-Type' header
-    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-    if ($_header_accept) {
-        $header_params->{'Accept'} = $_header_accept;
-    }
-    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
-
-    # query params
-    if ( exists $args{'cause'}) {
-        $query_params->{'cause'} = $self->{api_client}->to_query_value($args{'cause'});
-    }# query params
-    if ( exists $args{'effect'}) {
-        $query_params->{'effect'} = $self->{api_client}->to_query_value($args{'effect'});
-    }# query params
-    if ( exists $args{'correlationcoefficient'}) {
-        $query_params->{'correlationcoefficient'} = $self->{api_client}->to_query_value($args{'correlationcoefficient'});
-    }# query params
-    if ( exists $args{'vote'}) {
-        $query_params->{'vote'} = $self->{api_client}->to_query_value($args{'vote'});
-    }
-    
-    
-    
-    my $_body_data;
-    
-
-    # authentication setting, if any
-    my $auth_settings = ['oauth2'];
-
-    # make the API Call
-    
-    $self->{api_client}->call_api($_resource_path, $_method,
-                                           $query_params, $form_params,
-                                           $header_params, $_body_data, $auth_settings);
-    return;
-    
-}
-#
-# public_variables_get
+# v1_public_variables_get
 #
 # Get public variables
 # 
 # @return Variable
 #
-sub public_variables_get {
+sub v1_public_variables_get {
     my ($self, %args) = @_;
 
     
 
     # parse inputs
-    my $_resource_path = '/public/variables';
+    my $_resource_path = '/v1/public/variables';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';
@@ -179,7 +97,7 @@ sub public_variables_get {
     
 }
 #
-# public_variables_search_search_get
+# v1_public_variables_search_search_get
 #
 # Get top 5 PUBLIC variables with the most correlations
 # 
@@ -190,18 +108,18 @@ sub public_variables_get {
 # @param int $sort Sort by given field. If the field is prefixed with `-, it will sort in descending order. (optional)
 # @return Variable
 #
-sub public_variables_search_search_get {
+sub v1_public_variables_search_search_get {
     my ($self, %args) = @_;
 
     
     # verify the required parameter 'search' is set
     unless (exists $args{'search'}) {
-      croak("Missing the required parameter 'search' when calling public_variables_search_search_get");
+      croak("Missing the required parameter 'search' when calling v1_public_variables_search_search_get");
     }
     
 
     # parse inputs
-    my $_resource_path = '/public/variables/search/{search}';
+    my $_resource_path = '/v1/public/variables/search/{search}';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';
@@ -310,19 +228,19 @@ sub v1_user_variables_post {
     
 }
 #
-# variable_categories_get
+# v1_variable_categories_get
 #
 # Variable categories
 # 
 # @return ARRAY[VariableCategory]
 #
-sub variable_categories_get {
+sub v1_variable_categories_get {
     my ($self, %args) = @_;
 
     
 
     # parse inputs
-    my $_resource_path = '/variableCategories';
+    my $_resource_path = '/v1/variableCategories';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';
@@ -359,7 +277,7 @@ sub variable_categories_get {
     
 }
 #
-# variables_get
+# v1_variables_get
 #
 # Get variables by the category name
 # 
@@ -370,13 +288,13 @@ sub variable_categories_get {
 # @param int $sort Sort by given field. If the field is prefixed with `-, it will sort in descending order. (optional)
 # @return Variable
 #
-sub variables_get {
+sub v1_variables_get {
     my ($self, %args) = @_;
 
     
 
     # parse inputs
-    my $_resource_path = '/variables';
+    my $_resource_path = '/v1/variables';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';
@@ -428,25 +346,25 @@ sub variables_get {
     
 }
 #
-# variables_post
+# v1_variables_post
 #
 # Create Variables
 # 
 # @param VariablesNew $variable_name Original name for the variable. (required)
 # @return void
 #
-sub variables_post {
+sub v1_variables_post {
     my ($self, %args) = @_;
 
     
     # verify the required parameter 'variable_name' is set
     unless (exists $args{'variable_name'}) {
-      croak("Missing the required parameter 'variable_name' when calling variables_post");
+      croak("Missing the required parameter 'variable_name' when calling v1_variables_post");
     }
     
 
     # parse inputs
-    my $_resource_path = '/variables';
+    my $_resource_path = '/v1/variables';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'POST';
@@ -483,7 +401,7 @@ sub variables_post {
     
 }
 #
-# variables_search_search_get
+# v1_variables_search_search_get
 #
 # Get variables by search query
 # 
@@ -494,18 +412,18 @@ sub variables_post {
 # @param int $offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10. (optional)
 # @return ARRAY[Variable]
 #
-sub variables_search_search_get {
+sub v1_variables_search_search_get {
     my ($self, %args) = @_;
 
     
     # verify the required parameter 'search' is set
     unless (exists $args{'search'}) {
-      croak("Missing the required parameter 'search' when calling variables_search_search_get");
+      croak("Missing the required parameter 'search' when calling v1_variables_search_search_get");
     }
     
 
     # parse inputs
-    my $_resource_path = '/variables/search/{search}';
+    my $_resource_path = '/v1/variables/search/{search}';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';
@@ -559,25 +477,25 @@ sub variables_search_search_get {
     
 }
 #
-# variables_variable_name_get
+# v1_variables_variable_name_get
 #
 # Get info about a variable
 # 
 # @param string $variable_name Variable name (required)
 # @return Variable
 #
-sub variables_variable_name_get {
+sub v1_variables_variable_name_get {
     my ($self, %args) = @_;
 
     
     # verify the required parameter 'variable_name' is set
     unless (exists $args{'variable_name'}) {
-      croak("Missing the required parameter 'variable_name' when calling variables_variable_name_get");
+      croak("Missing the required parameter 'variable_name' when calling v1_variables_variable_name_get");
     }
     
 
     # parse inputs
-    my $_resource_path = '/variables/{variableName}';
+    my $_resource_path = '/v1/variables/{variableName}';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';

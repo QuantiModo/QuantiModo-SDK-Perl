@@ -48,55 +48,6 @@ sub new {
 }
 
 #
-# user_me_get
-#
-# Get all available units for variableGet authenticated user
-# 
-# @return User
-#
-sub user_me_get {
-    my ($self, %args) = @_;
-
-    
-
-    # parse inputs
-    my $_resource_path = '/user/me';
-    $_resource_path =~ s/{format}/json/; # default format to json
-
-    my $_method = 'GET';
-    my $query_params = {};
-    my $header_params = {};
-    my $form_params = {};
-
-    # 'Accept' and 'Content-Type' header
-    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-    if ($_header_accept) {
-        $header_params->{'Accept'} = $_header_accept;
-    }
-    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
-
-    
-    
-    
-    
-    my $_body_data;
-    
-
-    # authentication setting, if any
-    my $auth_settings = ['oauth2'];
-
-    # make the API Call
-    my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                           $query_params, $form_params,
-                                           $header_params, $_body_data, $auth_settings);
-    if (!$response) {
-        return;
-    }
-    my $_response_object = $self->{api_client}->deserialize('User', $response);
-    return $_response_object;
-    
-}
-#
 # v1_organizations_organization_id_users_post
 #
 # Get user tokens for existing users, create new users
@@ -162,6 +113,55 @@ sub v1_organizations_organization_id_users_post {
         return;
     }
     my $_response_object = $self->{api_client}->deserialize('UserTokenSuccessfulResponse', $response);
+    return $_response_object;
+    
+}
+#
+# v1_user_me_get
+#
+# Get all available units for variableGet authenticated user
+# 
+# @return User
+#
+sub v1_user_me_get {
+    my ($self, %args) = @_;
+
+    
+
+    # parse inputs
+    my $_resource_path = '/v1/user/me';
+    $_resource_path =~ s/{format}/json/; # default format to json
+
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
+        $header_params->{'Accept'} = $_header_accept;
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+
+    
+    
+    
+    
+    my $_body_data;
+    
+
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
+
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
+        return;
+    }
+    my $_response_object = $self->{api_client}->deserialize('User', $response);
     return $_response_object;
     
 }

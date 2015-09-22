@@ -54,6 +54,7 @@ sub new {
 # 
 # @param string $cause Cause variable name (required)
 # @param string $effect Effect variable name (required)
+# @param number $correlation Correlation value (required)
 # @param boolean $vote Vote: 0 (for implausible) or 1 (for plausible) (optional)
 # @return CommonResponse
 #
@@ -69,6 +70,11 @@ sub v1_votes_post {
     # verify the required parameter 'effect' is set
     unless (exists $args{'effect'}) {
       croak("Missing the required parameter 'effect' when calling v1_votes_post");
+    }
+    
+    # verify the required parameter 'correlation' is set
+    unless (exists $args{'correlation'}) {
+      croak("Missing the required parameter 'correlation' when calling v1_votes_post");
     }
     
 
@@ -94,6 +100,9 @@ sub v1_votes_post {
     }# query params
     if ( exists $args{'effect'}) {
         $query_params->{'effect'} = $self->{api_client}->to_query_value($args{'effect'});
+    }# query params
+    if ( exists $args{'correlation'}) {
+        $query_params->{'correlation'} = $self->{api_client}->to_query_value($args{'correlation'});
     }# query params
     if ( exists $args{'vote'}) {
         $query_params->{'vote'} = $self->{api_client}->to_query_value($args{'vote'});

@@ -48,7 +48,7 @@ sub new {
 }
 
 #
-# correlations_get
+# v1_correlations_get
 #
 # Get correlations
 # 
@@ -59,13 +59,13 @@ sub new {
 # @param int $sort Sort by given field. If the field is prefixed with `-, it will sort in descending order. (optional)
 # @return ARRAY[Correlation]
 #
-sub correlations_get {
+sub v1_correlations_get {
     my ($self, %args) = @_;
 
     
 
     # parse inputs
-    my $_resource_path = '/correlations';
+    my $_resource_path = '/v1/correlations';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';
@@ -117,78 +117,9 @@ sub correlations_get {
     
 }
 #
-# public_correlations_search_search_get
-#
-# Get average correlations for variables containing search term
-# 
-# @param string $search Name of the variable that you want to know the causes or effects of. (required)
-# @param string $effect_or_cause Specifies whether to return the effects or causes of the searched variable. (required)
-# @return ARRAY[Correlation]
-#
-sub public_correlations_search_search_get {
-    my ($self, %args) = @_;
-
-    
-    # verify the required parameter 'search' is set
-    unless (exists $args{'search'}) {
-      croak("Missing the required parameter 'search' when calling public_correlations_search_search_get");
-    }
-    
-    # verify the required parameter 'effect_or_cause' is set
-    unless (exists $args{'effect_or_cause'}) {
-      croak("Missing the required parameter 'effect_or_cause' when calling public_correlations_search_search_get");
-    }
-    
-
-    # parse inputs
-    my $_resource_path = '/public/correlations/search/{search}';
-    $_resource_path =~ s/{format}/json/; # default format to json
-
-    my $_method = 'GET';
-    my $query_params = {};
-    my $header_params = {};
-    my $form_params = {};
-
-    # 'Accept' and 'Content-Type' header
-    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
-    if ($_header_accept) {
-        $header_params->{'Accept'} = $_header_accept;
-    }
-    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
-
-    # query params
-    if ( exists $args{'effect_or_cause'}) {
-        $query_params->{'effectOrCause'} = $self->{api_client}->to_query_value($args{'effect_or_cause'});
-    }
-    
-    # path params
-    if ( exists $args{'search'}) {
-        my $_base_variable = "{" . "search" . "}";
-        my $_base_value = $self->{api_client}->to_path_value($args{'search'});
-        $_resource_path =~ s/$_base_variable/$_base_value/g;
-    }
-    
-    my $_body_data;
-    
-
-    # authentication setting, if any
-    my $auth_settings = ['oauth2'];
-
-    # make the API Call
-    my $response = $self->{api_client}->call_api($_resource_path, $_method,
-                                           $query_params, $form_params,
-                                           $header_params, $_body_data, $auth_settings);
-    if (!$response) {
-        return;
-    }
-    my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
-    return $_response_object;
-    
-}
-#
 # v1_correlations_post
 #
-# Add correlation or/and vote for it
+# Store or Update a Correlation
 # 
 # @param PostCorrelation $body Provides correlation data (required)
 # @return void
@@ -243,7 +174,7 @@ sub v1_correlations_post {
 #
 # v1_organizations_organization_id_users_user_id_variables_variable_name_causes_get
 #
-# Search user correlations for a given effect
+# Search user correlations for a given cause
 # 
 # @param int $organization_id Organization ID (required)
 # @param int $user_id User id (required)
@@ -427,6 +358,75 @@ sub v1_organizations_organization_id_users_user_id_variables_variable_name_effec
         return;
     }
     my $_response_object = $self->{api_client}->deserialize('ARRAY[CommonResponse]', $response);
+    return $_response_object;
+    
+}
+#
+# v1_public_correlations_search_search_get
+#
+# Get average correlations for variables containing search term
+# 
+# @param string $search Name of the variable that you want to know the causes or effects of. (required)
+# @param string $effect_or_cause Specifies whether to return the effects or causes of the searched variable. (required)
+# @return ARRAY[Correlation]
+#
+sub v1_public_correlations_search_search_get {
+    my ($self, %args) = @_;
+
+    
+    # verify the required parameter 'search' is set
+    unless (exists $args{'search'}) {
+      croak("Missing the required parameter 'search' when calling v1_public_correlations_search_search_get");
+    }
+    
+    # verify the required parameter 'effect_or_cause' is set
+    unless (exists $args{'effect_or_cause'}) {
+      croak("Missing the required parameter 'effect_or_cause' when calling v1_public_correlations_search_search_get");
+    }
+    
+
+    # parse inputs
+    my $_resource_path = '/v1/public/correlations/search/{search}';
+    $_resource_path =~ s/{format}/json/; # default format to json
+
+    my $_method = 'GET';
+    my $query_params = {};
+    my $header_params = {};
+    my $form_params = {};
+
+    # 'Accept' and 'Content-Type' header
+    my $_header_accept = $self->{api_client}->select_header_accept('application/json');
+    if ($_header_accept) {
+        $header_params->{'Accept'} = $_header_accept;
+    }
+    $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
+
+    # query params
+    if ( exists $args{'effect_or_cause'}) {
+        $query_params->{'effectOrCause'} = $self->{api_client}->to_query_value($args{'effect_or_cause'});
+    }
+    
+    # path params
+    if ( exists $args{'search'}) {
+        my $_base_variable = "{" . "search" . "}";
+        my $_base_value = $self->{api_client}->to_path_value($args{'search'});
+        $_resource_path =~ s/$_base_variable/$_base_value/g;
+    }
+    
+    my $_body_data;
+    
+
+    # authentication setting, if any
+    my $auth_settings = ['oauth2'];
+
+    # make the API Call
+    my $response = $self->{api_client}->call_api($_resource_path, $_method,
+                                           $query_params, $form_params,
+                                           $header_params, $_body_data, $auth_settings);
+    if (!$response) {
+        return;
+    }
+    my $_response_object = $self->{api_client}->deserialize('ARRAY[Correlation]', $response);
     return $_response_object;
     
 }
@@ -677,6 +677,7 @@ sub v1_variables_variable_name_public_effects_get {
 # 
 # @param string $cause Cause variable name (required)
 # @param string $effect Effect variable name (required)
+# @param number $correlation Correlation value (required)
 # @param boolean $vote Vote: 0 (for implausible) or 1 (for plausible) (optional)
 # @return CommonResponse
 #
@@ -692,6 +693,11 @@ sub v1_votes_post {
     # verify the required parameter 'effect' is set
     unless (exists $args{'effect'}) {
       croak("Missing the required parameter 'effect' when calling v1_votes_post");
+    }
+    
+    # verify the required parameter 'correlation' is set
+    unless (exists $args{'correlation'}) {
+      croak("Missing the required parameter 'correlation' when calling v1_votes_post");
     }
     
 
@@ -717,6 +723,9 @@ sub v1_votes_post {
     }# query params
     if ( exists $args{'effect'}) {
         $query_params->{'effect'} = $self->{api_client}->to_query_value($args{'effect'});
+    }# query params
+    if ( exists $args{'correlation'}) {
+        $query_params->{'correlation'} = $self->{api_client}->to_query_value($args{'correlation'});
     }# query params
     if ( exists $args{'vote'}) {
         $query_params->{'vote'} = $self->{api_client}->to_query_value($args{'vote'});

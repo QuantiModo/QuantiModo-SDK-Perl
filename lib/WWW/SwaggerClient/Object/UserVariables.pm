@@ -25,8 +25,8 @@ my $swagger_types = {
     'duration_of_action' => 'int',
     'filling_value' => 'int',
     'join_with' => 'string',
-    'maximum_value' => 'double',
-    'minimum_value' => 'double',
+    'maximum_allowed_value' => 'double',
+    'minimum_allowed_value' => 'double',
     'name' => 'string',
     'onset_delay' => 'int',
     'unit' => 'string'
@@ -38,8 +38,8 @@ my $attribute_map = {
     'duration_of_action' => 'durationOfAction',
     'filling_value' => 'fillingValue',
     'join_with' => 'joinWith',
-    'maximum_value' => 'maximumValue',
-    'minimum_value' => 'minimumValue',
+    'maximum_allowed_value' => 'maximumAllowedValue',
+    'minimum_allowed_value' => 'minimumAllowedValue',
     'name' => 'name',
     'onset_delay' => 'onsetDelay',
     'unit' => 'unit'
@@ -59,10 +59,10 @@ sub new {
         'filling_value' => $args{'fillingValue'}, 
         #joinWith
         'join_with' => $args{'joinWith'}, 
-        #maximumValue
-        'maximum_value' => $args{'maximumValue'}, 
-        #minimumValue
-        'minimum_value' => $args{'minimumValue'}, 
+        #maximumAllowedValue
+        'maximum_allowed_value' => $args{'maximumAllowedValue'}, 
+        #minimumAllowedValue
+        'minimum_allowed_value' => $args{'minimumAllowedValue'}, 
         #name
         'name' => $args{'name'}, 
         #onsetDelay

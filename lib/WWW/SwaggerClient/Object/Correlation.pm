@@ -22,7 +22,9 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 my $swagger_types = {
     'correlation_coefficient' => 'number',
     'cause' => 'string',
+    'original_cause' => 'string',
     'effect' => 'string',
+    'original_effect' => 'string',
     'onset_delay' => 'double',
     'duration_of_action' => 'number',
     'number_of_pairs' => 'number',
@@ -32,13 +34,22 @@ my $swagger_types = {
     'reverse_correlation' => 'number',
     'causality_factor' => 'number',
     'cause_category' => 'string',
-    'effect_category' => 'string'
+    'effect_category' => 'string',
+    'value_predicting_high_outcome' => 'number',
+    'value_predicting_low_outcome' => 'number',
+    'optimal_pearson_product' => 'number',
+    'average_vote' => 'number',
+    'user_vote' => 'number',
+    'cause_unit' => 'string',
+    'cause_unit_id' => 'int'
 };
 
 my $attribute_map = {
     'correlation_coefficient' => 'correlationCoefficient',
     'cause' => 'cause',
+    'original_cause' => 'originalCause',
     'effect' => 'effect',
+    'original_effect' => 'originalEffect',
     'onset_delay' => 'onsetDelay',
     'duration_of_action' => 'durationOfAction',
     'number_of_pairs' => 'numberOfPairs',
@@ -48,7 +59,14 @@ my $attribute_map = {
     'reverse_correlation' => 'reverseCorrelation',
     'causality_factor' => 'causalityFactor',
     'cause_category' => 'causeCategory',
-    'effect_category' => 'effectCategory'
+    'effect_category' => 'effectCategory',
+    'value_predicting_high_outcome' => 'valuePredictingHighOutcome',
+    'value_predicting_low_outcome' => 'valuePredictingLowOutcome',
+    'optimal_pearson_product' => 'optimalPearsonProduct',
+    'average_vote' => 'averageVote',
+    'user_vote' => 'userVote',
+    'cause_unit' => 'causeUnit',
+    'cause_unit_id' => 'causeUnitId'
 };
 
 # new object
@@ -59,8 +77,12 @@ sub new {
         'correlation_coefficient' => $args{'correlationCoefficient'}, 
         #ORIGINAL variable name of the cause variable for which the user desires correlations.
         'cause' => $args{'cause'}, 
+        #original name of the cause.
+        'original_cause' => $args{'originalCause'}, 
         #ORIGINAL variable name of the effect variable for which the user desires correlations.
         'effect' => $args{'effect'}, 
+        #effect variable original name.
+        'original_effect' => $args{'originalEffect'}, 
         #User estimated or default time after cause measurement before a perceivable effect is observed
         'onset_delay' => $args{'onsetDelay'}, 
         #Time over which the cause is expected to produce a perceivable effect following the onset delay
@@ -80,7 +102,21 @@ sub new {
         #Variable category of the cause variable.
         'cause_category' => $args{'causeCategory'}, 
         #Variable category of the effect variable.
-        'effect_category' => $args{'effectCategory'}
+        'effect_category' => $args{'effectCategory'}, 
+        #cause value that predicts an above average effect value (in default unit for cause variable)
+        'value_predicting_high_outcome' => $args{'valuePredictingHighOutcome'}, 
+        #cause value that predicts a below average effect value (in default unit for cause variable)
+        'value_predicting_low_outcome' => $args{'valuePredictingLowOutcome'}, 
+        #Optimal Pearson Product
+        'optimal_pearson_product' => $args{'optimalPearsonProduct'}, 
+        #Average Vote
+        'average_vote' => $args{'averageVote'}, 
+        #User Vote
+        'user_vote' => $args{'userVote'}, 
+        #Unit of Cause
+        'cause_unit' => $args{'causeUnit'}, 
+        #Unit Id of Cause
+        'cause_unit_id' => $args{'causeUnitId'}
     }; 
 
     return bless $self, $class; 

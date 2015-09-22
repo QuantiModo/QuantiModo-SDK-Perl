@@ -23,20 +23,32 @@ my $swagger_types = {
     'variable' => 'string',
     'source' => 'string',
     'timestamp' => 'int',
+    'start_time' => 'string',
+    'human_time' => 'HumanTime',
     'value' => 'double',
     'unit' => 'string',
+    'original_value' => 'int',
     'stored_value' => 'double',
-    'stored_abbreviated_unit_name' => 'string'
+    'stored_abbreviated_unit_name' => 'string',
+    'original_abbreviated_unit_name' => 'string',
+    'abbreviated_unit_name' => 'string',
+    'note' => 'string'
 };
 
 my $attribute_map = {
     'variable' => 'variable',
     'source' => 'source',
     'timestamp' => 'timestamp',
+    'start_time' => 'startTime',
+    'human_time' => 'humanTime',
     'value' => 'value',
     'unit' => 'unit',
+    'original_value' => 'originalValue',
     'stored_value' => 'storedValue',
-    'stored_abbreviated_unit_name' => 'storedAbbreviatedUnitName'
+    'stored_abbreviated_unit_name' => 'storedAbbreviatedUnitName',
+    'original_abbreviated_unit_name' => 'originalAbbreviatedUnitName',
+    'abbreviated_unit_name' => 'abbreviatedUnitName',
+    'note' => 'note'
 };
 
 # new object
@@ -49,14 +61,26 @@ sub new {
         'source' => $args{'source'}, 
         #Timestamp for the measurement event in epoch time
         'timestamp' => $args{'timestamp'}, 
+        #Start Time for the measurement event in ISO 8601
+        'start_time' => $args{'startTime'}, 
+        #Start Time for the measurement event in ISO 8601
+        'human_time' => $args{'humanTime'}, 
         #Converted measurement value in requested unit
         'value' => $args{'value'}, 
         #Unit of measurement as requested in GET request
         'unit' => $args{'unit'}, 
+        #Original value
+        'original_value' => $args{'originalValue'}, 
         #Measurement value in the unit as orignally submitted
         'stored_value' => $args{'storedValue'}, 
         #Unit of measurement as originally submitted
-        'stored_abbreviated_unit_name' => $args{'storedAbbreviatedUnitName'}
+        'stored_abbreviated_unit_name' => $args{'storedAbbreviatedUnitName'}, 
+        #Original Unit of measurement as originally submitted
+        'original_abbreviated_unit_name' => $args{'originalAbbreviatedUnitName'}, 
+        #Unit of measurement as originally submitted
+        'abbreviated_unit_name' => $args{'abbreviatedUnitName'}, 
+        #Note of measurement
+        'note' => $args{'note'}
     }; 
 
     return bless $self, $class; 

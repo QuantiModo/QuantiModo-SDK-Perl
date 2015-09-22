@@ -24,7 +24,8 @@ my $swagger_types = {
     'name' => 'string',
     'original_name' => 'string',
     'category' => 'string',
-    'unit' => 'string',
+    'abbreviated_unit_name' => 'string',
+    'abbreviated_unit_id' => 'int',
     'sources' => 'string',
     'minimum_value' => 'double',
     'maximum_value' => 'double',
@@ -44,10 +45,10 @@ my $swagger_types = {
     'outcome' => 'int',
     'measurements_at_last_analysis' => 'int',
     'number_of_measurements' => 'int',
-    'last_unit' => 'int',
+    'last_unit' => 'string',
     'last_value' => 'int',
     'most_common_value' => 'int',
-    'most_common_unit' => 'int',
+    'most_common_unit' => 'string',
     'last_source' => 'int'
 };
 
@@ -56,7 +57,8 @@ my $attribute_map = {
     'name' => 'name',
     'original_name' => 'originalName',
     'category' => 'category',
-    'unit' => 'unit',
+    'abbreviated_unit_name' => 'abbreviatedUnitName',
+    'abbreviated_unit_id' => 'abbreviatedUnitId',
     'sources' => 'sources',
     'minimum_value' => 'minimumValue',
     'maximum_value' => 'maximumValue',
@@ -96,7 +98,9 @@ sub new {
         #Variable category like Mood, Sleep, Physical Activity, Treatment, Symptom, etc.
         'category' => $args{'category'}, 
         #Abbreviated name of the default unit for the variable
-        'unit' => $args{'unit'}, 
+        'abbreviated_unit_name' => $args{'abbreviatedUnitName'}, 
+        #Id of the default unit for the variable
+        'abbreviated_unit_id' => $args{'abbreviatedUnitId'}, 
         #Comma-separated list of source names to limit variables to those sources
         'sources' => $args{'sources'}, 
         #Minimum reasonable value for this variable (uses default unit)

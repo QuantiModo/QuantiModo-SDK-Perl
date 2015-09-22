@@ -48,7 +48,7 @@ sub new {
 }
 
 #
-# pairs_get
+# v1_pairs_get
 #
 # Get pairs
 # 
@@ -67,23 +67,23 @@ sub new {
 # @param int $sort Sort by given field. If the field is prefixed with `-, it will sort in descending order. (optional)
 # @return ARRAY[Pairs]
 #
-sub pairs_get {
+sub v1_pairs_get {
     my ($self, %args) = @_;
 
     
     # verify the required parameter 'cause' is set
     unless (exists $args{'cause'}) {
-      croak("Missing the required parameter 'cause' when calling pairs_get");
+      croak("Missing the required parameter 'cause' when calling v1_pairs_get");
     }
     
     # verify the required parameter 'effect' is set
     unless (exists $args{'effect'}) {
-      croak("Missing the required parameter 'effect' when calling pairs_get");
+      croak("Missing the required parameter 'effect' when calling v1_pairs_get");
     }
     
 
     # parse inputs
-    my $_resource_path = '/pairs';
+    my $_resource_path = '/v1/pairs';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';

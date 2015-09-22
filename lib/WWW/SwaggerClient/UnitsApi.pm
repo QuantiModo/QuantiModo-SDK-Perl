@@ -48,19 +48,19 @@ sub new {
 }
 
 #
-# unit_categories_get
+# v1_unit_categories_get
 #
 # Get unit categories
 # 
 # @return UnitCategory
 #
-sub unit_categories_get {
+sub v1_unit_categories_get {
     my ($self, %args) = @_;
 
     
 
     # parse inputs
-    my $_resource_path = '/unitCategories';
+    my $_resource_path = '/v1/unitCategories';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';
@@ -97,7 +97,7 @@ sub unit_categories_get {
     
 }
 #
-# units_get
+# v1_units_get
 #
 # Get all available units
 # 
@@ -106,13 +106,13 @@ sub unit_categories_get {
 # @param string $category_name Restrict the results to a specific unit category by providing the unit category name. (optional)
 # @return ARRAY[Unit]
 #
-sub units_get {
+sub v1_units_get {
     my ($self, %args) = @_;
 
     
 
     # parse inputs
-    my $_resource_path = '/units';
+    my $_resource_path = '/v1/units';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';
@@ -158,7 +158,7 @@ sub units_get {
     
 }
 #
-# units_variable_get
+# v1_units_variable_get
 #
 # Units for Variable
 # 
@@ -168,13 +168,13 @@ sub units_get {
 # @param string $variable Name of the variable you want units for (optional)
 # @return ARRAY[Unit]
 #
-sub units_variable_get {
+sub v1_units_variable_get {
     my ($self, %args) = @_;
 
     
 
     # parse inputs
-    my $_resource_path = '/unitsVariable';
+    my $_resource_path = '/v1/unitsVariable';
     $_resource_path =~ s/{format}/json/; # default format to json
 
     my $_method = 'GET';
