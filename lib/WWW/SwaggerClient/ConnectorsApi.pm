@@ -52,12 +52,18 @@ sub new {
 #
 # Get embeddable connect javascript
 # 
-# @param string $t User token (optional)
+# @param string $access token User&#39;s access token (required)
+# @param string $mashape key Mashape API key (optional)
 # @return void
 #
 sub v1_connect/js_get {
     my ($self, %args) = @_;
 
+    
+    # verify the required parameter 'access token' is set
+    unless (exists $args{'access token'}) {
+      croak("Missing the required parameter 'access token' when calling v1_connect/js_get");
+    }
     
 
     # parse inputs
@@ -77,8 +83,11 @@ sub v1_connect/js_get {
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
     # query params
-    if ( exists $args{'t'}) {
-        $query_params->{'t'} = $self->{api_client}->to_query_value($args{'t'});
+    if ( exists $args{'access token'}) {
+        $query_params->{'access token'} = $self->{api_client}->to_query_value($args{'access token'});
+    }# query params
+    if ( exists $args{'mashape key'}) {
+        $query_params->{'mashape key'} = $self->{api_client}->to_query_value($args{'mashape key'});
     }
     
     

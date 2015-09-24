@@ -102,7 +102,6 @@ sub v1_public_variables_get {
 # Get top 5 PUBLIC variables with the most correlations
 # 
 # @param string $search Search query can be some fraction of a variable name. (required)
-# @param string $effect_or_cause Allows us to specify which column in the `correlations` table will be searched. Choices are effect or cause. (optional)
 # @param int $limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. (optional)
 # @param int $offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10. (optional)
 # @param int $sort Sort by given field. If the field is prefixed with `-, it will sort in descending order. (optional)
@@ -135,9 +134,6 @@ sub v1_public_variables_search_search_get {
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type();
 
     # query params
-    if ( exists $args{'effect_or_cause'}) {
-        $query_params->{'effectOrCause'} = $self->{api_client}->to_query_value($args{'effect_or_cause'});
-    }# query params
     if ( exists $args{'limit'}) {
         $query_params->{'limit'} = $self->{api_client}->to_query_value($args{'limit'});
     }# query params
@@ -283,6 +279,12 @@ sub v1_variable_categories_get {
 # 
 # @param int $user_id User id (optional)
 # @param string $category Filter data by category (optional)
+# @param string $name Original name of the variable (supports exact name match only) (optional)
+# @param string $last_updated Filter by the last time any of the properties of the variable were changed. Uses UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot; (optional)
+# @param string $source The name of the data source that created the variable (supports exact name match only). So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here (optional)
+# @param string $latest_measurement_time Filter variables based on the last time a measurement for them was created or updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot; (optional)
+# @param string $number_of_measurements Filter variables by the total number of measurements that they have. This could be used of you want to filter or sort by popularity. (optional)
+# @param string $last_source Limit variables to those which measurements were last submitted by a specific source. So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here. (supports exact name match only) (optional)
 # @param int $limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. (optional)
 # @param int $offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10. (optional)
 # @param int $sort Sort by given field. If the field is prefixed with `-, it will sort in descending order. (optional)
@@ -315,6 +317,24 @@ sub v1_variables_get {
     }# query params
     if ( exists $args{'category'}) {
         $query_params->{'category'} = $self->{api_client}->to_query_value($args{'category'});
+    }# query params
+    if ( exists $args{'name'}) {
+        $query_params->{'name'} = $self->{api_client}->to_query_value($args{'name'});
+    }# query params
+    if ( exists $args{'last_updated'}) {
+        $query_params->{'lastUpdated'} = $self->{api_client}->to_query_value($args{'last_updated'});
+    }# query params
+    if ( exists $args{'source'}) {
+        $query_params->{'source'} = $self->{api_client}->to_query_value($args{'source'});
+    }# query params
+    if ( exists $args{'latest_measurement_time'}) {
+        $query_params->{'latestMeasurementTime'} = $self->{api_client}->to_query_value($args{'latest_measurement_time'});
+    }# query params
+    if ( exists $args{'number_of_measurements'}) {
+        $query_params->{'numberOfMeasurements'} = $self->{api_client}->to_query_value($args{'number_of_measurements'});
+    }# query params
+    if ( exists $args{'last_source'}) {
+        $query_params->{'lastSource'} = $self->{api_client}->to_query_value($args{'last_source'});
     }# query params
     if ( exists $args{'limit'}) {
         $query_params->{'limit'} = $self->{api_client}->to_query_value($args{'limit'});

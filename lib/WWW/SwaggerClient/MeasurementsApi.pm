@@ -157,7 +157,10 @@ sub v1_measurement_sources_post {
 # Get measurements for this user
 # 
 # @param string $variable_name Name of the variable you want measurements for (optional)
-# @param string $unit The unit your want the measurements in (optional)
+# @param string $source Name of the source you want measurements for (supports exact name match only) (optional)
+# @param string $value Value of measurement (optional)
+# @param string $last_updated The time that this measurement was created or last updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot; (optional)
+# @param string $unit The unit you want the measurements in (optional)
 # @param string $start_time The lower limit of measurements returned (Epoch) (optional)
 # @param string $end_time The upper limit of measurements returned (Epoch) (optional)
 # @param int $grouping_width The time (in seconds) over which measurements are grouped together (optional)
@@ -191,6 +194,15 @@ sub v1_measurements_get {
     # query params
     if ( exists $args{'variable_name'}) {
         $query_params->{'variableName'} = $self->{api_client}->to_query_value($args{'variable_name'});
+    }# query params
+    if ( exists $args{'source'}) {
+        $query_params->{'source'} = $self->{api_client}->to_query_value($args{'source'});
+    }# query params
+    if ( exists $args{'value'}) {
+        $query_params->{'value'} = $self->{api_client}->to_query_value($args{'value'});
+    }# query params
+    if ( exists $args{'last_updated'}) {
+        $query_params->{'lastUpdated'} = $self->{api_client}->to_query_value($args{'last_updated'});
     }# query params
     if ( exists $args{'unit'}) {
         $query_params->{'unit'} = $self->{api_client}->to_query_value($args{'unit'});
