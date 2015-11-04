@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::UnitCategory;
+package WWW::SwaggerClient::Object::Update;
 
 require 5.6.0;
 use strict;
@@ -21,14 +21,22 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 
 my $swagger_types = {
     'id' => 'int',
-    'name' => 'string',
+    'user_id' => 'int',
+    'connector_id' => 'int',
+    'number_of_measurements' => 'int',
+    'success' => 'boolean',
+    'message' => 'string',
     'created_at' => 'DateTime',
     'updated_at' => 'DateTime'
 };
 
 my $attribute_map = {
     'id' => 'id',
-    'name' => 'name',
+    'user_id' => 'user_id',
+    'connector_id' => 'connector_id',
+    'number_of_measurements' => 'number_of_measurements',
+    'success' => 'success',
+    'message' => 'message',
     'created_at' => 'created_at',
     'updated_at' => 'updated_at'
 };
@@ -39,8 +47,16 @@ sub new {
     my $self = { 
         #id
         'id' => $args{'id'}, 
-        #Unit category name
-        'name' => $args{'name'}, 
+        #user_id
+        'user_id' => $args{'user_id'}, 
+        #connector_id
+        'connector_id' => $args{'connector_id'}, 
+        #number_of_measurements
+        'number_of_measurements' => $args{'number_of_measurements'}, 
+        #success
+        'success' => $args{'success'}, 
+        #message
+        'message' => $args{'message'}, 
         #created_at
         'created_at' => $args{'created_at'}, 
         #updated_at

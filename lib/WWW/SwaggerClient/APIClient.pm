@@ -25,7 +25,7 @@ sub new
     my $class = shift;
     my (%args) = (
         'ua' => LWP::UserAgent->new,
-        'base_url' => 'https://localhost/api',
+        'base_url' => 'https://app.quantimo.do/api/v2',
         @_
     );
   
@@ -146,8 +146,8 @@ sub to_path_value {
 # @return string the serialized object
 sub to_query_value {
       my ($self, $object) = @_;
-      if (is_array($object)) {
-          return implode(',', $object);
+      if (ref($object) eq 'ARRAY') {
+          return join(',', @$object);
       } else {
           return $self->to_string($object);
       }
@@ -309,17 +309,9 @@ sub update_params_for_auth {
         # determine which one to use
         if (!defined($auth)) {
         }
-        elsif ($auth eq 'basicAuth') {
-            $header_params->{'Authorization'} = 'Basic '.encode_base64($WWW::SwaggerClient::Configuration::username.":".$WWW::SwaggerClient::Configuration::password);
-            
-        }
-        elsif ($auth eq 'oauth2') {
+        elsif ($auth eq 'quantimodo_oauth2') {
             
             # TODO support oauth
-        }
-        elsif ($auth eq 'internalApiKey') {
-            $header_params->{'api_key'} = $self->get_api_key_with_prefix('api_key');
-            
         }
         
         else {

@@ -25,24 +25,22 @@ my $swagger_types = {
     'display_name' => 'string',
     'image' => 'string',
     'get_it_url' => 'string',
-    'connected' => 'string',
-    'connect_instructions' => 'string',
-    'last_update' => 'int',
-    'total_measurements_in_last_update' => 'int',
-    'no_data_yet' => 'boolean'
+    'short_description' => 'string',
+    'long_description' => 'string',
+    'enabled' => 'boolean',
+    'oauth' => 'boolean'
 };
 
 my $attribute_map = {
     'id' => 'id',
     'name' => 'name',
-    'display_name' => 'displayName',
+    'display_name' => 'display_name',
     'image' => 'image',
-    'get_it_url' => 'getItUrl',
-    'connected' => 'connected',
-    'connect_instructions' => 'connectInstructions',
-    'last_update' => 'lastUpdate',
-    'total_measurements_in_last_update' => 'totalMeasurementsInLastUpdate',
-    'no_data_yet' => 'noDataYet'
+    'get_it_url' => 'get_it_url',
+    'short_description' => 'short_description',
+    'long_description' => 'long_description',
+    'enabled' => 'enabled',
+    'oauth' => 'oauth'
 };
 
 # new object
@@ -54,21 +52,19 @@ sub new {
         #Connector lowercase system name
         'name' => $args{'name'}, 
         #Connector pretty display name
-        'display_name' => $args{'displayName'}, 
+        'display_name' => $args{'display_name'}, 
         #URL to the image of the connector logo
         'image' => $args{'image'}, 
         #URL to a site where one can get this device or application
-        'get_it_url' => $args{'getItUrl'}, 
-        #True if the authenticated user has this connector enabled
-        'connected' => $args{'connected'}, 
-        #URL and parameters used when connecting to a service
-        'connect_instructions' => $args{'connectInstructions'}, 
-        #Epoch timestamp of last sync
-        'last_update' => $args{'lastUpdate'}, 
-        #Number of measurements obtained during latest update
-        'total_measurements_in_last_update' => $args{'totalMeasurementsInLastUpdate'}, 
-        #True if user has no measurements for this connector
-        'no_data_yet' => $args{'noDataYet'}
+        'get_it_url' => $args{'get_it_url'}, 
+        #Short description
+        'short_description' => $args{'short_description'}, 
+        #Long description
+        'long_description' => $args{'long_description'}, 
+        #enabled
+        'enabled' => $args{'enabled'}, 
+        #oauth
+        'oauth' => $args{'oauth'}
     }; 
 
     return bless $self, $class; 

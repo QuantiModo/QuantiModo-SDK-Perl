@@ -21,134 +21,158 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 
 my $swagger_types = {
     'id' => 'int',
+    'client_id' => 'string',
+    'parent_id' => 'int',
     'name' => 'string',
-    'original_name' => 'string',
-    'category' => 'string',
-    'abbreviated_unit_name' => 'string',
-    'abbreviated_unit_id' => 'int',
-    'sources' => 'string',
-    'minimum_value' => 'double',
-    'maximum_value' => 'double',
+    'variable_category_id' => 'int',
+    'default_unit_id' => 'int',
     'combination_operation' => 'string',
     'filling_value' => 'double',
-    'join_with' => 'string',
-    'joined_variables' => 'ARRAY[Variable]',
-    'parent' => 'int',
-    'sub_variables' => 'ARRAY[Variable]',
+    'maximum_allowed_value' => 'double',
+    'minimum_allowed_value' => 'double',
     'onset_delay' => 'int',
     'duration_of_action' => 'int',
-    'earliest_measurement_time' => 'int',
-    'latest_measurement_time' => 'int',
-    'updated' => 'int',
-    'cause_only' => 'int',
-    'number_of_correlations' => 'int',
-    'outcome' => 'int',
-    'measurements_at_last_analysis' => 'int',
-    'number_of_measurements' => 'int',
-    'last_unit' => 'string',
-    'last_value' => 'int',
-    'most_common_value' => 'int',
-    'most_common_unit' => 'string',
-    'last_source' => 'int'
+    'public' => 'int',
+    'cause_only' => 'boolean',
+    'most_common_value' => 'double',
+    'most_common_unit_id' => 'int',
+    'standard_deviation' => 'double',
+    'variance' => 'double',
+    'mean' => 'double',
+    'median' => 'double',
+    'number_of_measurements' => 'double',
+    'number_of_unique_values' => 'double',
+    'skewness' => 'double',
+    'kurtosis' => 'double',
+    'status' => 'string',
+    'error_message' => 'string',
+    'last_successful_update_time' => 'DateTime',
+    'created_at' => 'DateTime',
+    'updated_at' => 'DateTime',
+    'product_url' => 'string',
+    'image_url' => 'string',
+    'price' => 'double',
+    'number_of_user_variables' => 'int',
+    'outcome' => 'boolean',
+    'minimum_recorded_value' => 'double',
+    'maximum_recorded_value' => 'double'
 };
 
 my $attribute_map = {
     'id' => 'id',
+    'client_id' => 'client_id',
+    'parent_id' => 'parent_id',
     'name' => 'name',
-    'original_name' => 'originalName',
-    'category' => 'category',
-    'abbreviated_unit_name' => 'abbreviatedUnitName',
-    'abbreviated_unit_id' => 'abbreviatedUnitId',
-    'sources' => 'sources',
-    'minimum_value' => 'minimumValue',
-    'maximum_value' => 'maximumValue',
-    'combination_operation' => 'combinationOperation',
-    'filling_value' => 'fillingValue',
-    'join_with' => 'joinWith',
-    'joined_variables' => 'joinedVariables',
-    'parent' => 'parent',
-    'sub_variables' => 'subVariables',
-    'onset_delay' => 'onsetDelay',
-    'duration_of_action' => 'durationOfAction',
-    'earliest_measurement_time' => 'earliestMeasurementTime',
-    'latest_measurement_time' => 'latestMeasurementTime',
-    'updated' => 'updated',
-    'cause_only' => 'causeOnly',
-    'number_of_correlations' => 'numberOfCorrelations',
+    'variable_category_id' => 'variable_category_id',
+    'default_unit_id' => 'default_unit_id',
+    'combination_operation' => 'combination_operation',
+    'filling_value' => 'filling_value',
+    'maximum_allowed_value' => 'maximum_allowed_value',
+    'minimum_allowed_value' => 'minimum_allowed_value',
+    'onset_delay' => 'onset_delay',
+    'duration_of_action' => 'duration_of_action',
+    'public' => 'public',
+    'cause_only' => 'cause_only',
+    'most_common_value' => 'most_common_value',
+    'most_common_unit_id' => 'most_common_unit_id',
+    'standard_deviation' => 'standard_deviation',
+    'variance' => 'variance',
+    'mean' => 'mean',
+    'median' => 'median',
+    'number_of_measurements' => 'number_of_measurements',
+    'number_of_unique_values' => 'number_of_unique_values',
+    'skewness' => 'skewness',
+    'kurtosis' => 'kurtosis',
+    'status' => 'status',
+    'error_message' => 'error_message',
+    'last_successful_update_time' => 'last_successful_update_time',
+    'created_at' => 'created_at',
+    'updated_at' => 'updated_at',
+    'product_url' => 'product_url',
+    'image_url' => 'image_url',
+    'price' => 'price',
+    'number_of_user_variables' => 'number_of_user_variables',
     'outcome' => 'outcome',
-    'measurements_at_last_analysis' => 'measurementsAtLastAnalysis',
-    'number_of_measurements' => 'numberOfMeasurements',
-    'last_unit' => 'lastUnit',
-    'last_value' => 'lastValue',
-    'most_common_value' => 'mostCommonValue',
-    'most_common_unit' => 'mostCommonUnit',
-    'last_source' => 'lastSource'
+    'minimum_recorded_value' => 'minimum_recorded_value',
+    'maximum_recorded_value' => 'maximum_recorded_value'
 };
 
 # new object
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
-        #Variable ID
+        #id
         'id' => $args{'id'}, 
-        #User-defined variable display name.
+        #client_id
+        'client_id' => $args{'client_id'}, 
+        #parent_id
+        'parent_id' => $args{'parent_id'}, 
+        #Name of the variable
         'name' => $args{'name'}, 
-        #Name used when the variable was originally created in the `variables` table.
-        'original_name' => $args{'originalName'}, 
-        #Variable category like Mood, Sleep, Physical Activity, Treatment, Symptom, etc.
-        'category' => $args{'category'}, 
-        #Abbreviated name of the default unit for the variable
-        'abbreviated_unit_name' => $args{'abbreviatedUnitName'}, 
-        #Id of the default unit for the variable
-        'abbreviated_unit_id' => $args{'abbreviatedUnitId'}, 
-        #Comma-separated list of source names to limit variables to those sources
-        'sources' => $args{'sources'}, 
-        #Minimum reasonable value for this variable (uses default unit)
-        'minimum_value' => $args{'minimumValue'}, 
-        #Maximum reasonable value for this variable (uses default unit)
-        'maximum_value' => $args{'maximumValue'}, 
-        #How to aggregate measurements over time.
-        'combination_operation' => $args{'combinationOperation'}, 
-        #Value for replacing null measurements
-        'filling_value' => $args{'fillingValue'}, 
-        #The Variable this Variable should be joined with. If the variable is joined with some other variable then it is not shown to user in the list of variables.
-        'join_with' => $args{'joinWith'}, 
-        #Array of Variables that are joined with this Variable
-        'joined_variables' => $args{'joinedVariables'}, 
-        #Id of the parent variable if this variable has any parent
-        'parent' => $args{'parent'}, 
-        #Array of Variables that are sub variables to this Variable
-        'sub_variables' => $args{'subVariables'}, 
-        #How long it takes for a measurement in this variable to take effect
-        'onset_delay' => $args{'onsetDelay'}, 
-        #How long the effect of a measurement in this variable lasts
-        'duration_of_action' => $args{'durationOfAction'}, 
-        #Earliest measurement time
-        'earliest_measurement_time' => $args{'earliestMeasurementTime'}, 
-        #Latest measurement time
-        'latest_measurement_time' => $args{'latestMeasurementTime'}, 
-        #When this variable or its settings were last updated
-        'updated' => $args{'updated'}, 
-        #A value of 1 indicates that this variable is generally a cause in a causal relationship.  An example of a causeOnly variable would be a variable such as Cloud Cover which would generally not be influenced by the behaviour of the user.
-        'cause_only' => $args{'causeOnly'}, 
-        #Number of correlations
-        'number_of_correlations' => $args{'numberOfCorrelations'}, 
-        #Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables.
+        #Category of the variable
+        'variable_category_id' => $args{'variable_category_id'}, 
+        #ID of the default unit of measurement to use for this variable
+        'default_unit_id' => $args{'default_unit_id'}, 
+        #How to combine values of this variable (for instance, to see a summary of the values over a month) 0 for sum OR 1 for mean
+        'combination_operation' => $args{'combination_operation'}, 
+        #filling_value
+        'filling_value' => $args{'filling_value'}, 
+        #maximum_allowed_value
+        'maximum_allowed_value' => $args{'maximum_allowed_value'}, 
+        #minimum_allowed_value
+        'minimum_allowed_value' => $args{'minimum_allowed_value'}, 
+        #onset_delay
+        'onset_delay' => $args{'onset_delay'}, 
+        #duration_of_action
+        'duration_of_action' => $args{'duration_of_action'}, 
+        #public
+        'public' => $args{'public'}, 
+        #cause_only
+        'cause_only' => $args{'cause_only'}, 
+        #most_common_value
+        'most_common_value' => $args{'most_common_value'}, 
+        #most_common_unit_id
+        'most_common_unit_id' => $args{'most_common_unit_id'}, 
+        #standard_deviation
+        'standard_deviation' => $args{'standard_deviation'}, 
+        #variance
+        'variance' => $args{'variance'}, 
+        #mean
+        'mean' => $args{'mean'}, 
+        #median
+        'median' => $args{'median'}, 
+        #number_of_measurements
+        'number_of_measurements' => $args{'number_of_measurements'}, 
+        #number_of_unique_values
+        'number_of_unique_values' => $args{'number_of_unique_values'}, 
+        #skewness
+        'skewness' => $args{'skewness'}, 
+        #kurtosis
+        'kurtosis' => $args{'kurtosis'}, 
+        #status
+        'status' => $args{'status'}, 
+        #error_message
+        'error_message' => $args{'error_message'}, 
+        #last_successful_update_time
+        'last_successful_update_time' => $args{'last_successful_update_time'}, 
+        #created_at
+        'created_at' => $args{'created_at'}, 
+        #updated_at
+        'updated_at' => $args{'updated_at'}, 
+        #product_url
+        'product_url' => $args{'product_url'}, 
+        #image_url
+        'image_url' => $args{'image_url'}, 
+        #price
+        'price' => $args{'price'}, 
+        #number_of_user_variables
+        'number_of_user_variables' => $args{'number_of_user_variables'}, 
+        #outcome
         'outcome' => $args{'outcome'}, 
-        #The number of measurements that a given user had for this variable the last time a correlation calculation was performed. Generally correlation values are only updated once the current number of measurements for a variable is more than 10% greater than the measurementsAtLastAnalysis.  This avoids a computationally-demanding recalculation when there's not enough new data to make a significant difference in the correlation.
-        'measurements_at_last_analysis' => $args{'measurementsAtLastAnalysis'}, 
-        #Number of measurements
-        'number_of_measurements' => $args{'numberOfMeasurements'}, 
-        #Last unit
-        'last_unit' => $args{'lastUnit'}, 
-        #Last value
-        'last_value' => $args{'lastValue'}, 
-        #Most common value
-        'most_common_value' => $args{'mostCommonValue'}, 
-        #Most common unit
-        'most_common_unit' => $args{'mostCommonUnit'}, 
-        #Last source
-        'last_source' => $args{'lastSource'}
+        #minimum_recorded_value
+        'minimum_recorded_value' => $args{'minimum_recorded_value'}, 
+        #maximum_recorded_value
+        'maximum_recorded_value' => $args{'maximum_recorded_value'}
     }; 
 
     return bless $self, $class; 

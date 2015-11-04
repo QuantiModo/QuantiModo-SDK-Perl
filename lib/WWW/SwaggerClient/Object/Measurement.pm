@@ -20,67 +20,91 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-    'variable' => 'string',
-    'source' => 'string',
-    'timestamp' => 'int',
-    'start_time' => 'string',
-    'human_time' => 'HumanTime',
+    'id' => 'int',
+    'user_id' => 'int',
+    'client_id' => 'string',
+    'connector_id' => 'int',
+    'variable_id' => 'int',
+    'source_id' => 'int',
+    'start_time' => 'int',
     'value' => 'double',
-    'unit' => 'string',
-    'original_value' => 'int',
-    'stored_value' => 'double',
-    'stored_abbreviated_unit_name' => 'string',
-    'original_abbreviated_unit_name' => 'string',
-    'abbreviated_unit_name' => 'string',
-    'note' => 'string'
+    'unit_id' => 'int',
+    'original_value' => 'double',
+    'original_unit_id' => 'int',
+    'duration' => 'int',
+    'note' => 'string',
+    'latitude' => 'double',
+    'longitude' => 'double',
+    'location' => 'string',
+    'created_at' => 'DateTime',
+    'updated_at' => 'DateTime',
+    'error' => 'string'
 };
 
 my $attribute_map = {
-    'variable' => 'variable',
-    'source' => 'source',
-    'timestamp' => 'timestamp',
-    'start_time' => 'startTime',
-    'human_time' => 'humanTime',
+    'id' => 'id',
+    'user_id' => 'user_id',
+    'client_id' => 'client_id',
+    'connector_id' => 'connector_id',
+    'variable_id' => 'variable_id',
+    'source_id' => 'source_id',
+    'start_time' => 'start_time',
     'value' => 'value',
-    'unit' => 'unit',
-    'original_value' => 'originalValue',
-    'stored_value' => 'storedValue',
-    'stored_abbreviated_unit_name' => 'storedAbbreviatedUnitName',
-    'original_abbreviated_unit_name' => 'originalAbbreviatedUnitName',
-    'abbreviated_unit_name' => 'abbreviatedUnitName',
-    'note' => 'note'
+    'unit_id' => 'unit_id',
+    'original_value' => 'original_value',
+    'original_unit_id' => 'original_unit_id',
+    'duration' => 'duration',
+    'note' => 'note',
+    'latitude' => 'latitude',
+    'longitude' => 'longitude',
+    'location' => 'location',
+    'created_at' => 'created_at',
+    'updated_at' => 'updated_at',
+    'error' => 'error'
 };
 
 # new object
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
-        #ORIGINAL Name of the variable for which we are creating the measurement records
-        'variable' => $args{'variable'}, 
+        #id
+        'id' => $args{'id'}, 
+        #ID of user that owns this measurement
+        'user_id' => $args{'user_id'}, 
+        #client_id
+        'client_id' => $args{'client_id'}, 
+        #Connector ID
+        'connector_id' => $args{'connector_id'}, 
+        #ID of the variable for which we are creating the measurement records
+        'variable_id' => $args{'variable_id'}, 
         #Application or device used to record the measurement values
-        'source' => $args{'source'}, 
-        #Timestamp for the measurement event in epoch time
-        'timestamp' => $args{'timestamp'}, 
+        'source_id' => $args{'source_id'}, 
         #Start Time for the measurement event in ISO 8601
-        'start_time' => $args{'startTime'}, 
-        #Start Time for the measurement event in ISO 8601
-        'human_time' => $args{'humanTime'}, 
+        'start_time' => $args{'start_time'}, 
         #Converted measurement value in requested unit
         'value' => $args{'value'}, 
-        #Unit of measurement as requested in GET request
-        'unit' => $args{'unit'}, 
+        #Unit ID of measurement as requested in GET request
+        'unit_id' => $args{'unit_id'}, 
         #Original value
-        'original_value' => $args{'originalValue'}, 
-        #Measurement value in the unit as orignally submitted
-        'stored_value' => $args{'storedValue'}, 
-        #Unit of measurement as originally submitted
-        'stored_abbreviated_unit_name' => $args{'storedAbbreviatedUnitName'}, 
-        #Original Unit of measurement as originally submitted
-        'original_abbreviated_unit_name' => $args{'originalAbbreviatedUnitName'}, 
-        #Unit of measurement as originally submitted
-        'abbreviated_unit_name' => $args{'abbreviatedUnitName'}, 
+        'original_value' => $args{'original_value'}, 
+        #Unit ID of measurement as originally submitted
+        'original_unit_id' => $args{'original_unit_id'}, 
+        #duration of measurement in seconds
+        'duration' => $args{'duration'}, 
         #Note of measurement
-        'note' => $args{'note'}
+        'note' => $args{'note'}, 
+        #latitude
+        'latitude' => $args{'latitude'}, 
+        #longitude
+        'longitude' => $args{'longitude'}, 
+        #location
+        'location' => $args{'location'}, 
+        #created_at
+        'created_at' => $args{'created_at'}, 
+        #updated_at
+        'updated_at' => $args{'updated_at'}, 
+        #error
+        'error' => $args{'error'}
     }; 
 
     return bless $self, $class; 

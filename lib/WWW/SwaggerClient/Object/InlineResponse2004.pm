@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::UnitCategory;
+package WWW::SwaggerClient::Object::InlineResponse2004;
 
 require 5.6.0;
 use strict;
@@ -20,31 +20,23 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-    'id' => 'int',
-    'name' => 'string',
-    'created_at' => 'DateTime',
-    'updated_at' => 'DateTime'
+    'data' => 'Connection',
+    'success' => 'boolean'
 };
 
 my $attribute_map = {
-    'id' => 'id',
-    'name' => 'name',
-    'created_at' => 'created_at',
-    'updated_at' => 'updated_at'
+    'data' => 'data',
+    'success' => 'success'
 };
 
 # new object
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
-        #id
-        'id' => $args{'id'}, 
-        #Unit category name
-        'name' => $args{'name'}, 
-        #created_at
-        'created_at' => $args{'created_at'}, 
-        #updated_at
-        'updated_at' => $args{'updated_at'}
+        #
+        'data' => $args{'data'}, 
+        #
+        'success' => $args{'success'}
     }; 
 
     return bless $self, $class; 

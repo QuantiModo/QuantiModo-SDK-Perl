@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::UnitCategory;
+package WWW::SwaggerClient::Object::Credential;
 
 require 5.6.0;
 use strict;
@@ -20,15 +20,17 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-    'id' => 'int',
-    'name' => 'string',
+    'connector_id' => 'int',
+    'attr_key' => 'string',
+    'attr_value' => 'string',
     'created_at' => 'DateTime',
     'updated_at' => 'DateTime'
 };
 
 my $attribute_map = {
-    'id' => 'id',
-    'name' => 'name',
+    'connector_id' => 'connector_id',
+    'attr_key' => 'attr_key',
+    'attr_value' => 'attr_value',
     'created_at' => 'created_at',
     'updated_at' => 'updated_at'
 };
@@ -37,10 +39,12 @@ my $attribute_map = {
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
-        #id
-        'id' => $args{'id'}, 
-        #Unit category name
-        'name' => $args{'name'}, 
+        #connector_id
+        'connector_id' => $args{'connector_id'}, 
+        #attr_key
+        'attr_key' => $args{'attr_key'}, 
+        #attr_value
+        'attr_value' => $args{'attr_value'}, 
         #created_at
         'created_at' => $args{'created_at'}, 
         #updated_at

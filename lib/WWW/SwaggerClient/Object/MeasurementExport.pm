@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::UnitCategory;
+package WWW::SwaggerClient::Object::MeasurementExport;
 
 require 5.6.0;
 use strict;
@@ -21,14 +21,18 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 
 my $swagger_types = {
     'id' => 'int',
-    'name' => 'string',
+    'user_id' => 'int',
+    'status' => 'string',
+    'error_message' => 'string',
     'created_at' => 'DateTime',
     'updated_at' => 'DateTime'
 };
 
 my $attribute_map = {
     'id' => 'id',
-    'name' => 'name',
+    'user_id' => 'user_id',
+    'status' => 'status',
+    'error_message' => 'error_message',
     'created_at' => 'created_at',
     'updated_at' => 'updated_at'
 };
@@ -39,8 +43,12 @@ sub new {
     my $self = { 
         #id
         'id' => $args{'id'}, 
-        #Unit category name
-        'name' => $args{'name'}, 
+        #ID of User
+        'user_id' => $args{'user_id'}, 
+        #Status of Measurement Export
+        'status' => $args{'status'}, 
+        #Error message
+        'error_message' => $args{'error_message'}, 
         #created_at
         'created_at' => $args{'created_at'}, 
         #updated_at

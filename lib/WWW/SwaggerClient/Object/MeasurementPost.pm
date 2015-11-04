@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::UnitCategory;
+package WWW::SwaggerClient::Object::MeasurementPost;
 
 require 5.6.0;
 use strict;
@@ -20,31 +20,31 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-    'id' => 'int',
-    'name' => 'string',
-    'created_at' => 'DateTime',
-    'updated_at' => 'DateTime'
+    'variable_id' => 'int',
+    'source_id' => 'int',
+    'unit_id' => 'int',
+    'measurements' => 'ARRAY[MeasurementValue]'
 };
 
 my $attribute_map = {
-    'id' => 'id',
-    'name' => 'name',
-    'created_at' => 'created_at',
-    'updated_at' => 'updated_at'
+    'variable_id' => 'variable_id',
+    'source_id' => 'source_id',
+    'unit_id' => 'unit_id',
+    'measurements' => 'measurements'
 };
 
 # new object
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
-        #id
-        'id' => $args{'id'}, 
-        #Unit category name
-        'name' => $args{'name'}, 
-        #created_at
-        'created_at' => $args{'created_at'}, 
-        #updated_at
-        'updated_at' => $args{'updated_at'}
+        #variable_id
+        'variable_id' => $args{'variable_id'}, 
+        #source_id
+        'source_id' => $args{'source_id'}, 
+        #unit_id
+        'unit_id' => $args{'unit_id'}, 
+        #measurements
+        'measurements' => $args{'measurements'}
     }; 
 
     return bless $self, $class; 

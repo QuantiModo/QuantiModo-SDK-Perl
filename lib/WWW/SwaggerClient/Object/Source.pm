@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::Unit;
+package WWW::SwaggerClient::Object::Source;
 
 require 5.6.0;
 use strict;
@@ -23,14 +23,6 @@ my $swagger_types = {
     'id' => 'int',
     'client_id' => 'string',
     'name' => 'string',
-    'abbreviated_name' => 'string',
-    'category_id' => 'int',
-    'minimum_value' => 'double',
-    'maximum_value' => 'double',
-    'updated' => 'int',
-    'default_unit_id' => 'int',
-    'multiply' => 'double',
-    'add' => 'double',
     'created_at' => 'DateTime',
     'updated_at' => 'DateTime'
 };
@@ -39,14 +31,6 @@ my $attribute_map = {
     'id' => 'id',
     'client_id' => 'client_id',
     'name' => 'name',
-    'abbreviated_name' => 'abbreviated_name',
-    'category_id' => 'category_id',
-    'minimum_value' => 'minimum_value',
-    'maximum_value' => 'maximum_value',
-    'updated' => 'updated',
-    'default_unit_id' => 'default_unit_id',
-    'multiply' => 'multiply',
-    'add' => 'add',
     'created_at' => 'created_at',
     'updated_at' => 'updated_at'
 };
@@ -59,24 +43,8 @@ sub new {
         'id' => $args{'id'}, 
         #client_id
         'client_id' => $args{'client_id'}, 
-        #Unit name
+        #Name of the application or device
         'name' => $args{'name'}, 
-        #Unit abbreviation
-        'abbreviated_name' => $args{'abbreviated_name'}, 
-        #Unit category ID
-        'category_id' => $args{'category_id'}, 
-        #Unit minimum value
-        'minimum_value' => $args{'minimum_value'}, 
-        #Unit maximum value
-        'maximum_value' => $args{'maximum_value'}, 
-        #updated
-        'updated' => $args{'updated'}, 
-        #ID of default unit
-        'default_unit_id' => $args{'default_unit_id'}, 
-        #Value multiplied to
-        'multiply' => $args{'multiply'}, 
-        #Value which should be added to convert to default unit
-        'add' => $args{'add'}, 
         #created_at
         'created_at' => $args{'created_at'}, 
         #updated_at

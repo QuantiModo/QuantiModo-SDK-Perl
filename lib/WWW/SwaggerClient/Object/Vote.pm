@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::UnitCategory;
+package WWW::SwaggerClient::Object::Vote;
 
 require 5.6.0;
 use strict;
@@ -21,14 +21,22 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 
 my $swagger_types = {
     'id' => 'int',
-    'name' => 'string',
+    'client_id' => 'string',
+    'user_id' => 'int',
+    'cause_id' => 'int',
+    'effect_id' => 'int',
+    'value' => 'int',
     'created_at' => 'DateTime',
     'updated_at' => 'DateTime'
 };
 
 my $attribute_map = {
     'id' => 'id',
-    'name' => 'name',
+    'client_id' => 'client_id',
+    'user_id' => 'user_id',
+    'cause_id' => 'cause_id',
+    'effect_id' => 'effect_id',
+    'value' => 'value',
     'created_at' => 'created_at',
     'updated_at' => 'updated_at'
 };
@@ -39,8 +47,16 @@ sub new {
     my $self = { 
         #id
         'id' => $args{'id'}, 
-        #Unit category name
-        'name' => $args{'name'}, 
+        #client_id
+        'client_id' => $args{'client_id'}, 
+        #ID of User
+        'user_id' => $args{'user_id'}, 
+        #ID of cause variable
+        'cause_id' => $args{'cause_id'}, 
+        #ID of effect variable
+        'effect_id' => $args{'effect_id'}, 
+        #Value of Vote
+        'value' => $args{'value'}, 
         #created_at
         'created_at' => $args{'created_at'}, 
         #updated_at

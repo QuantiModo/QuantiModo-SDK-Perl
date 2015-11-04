@@ -1,4 +1,4 @@
-package WWW::SwaggerClient::Object::UnitCategory;
+package WWW::SwaggerClient::Object::UnitConversion;
 
 require 5.6.0;
 use strict;
@@ -20,15 +20,19 @@ use base "WWW::SwaggerClient::Object::BaseObject";
 #
 
 my $swagger_types = {
-    'id' => 'int',
-    'name' => 'string',
+    'unit_id' => 'int',
+    'step_number' => 'boolean',
+    'operation' => 'boolean',
+    'value' => 'double',
     'created_at' => 'DateTime',
     'updated_at' => 'DateTime'
 };
 
 my $attribute_map = {
-    'id' => 'id',
-    'name' => 'name',
+    'unit_id' => 'unit_id',
+    'step_number' => 'step_number',
+    'operation' => 'operation',
+    'value' => 'value',
     'created_at' => 'created_at',
     'updated_at' => 'updated_at'
 };
@@ -37,10 +41,14 @@ my $attribute_map = {
 sub new { 
     my ($class, %args) = @_; 
     my $self = { 
-        #id
-        'id' => $args{'id'}, 
-        #Unit category name
-        'name' => $args{'name'}, 
+        #unit_id
+        'unit_id' => $args{'unit_id'}, 
+        #step in the conversion process
+        'step_number' => $args{'step_number'}, 
+        #0 is add and 1 is multiply
+        'operation' => $args{'operation'}, 
+        #number used in the operation
+        'value' => $args{'value'}, 
         #created_at
         'created_at' => $args{'created_at'}, 
         #updated_at
