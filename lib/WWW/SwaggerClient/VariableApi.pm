@@ -1,5 +1,5 @@
 #
-# Copyright 2015 SmartBear Software
+# Copyright 2016 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,11 +30,14 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
+use base "Class::Data::Inheritable";
+
+__PACKAGE__->mk_classdata('method_documentation' => {});
+
 sub new {
     my $class   = shift;
-    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
-        'api_client' => $default_api_client,
+        'api_client' => WWW::SwaggerClient::ApiClient->instance,
         @_
     );
 
@@ -47,54 +50,262 @@ sub new {
 
 }
 
+
 #
 # variables_get
 #
 # Get all Variables
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param int $id id (optional)
-# @param string $client_id client_id (optional)
-# @param int $parent_id parent_id (optional)
-# @param string $name name (optional)
-# @param int $variable_category_id variable_category_id (optional)
-# @param int $default_unit_id default_unit_id (optional)
-# @param string $combination_operation combination_operation (optional)
-# @param number $filling_value filling_value (optional)
-# @param number $maximum_allowed_value maximum_allowed_value (optional)
-# @param number $minimum_allowed_value minimum_allowed_value (optional)
-# @param int $onset_delay onset_delay (optional)
-# @param int $duration_of_action duration_of_action (optional)
-# @param int $public public (optional)
-# @param boolean $cause_only cause_only (optional)
-# @param number $most_common_value most_common_value (optional)
-# @param int $most_common_unit_id most_common_unit_id (optional)
-# @param number $standard_deviation standard_deviation (optional)
-# @param number $variance variance (optional)
-# @param number $mean mean (optional)
-# @param number $median median (optional)
-# @param number $number_of_measurements number_of_measurements (optional)
-# @param number $number_of_unique_values number_of_unique_values (optional)
-# @param number $skewness skewness (optional)
-# @param number $kurtosis kurtosis (optional)
-# @param number $latitude latitude (optional)
-# @param number $longitude longitude (optional)
-# @param string $location location (optional)
+# @param string $client_id The ID of the client application which last created or updated this common variable (optional)
+# @param int $parent_id ID of the parent variable if this variable has any parent (optional)
+# @param string $name User-defined variable display name (optional)
+# @param int $variable_category_id Variable category ID (optional)
+# @param int $default_unit_id ID of the default unit for the variable (optional)
+# @param string $combination_operation How to combine values of this variable (for instance, to see a summary of the values over a month) SUM or MEAN (optional)
+# @param number $filling_value Value for replacing null measurements (optional)
+# @param number $maximum_allowed_value Maximum reasonable value for this variable (uses default unit) (optional)
+# @param number $minimum_allowed_value Minimum reasonable value for this variable (uses default unit) (optional)
+# @param int $onset_delay Estimated number of seconds that pass before a stimulus produces a perceivable effect (optional)
+# @param int $duration_of_action Estimated number of seconds following the onset delay in which a stimulus produces a perceivable effect (optional)
+# @param int $public Is variable public (optional)
+# @param boolean $cause_only A value of 1 indicates that this variable is generally a cause in a causal relationship.  An example of a causeOnly variable would be a variable such as Cloud Cover which would generally not be influenced by the behaviour of the user (optional)
+# @param number $most_common_value Most common value (optional)
+# @param int $most_common_unit_id Most common Unit (optional)
+# @param number $standard_deviation Standard Deviation (optional)
+# @param number $variance Average variance for this variable based on all user data (optional)
+# @param number $mean Mean for this variable based on all user data (optional)
+# @param number $median Median for this variable based on all user data (optional)
+# @param number $number_of_measurements Number of measurements for this variable based on all user data (optional)
+# @param number $number_of_unique_values Number of unique values for this variable based on all user data (optional)
+# @param number $skewness Skewness for this variable based on all user data (optional)
+# @param number $kurtosis Kurtosis for this variable based on all user data (optional)
 # @param string $status status (optional)
 # @param string $error_message error_message (optional)
-# @param string $last_successful_update_time last_successful_update_time (optional)
-# @param string $created_at created_at (optional)
-# @param string $updated_at updated_at (optional)
-# @param string $product_url product_url (optional)
-# @param string $image_url image_url (optional)
-# @param number $price price (optional)
-# @param int $number_of_user_variables number_of_user_variables (optional)
-# @param boolean $outcome outcome (optional)
-# @param number $minimum_recorded_value minimum_recorded_value (optional)
-# @param number $maximum_recorded_value maximum_recorded_value (optional)
-# @param int $limit limit (optional)
-# @param int $offset offset (optional)
-# @param string $sort sort (optional)
-# @return inline_response_200_27
+# @param string $last_successful_update_time When this variable or its settings were last updated (optional)
+# @param string $created_at When the record was first created. Use ISO 8601 datetime format (optional)
+# @param string $updated_at When the record was last updated. Use ISO 8601 datetime format (optional)
+# @param string $product_url Product URL (optional)
+# @param string $image_url Image URL (optional)
+# @param number $price Price (optional)
+# @param int $number_of_user_variables Number of users who have data for this variable (optional)
+# @param boolean $outcome Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables. (optional)
+# @param number $minimum_recorded_value Minimum recorded value of this variable based on all user data (optional)
+# @param number $maximum_recorded_value Maximum recorded value of this variable based on all user data (optional)
+# @param int $limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records. (optional)
+# @param int $offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned. (optional)
+# @param string $sort Sort records by a given field name. If the field name is prefixed with &#39;-&#39;, it will sort in descending order. (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'id' => {
+        data_type => 'int',
+        description => 'id',
+        required => '0',
+    },
+    'client_id' => {
+        data_type => 'string',
+        description => 'The ID of the client application which last created or updated this common variable',
+        required => '0',
+    },
+    'parent_id' => {
+        data_type => 'int',
+        description => 'ID of the parent variable if this variable has any parent',
+        required => '0',
+    },
+    'name' => {
+        data_type => 'string',
+        description => 'User-defined variable display name',
+        required => '0',
+    },
+    'variable_category_id' => {
+        data_type => 'int',
+        description => 'Variable category ID',
+        required => '0',
+    },
+    'default_unit_id' => {
+        data_type => 'int',
+        description => 'ID of the default unit for the variable',
+        required => '0',
+    },
+    'combination_operation' => {
+        data_type => 'string',
+        description => 'How to combine values of this variable (for instance, to see a summary of the values over a month) SUM or MEAN',
+        required => '0',
+    },
+    'filling_value' => {
+        data_type => 'number',
+        description => 'Value for replacing null measurements',
+        required => '0',
+    },
+    'maximum_allowed_value' => {
+        data_type => 'number',
+        description => 'Maximum reasonable value for this variable (uses default unit)',
+        required => '0',
+    },
+    'minimum_allowed_value' => {
+        data_type => 'number',
+        description => 'Minimum reasonable value for this variable (uses default unit)',
+        required => '0',
+    },
+    'onset_delay' => {
+        data_type => 'int',
+        description => 'Estimated number of seconds that pass before a stimulus produces a perceivable effect',
+        required => '0',
+    },
+    'duration_of_action' => {
+        data_type => 'int',
+        description => 'Estimated number of seconds following the onset delay in which a stimulus produces a perceivable effect',
+        required => '0',
+    },
+    'public' => {
+        data_type => 'int',
+        description => 'Is variable public',
+        required => '0',
+    },
+    'cause_only' => {
+        data_type => 'boolean',
+        description => 'A value of 1 indicates that this variable is generally a cause in a causal relationship.  An example of a causeOnly variable would be a variable such as Cloud Cover which would generally not be influenced by the behaviour of the user',
+        required => '0',
+    },
+    'most_common_value' => {
+        data_type => 'number',
+        description => 'Most common value',
+        required => '0',
+    },
+    'most_common_unit_id' => {
+        data_type => 'int',
+        description => 'Most common Unit',
+        required => '0',
+    },
+    'standard_deviation' => {
+        data_type => 'number',
+        description => 'Standard Deviation',
+        required => '0',
+    },
+    'variance' => {
+        data_type => 'number',
+        description => 'Average variance for this variable based on all user data',
+        required => '0',
+    },
+    'mean' => {
+        data_type => 'number',
+        description => 'Mean for this variable based on all user data',
+        required => '0',
+    },
+    'median' => {
+        data_type => 'number',
+        description => 'Median for this variable based on all user data',
+        required => '0',
+    },
+    'number_of_measurements' => {
+        data_type => 'number',
+        description => 'Number of measurements for this variable based on all user data',
+        required => '0',
+    },
+    'number_of_unique_values' => {
+        data_type => 'number',
+        description => 'Number of unique values for this variable based on all user data',
+        required => '0',
+    },
+    'skewness' => {
+        data_type => 'number',
+        description => 'Skewness for this variable based on all user data',
+        required => '0',
+    },
+    'kurtosis' => {
+        data_type => 'number',
+        description => 'Kurtosis for this variable based on all user data',
+        required => '0',
+    },
+    'status' => {
+        data_type => 'string',
+        description => 'status',
+        required => '0',
+    },
+    'error_message' => {
+        data_type => 'string',
+        description => 'error_message',
+        required => '0',
+    },
+    'last_successful_update_time' => {
+        data_type => 'string',
+        description => 'When this variable or its settings were last updated',
+        required => '0',
+    },
+    'created_at' => {
+        data_type => 'string',
+        description => 'When the record was first created. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'updated_at' => {
+        data_type => 'string',
+        description => 'When the record was last updated. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'product_url' => {
+        data_type => 'string',
+        description => 'Product URL',
+        required => '0',
+    },
+    'image_url' => {
+        data_type => 'string',
+        description => 'Image URL',
+        required => '0',
+    },
+    'price' => {
+        data_type => 'number',
+        description => 'Price',
+        required => '0',
+    },
+    'number_of_user_variables' => {
+        data_type => 'int',
+        description => 'Number of users who have data for this variable',
+        required => '0',
+    },
+    'outcome' => {
+        data_type => 'boolean',
+        description => 'Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables.',
+        required => '0',
+    },
+    'minimum_recorded_value' => {
+        data_type => 'number',
+        description => 'Minimum recorded value of this variable based on all user data',
+        required => '0',
+    },
+    'maximum_recorded_value' => {
+        data_type => 'number',
+        description => 'Maximum recorded value of this variable based on all user data',
+        required => '0',
+    },
+    'limit' => {
+        data_type => 'int',
+        description => 'The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.',
+        required => '0',
+    },
+    'offset' => {
+        data_type => 'int',
+        description => 'OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.',
+        required => '0',
+    },
+    'sort' => {
+        data_type => 'string',
+        description => 'Sort records by a given field name. If the field name is prefixed with &#39;-&#39;, it will sort in descending order.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variables_get } = { 
+    	summary => 'Get all Variables',
+        params => $params,
+        returns => 'inline_response_200_34',
+        };
+}
+# @return inline_response_200_34
 #
 sub variables_get {
     my ($self, %args) = @_;
@@ -118,6 +329,9 @@ sub variables_get {
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
     # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }# query params
     if ( exists $args{'id'}) {
         $query_params->{'id'} = $self->{api_client}->to_query_value($args{'id'});
     }# query params
@@ -190,15 +404,6 @@ sub variables_get {
     if ( exists $args{'kurtosis'}) {
         $query_params->{'kurtosis'} = $self->{api_client}->to_query_value($args{'kurtosis'});
     }# query params
-    if ( exists $args{'latitude'}) {
-        $query_params->{'latitude'} = $self->{api_client}->to_query_value($args{'latitude'});
-    }# query params
-    if ( exists $args{'longitude'}) {
-        $query_params->{'longitude'} = $self->{api_client}->to_query_value($args{'longitude'});
-    }# query params
-    if ( exists $args{'location'}) {
-        $query_params->{'location'} = $self->{api_client}->to_query_value($args{'location'});
-    }# query params
     if ( exists $args{'status'}) {
         $query_params->{'status'} = $self->{api_client}->to_query_value($args{'status'});
     }# query params
@@ -251,7 +456,7 @@ sub variables_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -260,17 +465,38 @@ sub variables_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_27', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_34', $response);
     return $_response_object;
     
 }
+
 #
 # variables_post
 #
 # Store Variable
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param Variable $body Variable that should be stored (optional)
-# @return inline_response_200_28
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'Variable',
+        description => 'Variable that should be stored',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variables_post } = { 
+    	summary => 'Store Variable',
+        params => $params,
+        returns => 'inline_response_200_35',
+        };
+}
+# @return inline_response_200_35
 #
 sub variables_post {
     my ($self, %args) = @_;
@@ -293,7 +519,10 @@ sub variables_post {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     
     
@@ -304,7 +533,7 @@ sub variables_post {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -313,17 +542,38 @@ sub variables_post {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_28', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_35', $response);
     return $_response_object;
     
 }
+
 #
 # variables_id_get
 #
 # Get Variable
 # 
 # @param int $id id of Variable (required)
-# @return inline_response_200_28
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Variable',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variables_id_get } = { 
+    	summary => 'Get Variable',
+        params => $params,
+        returns => 'inline_response_200_35',
+        };
+}
+# @return inline_response_200_35
 #
 sub variables_id_get {
     my ($self, %args) = @_;
@@ -351,7 +601,10 @@ sub variables_id_get {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -364,7 +617,7 @@ sub variables_id_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -373,17 +626,43 @@ sub variables_id_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_28', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_35', $response);
     return $_response_object;
     
 }
+
 #
 # variables_id_put
 #
 # Update Variable
 # 
 # @param int $id id of Variable (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param Variable $body Variable that should be updated (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Variable',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'Variable',
+        description => 'Variable that should be updated',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variables_id_put } = { 
+    	summary => 'Update Variable',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub variables_id_put {
@@ -412,7 +691,10 @@ sub variables_id_put {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -428,7 +710,7 @@ sub variables_id_put {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -441,12 +723,33 @@ sub variables_id_put {
     return $_response_object;
     
 }
+
 #
 # variables_id_delete
 #
 # Delete Variable
 # 
 # @param int $id id of Variable (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Variable',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variables_id_delete } = { 
+    	summary => 'Delete Variable',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub variables_id_delete {
@@ -475,7 +778,10 @@ sub variables_id_delete {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -488,7 +794,7 @@ sub variables_id_delete {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,

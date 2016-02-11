@@ -1,5 +1,5 @@
 #
-# Copyright 2015 SmartBear Software
+# Copyright 2016 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,11 +30,14 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
+use base "Class::Data::Inheritable";
+
+__PACKAGE__->mk_classdata('method_documentation' => {});
+
 sub new {
     my $class   = shift;
-    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
-        'api_client' => $default_api_client,
+        'api_client' => WWW::SwaggerClient::ApiClient->instance,
         @_
     );
 
@@ -47,38 +50,184 @@ sub new {
 
 }
 
+
 #
 # correlations_get
 #
 # Get all Correlations
 # 
-# @param int $timestamp timestamp (optional)
-# @param int $user_id user_id (optional)
-# @param number $correlation correlation (optional)
-# @param int $cause_id cause_id (optional)
-# @param int $effect_id effect_id (optional)
-# @param int $onset_delay onset_delay (optional)
-# @param int $duration_of_action duration_of_action (optional)
-# @param int $number_of_pairs number_of_pairs (optional)
-# @param number $value_predicting_high_outcome value_predicting_high_outcome (optional)
-# @param number $value_predicting_low_outcome value_predicting_low_outcome (optional)
-# @param number $optimal_pearson_product optimal_pearson_product (optional)
-# @param number $vote vote (optional)
-# @param number $statistical_significance statistical_significance (optional)
-# @param string $cause_unit cause_unit (optional)
-# @param int $cause_unit_id cause_unit_id (optional)
-# @param int $cause_changes cause_changes (optional)
-# @param int $effect_changes effect_changes (optional)
-# @param number $qm_score qm_score (optional)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+# @param int $timestamp Time at which correlation was calculated (optional)
+# @param int $user_id ID of user that owns this correlation (optional)
+# @param number $correlation Pearson correlation coefficient between cause and effect measurements (optional)
+# @param int $cause_id variable ID of the predictor variable for which the user desires correlations (optional)
+# @param int $effect_id variable ID of the outcome variable for which the user desires correlations (optional)
+# @param int $onset_delay User estimated or default time after cause measurement before a perceivable effect is observed (optional)
+# @param int $duration_of_action Time over which the cause is expected to produce a perceivable effect following the onset delay (optional)
+# @param int $number_of_pairs Number of points that went into the correlation calculation (optional)
+# @param number $value_predicting_high_outcome cause value that predicts an above average effect value (in default unit for predictor variable) (optional)
+# @param number $value_predicting_low_outcome cause value that predicts a below average effect value (in default unit for predictor variable) (optional)
+# @param number $optimal_pearson_product Optimal Pearson Product (optional)
+# @param number $vote Vote (optional)
+# @param number $statistical_significance A function of the effect size and sample size (optional)
+# @param string $cause_unit Unit of the predictor variable (optional)
+# @param int $cause_unit_id Unit ID of the predictor variable (optional)
+# @param int $cause_changes Cause changes (optional)
+# @param int $effect_changes Effect changes (optional)
+# @param number $qm_score QM Score (optional)
 # @param string $error error (optional)
-# @param string $created_at created_at (optional)
-# @param string $updated_at updated_at (optional)
-# @param number $reverse_pearson_correlation_coefficient reverse_pearson_correlation_coefficient (optional)
-# @param number $predictive_pearson_correlation_coefficient predictive_pearson_correlation_coefficient (optional)
-# @param int $limit limit (optional)
-# @param int $offset offset (optional)
-# @param string $sort sort (optional)
-# @return inline_response_200_7
+# @param string $created_at When the record was first created. Use ISO 8601 datetime format (optional)
+# @param string $updated_at When the record in the database was last updated. Use ISO 8601 datetime format (optional)
+# @param number $reverse_pearson_correlation_coefficient Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation (optional)
+# @param number $predictive_pearson_correlation_coefficient Predictive Pearson Correlation Coefficient (optional)
+# @param int $limit Limit the number of results returned (optional)
+# @param int $offset Records from give Offset (optional)
+# @param string $sort Sort records by given field (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'timestamp' => {
+        data_type => 'int',
+        description => 'Time at which correlation was calculated',
+        required => '0',
+    },
+    'user_id' => {
+        data_type => 'int',
+        description => 'ID of user that owns this correlation',
+        required => '0',
+    },
+    'correlation' => {
+        data_type => 'number',
+        description => 'Pearson correlation coefficient between cause and effect measurements',
+        required => '0',
+    },
+    'cause_id' => {
+        data_type => 'int',
+        description => 'variable ID of the predictor variable for which the user desires correlations',
+        required => '0',
+    },
+    'effect_id' => {
+        data_type => 'int',
+        description => 'variable ID of the outcome variable for which the user desires correlations',
+        required => '0',
+    },
+    'onset_delay' => {
+        data_type => 'int',
+        description => 'User estimated or default time after cause measurement before a perceivable effect is observed',
+        required => '0',
+    },
+    'duration_of_action' => {
+        data_type => 'int',
+        description => 'Time over which the cause is expected to produce a perceivable effect following the onset delay',
+        required => '0',
+    },
+    'number_of_pairs' => {
+        data_type => 'int',
+        description => 'Number of points that went into the correlation calculation',
+        required => '0',
+    },
+    'value_predicting_high_outcome' => {
+        data_type => 'number',
+        description => 'cause value that predicts an above average effect value (in default unit for predictor variable)',
+        required => '0',
+    },
+    'value_predicting_low_outcome' => {
+        data_type => 'number',
+        description => 'cause value that predicts a below average effect value (in default unit for predictor variable)',
+        required => '0',
+    },
+    'optimal_pearson_product' => {
+        data_type => 'number',
+        description => 'Optimal Pearson Product',
+        required => '0',
+    },
+    'vote' => {
+        data_type => 'number',
+        description => 'Vote',
+        required => '0',
+    },
+    'statistical_significance' => {
+        data_type => 'number',
+        description => 'A function of the effect size and sample size',
+        required => '0',
+    },
+    'cause_unit' => {
+        data_type => 'string',
+        description => 'Unit of the predictor variable',
+        required => '0',
+    },
+    'cause_unit_id' => {
+        data_type => 'int',
+        description => 'Unit ID of the predictor variable',
+        required => '0',
+    },
+    'cause_changes' => {
+        data_type => 'int',
+        description => 'Cause changes',
+        required => '0',
+    },
+    'effect_changes' => {
+        data_type => 'int',
+        description => 'Effect changes',
+        required => '0',
+    },
+    'qm_score' => {
+        data_type => 'number',
+        description => 'QM Score',
+        required => '0',
+    },
+    'error' => {
+        data_type => 'string',
+        description => 'error',
+        required => '0',
+    },
+    'created_at' => {
+        data_type => 'string',
+        description => 'When the record was first created. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'updated_at' => {
+        data_type => 'string',
+        description => 'When the record in the database was last updated. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'reverse_pearson_correlation_coefficient' => {
+        data_type => 'number',
+        description => 'Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation',
+        required => '0',
+    },
+    'predictive_pearson_correlation_coefficient' => {
+        data_type => 'number',
+        description => 'Predictive Pearson Correlation Coefficient',
+        required => '0',
+    },
+    'limit' => {
+        data_type => 'int',
+        description => 'Limit the number of results returned',
+        required => '0',
+    },
+    'offset' => {
+        data_type => 'int',
+        description => 'Records from give Offset',
+        required => '0',
+    },
+    'sort' => {
+        data_type => 'string',
+        description => 'Sort records by given field',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ correlations_get } = { 
+    	summary => 'Get all Correlations',
+        params => $params,
+        returns => 'inline_response_200_17',
+        };
+}
+# @return inline_response_200_17
 #
 sub correlations_get {
     my ($self, %args) = @_;
@@ -102,6 +251,9 @@ sub correlations_get {
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
     # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }# query params
     if ( exists $args{'timestamp'}) {
         $query_params->{'timestamp'} = $self->{api_client}->to_query_value($args{'timestamp'});
     }# query params
@@ -187,7 +339,7 @@ sub correlations_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -196,17 +348,38 @@ sub correlations_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_7', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_17', $response);
     return $_response_object;
     
 }
+
 #
 # correlations_post
 #
 # Store Correlation
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param Correlation $body Correlation that should be stored (optional)
-# @return inline_response_200_8
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'Correlation',
+        description => 'Correlation that should be stored',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ correlations_post } = { 
+    	summary => 'Store Correlation',
+        params => $params,
+        returns => 'inline_response_200_18',
+        };
+}
+# @return inline_response_200_18
 #
 sub correlations_post {
     my ($self, %args) = @_;
@@ -229,7 +402,10 @@ sub correlations_post {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     
     
@@ -240,7 +416,7 @@ sub correlations_post {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -249,17 +425,38 @@ sub correlations_post {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_8', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_18', $response);
     return $_response_object;
     
 }
+
 #
 # correlations_id_get
 #
-# Get Correlation
+# Get Correlation Details
 # 
 # @param int $id id of Correlation (required)
-# @return inline_response_200_8
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Correlation',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ correlations_id_get } = { 
+    	summary => 'Get Correlation Details',
+        params => $params,
+        returns => 'inline_response_200_18',
+        };
+}
+# @return inline_response_200_18
 #
 sub correlations_id_get {
     my ($self, %args) = @_;
@@ -287,7 +484,10 @@ sub correlations_id_get {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -300,7 +500,7 @@ sub correlations_id_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -309,17 +509,43 @@ sub correlations_id_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_8', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_18', $response);
     return $_response_object;
     
 }
+
 #
 # correlations_id_put
 #
 # Update Correlation
 # 
 # @param int $id id of Correlation (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param Correlation $body Correlation that should be updated (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Correlation',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'Correlation',
+        description => 'Correlation that should be updated',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ correlations_id_put } = { 
+    	summary => 'Update Correlation',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub correlations_id_put {
@@ -348,7 +574,10 @@ sub correlations_id_put {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -364,7 +593,7 @@ sub correlations_id_put {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -377,12 +606,33 @@ sub correlations_id_put {
     return $_response_object;
     
 }
+
 #
 # correlations_id_delete
 #
 # Delete Correlation
 # 
 # @param int $id id of Correlation (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Correlation',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ correlations_id_delete } = { 
+    	summary => 'Delete Correlation',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub correlations_id_delete {
@@ -411,7 +661,10 @@ sub correlations_id_delete {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -424,7 +677,7 @@ sub correlations_id_delete {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,

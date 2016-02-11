@@ -1,5 +1,5 @@
 #
-# Copyright 2015 SmartBear Software
+# Copyright 2016 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,11 +30,14 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
+use base "Class::Data::Inheritable";
+
+__PACKAGE__->mk_classdata('method_documentation' => {});
+
 sub new {
     my $class   = shift;
-    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
-        'api_client' => $default_api_client,
+        'api_client' => WWW::SwaggerClient::ApiClient->instance,
         @_
     );
 
@@ -47,30 +50,154 @@ sub new {
 
 }
 
+
 #
 # measurements_get
 #
-# Get all Measurements
+# Get measurements for this user
 # 
-# @param int $user_id user_id (optional)
-# @param string $client_id client_id (optional)
-# @param int $connector_id connector_id (optional)
-# @param int $variable_id variable_id (optional)
-# @param int $start_time start_time (optional)
-# @param number $value value (optional)
-# @param number $original_value original_value (optional)
-# @param int $duration duration (optional)
-# @param string $note note (optional)
-# @param number $latitude latitude (optional)
-# @param number $longitude longitude (optional)
-# @param string $location location (optional)
-# @param string $created_at created_at (optional)
-# @param string $updated_at updated_at (optional)
-# @param string $error error (optional)
-# @param int $limit limit (optional)
-# @param int $offset offset (optional)
-# @param string $sort sort (optional)
-# @return inline_response_200_11
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+# @param int $user_id ID of user that owns this measurement (optional)
+# @param string $client_id The ID of the client application which originally stored the measurement (optional)
+# @param int $connector_id The id for the connector data source from which the measurement was obtained (optional)
+# @param int $variable_id ID of the variable for which we are creating the measurement records (optional)
+# @param int $source_id Application or device used to record the measurement values (optional)
+# @param string $start_time start time for the measurement event. Use ISO 8601 datetime format (optional)
+# @param number $value The value of the measurement after conversion to the default unit for that variable (optional)
+# @param int $unit_id The default unit id for the variable (optional)
+# @param number $original_value Unconverted value of measurement as originally posted (before conversion to default unit) (optional)
+# @param int $original_unit_id Unit id of the measurement as originally submitted (optional)
+# @param int $duration Duration of the event being measurement in seconds (optional)
+# @param string $note An optional note the user may include with their measurement (optional)
+# @param number $latitude Latitude at which the measurement was taken (optional)
+# @param number $longitude Longitude at which the measurement was taken (optional)
+# @param string $location Optional human readable name for the location where the measurement was recorded (optional)
+# @param string $created_at When the record was first created. Use ISO 8601 datetime format (optional)
+# @param string $updated_at When the record was last updated. Use ISO 8601 datetime format (optional)
+# @param string $error An error message if there is a problem with the measurement (optional)
+# @param int $limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records. (optional)
+# @param int $offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned. (optional)
+# @param string $sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order. (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'user_id' => {
+        data_type => 'int',
+        description => 'ID of user that owns this measurement',
+        required => '0',
+    },
+    'client_id' => {
+        data_type => 'string',
+        description => 'The ID of the client application which originally stored the measurement',
+        required => '0',
+    },
+    'connector_id' => {
+        data_type => 'int',
+        description => 'The id for the connector data source from which the measurement was obtained',
+        required => '0',
+    },
+    'variable_id' => {
+        data_type => 'int',
+        description => 'ID of the variable for which we are creating the measurement records',
+        required => '0',
+    },
+    'source_id' => {
+        data_type => 'int',
+        description => 'Application or device used to record the measurement values',
+        required => '0',
+    },
+    'start_time' => {
+        data_type => 'string',
+        description => 'start time for the measurement event. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'value' => {
+        data_type => 'number',
+        description => 'The value of the measurement after conversion to the default unit for that variable',
+        required => '0',
+    },
+    'unit_id' => {
+        data_type => 'int',
+        description => 'The default unit id for the variable',
+        required => '0',
+    },
+    'original_value' => {
+        data_type => 'number',
+        description => 'Unconverted value of measurement as originally posted (before conversion to default unit)',
+        required => '0',
+    },
+    'original_unit_id' => {
+        data_type => 'int',
+        description => 'Unit id of the measurement as originally submitted',
+        required => '0',
+    },
+    'duration' => {
+        data_type => 'int',
+        description => 'Duration of the event being measurement in seconds',
+        required => '0',
+    },
+    'note' => {
+        data_type => 'string',
+        description => 'An optional note the user may include with their measurement',
+        required => '0',
+    },
+    'latitude' => {
+        data_type => 'number',
+        description => 'Latitude at which the measurement was taken',
+        required => '0',
+    },
+    'longitude' => {
+        data_type => 'number',
+        description => 'Longitude at which the measurement was taken',
+        required => '0',
+    },
+    'location' => {
+        data_type => 'string',
+        description => 'Optional human readable name for the location where the measurement was recorded',
+        required => '0',
+    },
+    'created_at' => {
+        data_type => 'string',
+        description => 'When the record was first created. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'updated_at' => {
+        data_type => 'string',
+        description => 'When the record was last updated. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'error' => {
+        data_type => 'string',
+        description => 'An error message if there is a problem with the measurement',
+        required => '0',
+    },
+    'limit' => {
+        data_type => 'int',
+        description => 'The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.',
+        required => '0',
+    },
+    'offset' => {
+        data_type => 'int',
+        description => 'OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.',
+        required => '0',
+    },
+    'sort' => {
+        data_type => 'string',
+        description => 'Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ measurements_get } = { 
+    	summary => 'Get measurements for this user',
+        params => $params,
+        returns => 'inline_response_200_5',
+        };
+}
+# @return inline_response_200_5
 #
 sub measurements_get {
     my ($self, %args) = @_;
@@ -94,6 +221,9 @@ sub measurements_get {
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
     # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }# query params
     if ( exists $args{'user_id'}) {
         $query_params->{'user_id'} = $self->{api_client}->to_query_value($args{'user_id'});
     }# query params
@@ -106,14 +236,23 @@ sub measurements_get {
     if ( exists $args{'variable_id'}) {
         $query_params->{'variable_id'} = $self->{api_client}->to_query_value($args{'variable_id'});
     }# query params
+    if ( exists $args{'source_id'}) {
+        $query_params->{'source_id'} = $self->{api_client}->to_query_value($args{'source_id'});
+    }# query params
     if ( exists $args{'start_time'}) {
         $query_params->{'start_time'} = $self->{api_client}->to_query_value($args{'start_time'});
     }# query params
     if ( exists $args{'value'}) {
         $query_params->{'value'} = $self->{api_client}->to_query_value($args{'value'});
     }# query params
+    if ( exists $args{'unit_id'}) {
+        $query_params->{'unit_id'} = $self->{api_client}->to_query_value($args{'unit_id'});
+    }# query params
     if ( exists $args{'original_value'}) {
         $query_params->{'original_value'} = $self->{api_client}->to_query_value($args{'original_value'});
+    }# query params
+    if ( exists $args{'original_unit_id'}) {
+        $query_params->{'original_unit_id'} = $self->{api_client}->to_query_value($args{'original_unit_id'});
     }# query params
     if ( exists $args{'duration'}) {
         $query_params->{'duration'} = $self->{api_client}->to_query_value($args{'duration'});
@@ -155,7 +294,7 @@ sub measurements_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -164,17 +303,38 @@ sub measurements_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_11', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_5', $response);
     return $_response_object;
     
 }
+
 #
 # measurements_post
 #
-# Store Measurement
+# Post a new set or update existing measurements to the database
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param MeasurementPost $body Measurement that should be stored (optional)
-# @return inline_response_200_11
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'MeasurementPost',
+        description => 'Measurement that should be stored',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ measurements_post } = { 
+    	summary => 'Post a new set or update existing measurements to the database',
+        params => $params,
+        returns => 'inline_response_200_5',
+        };
+}
+# @return inline_response_200_5
 #
 sub measurements_post {
     my ($self, %args) = @_;
@@ -197,7 +357,10 @@ sub measurements_post {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     
     
@@ -208,7 +371,7 @@ sub measurements_post {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -217,15 +380,31 @@ sub measurements_post {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_11', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_5', $response);
     return $_response_object;
     
 }
+
 #
 # measurements_csv_get
 #
 # Get Measurements CSV
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ measurements_csv_get } = { 
+    	summary => 'Get Measurements CSV',
+        params => $params,
+        returns => 'file',
+        };
+}
 # @return file
 #
 sub measurements_csv_get {
@@ -249,7 +428,10 @@ sub measurements_csv_get {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     
     
@@ -257,7 +439,7 @@ sub measurements_csv_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -270,11 +452,27 @@ sub measurements_csv_get {
     return $_response_object;
     
 }
+
 #
 # measurements_request_csv_post
 #
 # Post Request for Measurements CSV
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ measurements_request_csv_post } = { 
+    	summary => 'Post Request for Measurements CSV',
+        params => $params,
+        returns => 'int',
+        };
+}
 # @return int
 #
 sub measurements_request_csv_post {
@@ -298,7 +496,10 @@ sub measurements_request_csv_post {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     
     
@@ -306,7 +507,7 @@ sub measurements_request_csv_post {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -319,13 +520,34 @@ sub measurements_request_csv_post {
     return $_response_object;
     
 }
+
 #
 # measurements_id_get
 #
 # Get Measurement
 # 
 # @param int $id id of Measurement (required)
-# @return inline_response_200_12
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Measurement',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ measurements_id_get } = { 
+    	summary => 'Get Measurement',
+        params => $params,
+        returns => 'inline_response_200_20',
+        };
+}
+# @return inline_response_200_20
 #
 sub measurements_id_get {
     my ($self, %args) = @_;
@@ -353,7 +575,10 @@ sub measurements_id_get {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -366,7 +591,7 @@ sub measurements_id_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -375,17 +600,43 @@ sub measurements_id_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_12', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_20', $response);
     return $_response_object;
     
 }
+
 #
 # measurements_id_put
 #
 # Update Measurement
 # 
 # @param int $id id of Measurement (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param Measurement $body Measurement that should be updated (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Measurement',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'Measurement',
+        description => 'Measurement that should be updated',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ measurements_id_put } = { 
+    	summary => 'Update Measurement',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub measurements_id_put {
@@ -414,7 +665,10 @@ sub measurements_id_put {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -430,7 +684,7 @@ sub measurements_id_put {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -443,12 +697,33 @@ sub measurements_id_put {
     return $_response_object;
     
 }
+
 #
 # measurements_id_delete
 #
 # Delete Measurement
 # 
 # @param int $id id of Measurement (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Measurement',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ measurements_id_delete } = { 
+    	summary => 'Delete Measurement',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub measurements_id_delete {
@@ -477,7 +752,10 @@ sub measurements_id_delete {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -490,7 +768,7 @@ sub measurements_id_delete {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,

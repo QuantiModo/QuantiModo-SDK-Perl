@@ -1,5 +1,5 @@
 #
-# Copyright 2015 SmartBear Software
+# Copyright 2016 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,11 +30,14 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
+use base "Class::Data::Inheritable";
+
+__PACKAGE__->mk_classdata('method_documentation' => {});
+
 sub new {
     my $class   = shift;
-    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
-        'api_client' => $default_api_client,
+        'api_client' => WWW::SwaggerClient::ApiClient->instance,
         @_
     );
 
@@ -47,30 +50,136 @@ sub new {
 
 }
 
+
 #
 # variable_categories_get
 #
 # Get all VariableCategories
 # 
-# @param string $name name (optional)
-# @param number $filling_value filling_value (optional)
-# @param number $maximum_allowed_value maximum_allowed_value (optional)
-# @param number $minimum_allowed_value minimum_allowed_value (optional)
-# @param int $duration_of_action duration_of_action (optional)
-# @param int $onset_delay onset_delay (optional)
-# @param string $combination_operation combination_operation (optional)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+# @param string $name Name of the category (optional)
+# @param number $filling_value Value for replacing null measurements (optional)
+# @param number $maximum_allowed_value Maximum recorded value of this category (optional)
+# @param number $minimum_allowed_value Minimum recorded value of this category (optional)
+# @param int $duration_of_action Estimated number of seconds following the onset delay in which a stimulus produces a perceivable effect (optional)
+# @param int $onset_delay Estimated number of seconds that pass before a stimulus produces a perceivable effect (optional)
+# @param string $combination_operation How to combine values of this variable (for instance, to see a summary of the values over a month) SUM or MEAN (optional)
 # @param int $updated updated (optional)
-# @param boolean $cause_only cause_only (optional)
-# @param int $public public (optional)
+# @param boolean $cause_only A value of 1 indicates that this category is generally a cause in a causal relationship.  An example of a causeOnly category would be a category such as Work which would generally not be influenced by the behaviour of the user (optional)
+# @param int $public Is category public (optional)
 # @param boolean $outcome outcome (optional)
-# @param string $created_at created_at (optional)
-# @param string $updated_at updated_at (optional)
-# @param string $image_url image_url (optional)
-# @param int $default_unit_id default_unit_id (optional)
-# @param int $limit limit (optional)
-# @param int $offset offset (optional)
-# @param string $sort sort (optional)
-# @return inline_response_200_23
+# @param string $created_at When the record was first created. Use ISO 8601 datetime format (optional)
+# @param string $updated_at When the record was last updated. Use ISO 8601 datetime format (optional)
+# @param string $image_url Image URL (optional)
+# @param int $default_unit_id ID of the default unit for the category (optional)
+# @param int $limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records. (optional)
+# @param int $offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned. (optional)
+# @param string $sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order. (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'name' => {
+        data_type => 'string',
+        description => 'Name of the category',
+        required => '0',
+    },
+    'filling_value' => {
+        data_type => 'number',
+        description => 'Value for replacing null measurements',
+        required => '0',
+    },
+    'maximum_allowed_value' => {
+        data_type => 'number',
+        description => 'Maximum recorded value of this category',
+        required => '0',
+    },
+    'minimum_allowed_value' => {
+        data_type => 'number',
+        description => 'Minimum recorded value of this category',
+        required => '0',
+    },
+    'duration_of_action' => {
+        data_type => 'int',
+        description => 'Estimated number of seconds following the onset delay in which a stimulus produces a perceivable effect',
+        required => '0',
+    },
+    'onset_delay' => {
+        data_type => 'int',
+        description => 'Estimated number of seconds that pass before a stimulus produces a perceivable effect',
+        required => '0',
+    },
+    'combination_operation' => {
+        data_type => 'string',
+        description => 'How to combine values of this variable (for instance, to see a summary of the values over a month) SUM or MEAN',
+        required => '0',
+    },
+    'updated' => {
+        data_type => 'int',
+        description => 'updated',
+        required => '0',
+    },
+    'cause_only' => {
+        data_type => 'boolean',
+        description => 'A value of 1 indicates that this category is generally a cause in a causal relationship.  An example of a causeOnly category would be a category such as Work which would generally not be influenced by the behaviour of the user',
+        required => '0',
+    },
+    'public' => {
+        data_type => 'int',
+        description => 'Is category public',
+        required => '0',
+    },
+    'outcome' => {
+        data_type => 'boolean',
+        description => 'outcome',
+        required => '0',
+    },
+    'created_at' => {
+        data_type => 'string',
+        description => 'When the record was first created. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'updated_at' => {
+        data_type => 'string',
+        description => 'When the record was last updated. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'image_url' => {
+        data_type => 'string',
+        description => 'Image URL',
+        required => '0',
+    },
+    'default_unit_id' => {
+        data_type => 'int',
+        description => 'ID of the default unit for the category',
+        required => '0',
+    },
+    'limit' => {
+        data_type => 'int',
+        description => 'The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.',
+        required => '0',
+    },
+    'offset' => {
+        data_type => 'int',
+        description => 'OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.',
+        required => '0',
+    },
+    'sort' => {
+        data_type => 'string',
+        description => 'Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variable_categories_get } = { 
+    	summary => 'Get all VariableCategories',
+        params => $params,
+        returns => 'inline_response_200_31',
+        };
+}
+# @return inline_response_200_31
 #
 sub variable_categories_get {
     my ($self, %args) = @_;
@@ -94,6 +203,9 @@ sub variable_categories_get {
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
     # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }# query params
     if ( exists $args{'name'}) {
         $query_params->{'name'} = $self->{api_client}->to_query_value($args{'name'});
     }# query params
@@ -155,7 +267,7 @@ sub variable_categories_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -164,17 +276,38 @@ sub variable_categories_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_23', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_31', $response);
     return $_response_object;
     
 }
+
 #
 # variable_categories_post
 #
 # Store VariableCategory
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param VariableCategory $body VariableCategory that should be stored (optional)
-# @return inline_response_200_24
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'VariableCategory',
+        description => 'VariableCategory that should be stored',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variable_categories_post } = { 
+    	summary => 'Store VariableCategory',
+        params => $params,
+        returns => 'inline_response_200_32',
+        };
+}
+# @return inline_response_200_32
 #
 sub variable_categories_post {
     my ($self, %args) = @_;
@@ -197,7 +330,10 @@ sub variable_categories_post {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     
     
@@ -208,7 +344,7 @@ sub variable_categories_post {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -217,17 +353,38 @@ sub variable_categories_post {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_24', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_32', $response);
     return $_response_object;
     
 }
+
 #
 # variable_categories_id_get
 #
 # Get VariableCategory
 # 
 # @param int $id id of VariableCategory (required)
-# @return inline_response_200_24
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of VariableCategory',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variable_categories_id_get } = { 
+    	summary => 'Get VariableCategory',
+        params => $params,
+        returns => 'inline_response_200_32',
+        };
+}
+# @return inline_response_200_32
 #
 sub variable_categories_id_get {
     my ($self, %args) = @_;
@@ -255,7 +412,10 @@ sub variable_categories_id_get {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -268,7 +428,7 @@ sub variable_categories_id_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -277,17 +437,43 @@ sub variable_categories_id_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_24', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_32', $response);
     return $_response_object;
     
 }
+
 #
 # variable_categories_id_put
 #
 # Update VariableCategory
 # 
 # @param int $id id of VariableCategory (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param VariableCategory $body VariableCategory that should be updated (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of VariableCategory',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'VariableCategory',
+        description => 'VariableCategory that should be updated',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variable_categories_id_put } = { 
+    	summary => 'Update VariableCategory',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub variable_categories_id_put {
@@ -316,7 +502,10 @@ sub variable_categories_id_put {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -332,7 +521,7 @@ sub variable_categories_id_put {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -345,12 +534,33 @@ sub variable_categories_id_put {
     return $_response_object;
     
 }
+
 #
 # variable_categories_id_delete
 #
 # Delete VariableCategory
 # 
 # @param int $id id of VariableCategory (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of VariableCategory',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ variable_categories_id_delete } = { 
+    	summary => 'Delete VariableCategory',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub variable_categories_id_delete {
@@ -379,7 +589,10 @@ sub variable_categories_id_delete {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -392,7 +605,7 @@ sub variable_categories_id_delete {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,

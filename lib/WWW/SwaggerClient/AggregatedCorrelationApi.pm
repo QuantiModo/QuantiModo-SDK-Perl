@@ -1,5 +1,5 @@
 #
-# Copyright 2015 SmartBear Software
+# Copyright 2016 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,11 +30,14 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
+use base "Class::Data::Inheritable";
+
+__PACKAGE__->mk_classdata('method_documentation' => {});
+
 sub new {
     my $class   = shift;
-    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
-        'api_client' => $default_api_client,
+        'api_client' => WWW::SwaggerClient::ApiClient->instance,
         @_
     );
 
@@ -47,39 +50,189 @@ sub new {
 
 }
 
+
 #
 # aggregated_correlations_get
 #
 # Get all AggregatedCorrelations
 # 
-# @param number $correlation correlation (optional)
-# @param int $cause_id cause_id (optional)
-# @param int $effect_id effect_id (optional)
-# @param int $onset_delay onset_delay (optional)
-# @param int $duration_of_action duration_of_action (optional)
-# @param int $number_of_pairs number_of_pairs (optional)
-# @param number $value_predicting_high_outcome value_predicting_high_outcome (optional)
-# @param number $value_predicting_low_outcome value_predicting_low_outcome (optional)
-# @param number $optimal_pearson_product optimal_pearson_product (optional)
-# @param number $vote vote (optional)
-# @param int $number_of_users number_of_users (optional)
-# @param int $number_of_correlations number_of_correlations (optional)
-# @param number $statistical_significance statistical_significance (optional)
-# @param string $cause_unit cause_unit (optional)
-# @param int $cause_unit_id cause_unit_id (optional)
-# @param int $cause_changes cause_changes (optional)
-# @param int $effect_changes effect_changes (optional)
-# @param number $aggregate_qm_score aggregate_qm_score (optional)
-# @param string $created_at created_at (optional)
-# @param string $updated_at updated_at (optional)
-# @param string $status status (optional)
-# @param string $error_message error_message (optional)
-# @param string $last_successful_update_time last_successful_update_time (optional)
-# @param number $reverse_pearson_correlation_coefficient reverse_pearson_correlation_coefficient (optional)
-# @param number $predictive_pearson_correlation_coefficient predictive_pearson_correlation_coefficient (optional)
-# @param int $limit limit (optional)
-# @param int $offset offset (optional)
-# @param string $sort sort (optional)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+# @param number $correlation Pearson correlation coefficient between cause and effect measurements (optional)
+# @param int $cause_id Variable ID of the predictor variable for which the user desires correlations (optional)
+# @param int $effect_id Variable ID of the outcome variable for which the user desires correlations (optional)
+# @param int $onset_delay User estimated (or default number of seconds) after cause measurement before a perceivable effect is observed (optional)
+# @param int $duration_of_action Number of seconds over which the predictor variable event is expected to produce a perceivable effect following the onset delay (optional)
+# @param int $number_of_pairs Number of predictor/outcome data points used in the analysis (optional)
+# @param number $value_predicting_high_outcome Predictor daily aggregated measurement value that predicts an above average effect measurement value (in default unit for predictor variable) (optional)
+# @param number $value_predicting_low_outcome Predictor daily aggregated measurement value that predicts a below average effect measurement value (in default unit for outcome variable) (optional)
+# @param number $optimal_pearson_product Optimal Pearson Product (optional)
+# @param int $number_of_users Number of users whose data was used in this aggregation (optional)
+# @param int $number_of_correlations Number of correlational analyses used in this aggregation (optional)
+# @param number $statistical_significance A function of the effect size and sample size (optional)
+# @param string $cause_unit Abbreviated unit name for the predictor variable (optional)
+# @param int $cause_unit_id Unit ID for the predictor variable (optional)
+# @param int $cause_changes Number of times that the predictor time series changes (optional)
+# @param int $effect_changes Number of times that the predictor time series changes (optional)
+# @param number $aggregate_qm_score Aggregated QM Score which is directly proportional with the relevance of each predictor or outcome (optional)
+# @param string $created_at Date at which the analysis was first performed (optional)
+# @param string $updated_at Date at which the analysis was last updated (optional)
+# @param string $status Indicates whether an analysis is up to date (UPDATED), needs to be updated (WAITING), or had an error (ERROR) (optional)
+# @param string $error_message Message describing any problems encountered during the analysis (optional)
+# @param string $last_successful_update_time Last Successful update time (optional)
+# @param number $reverse_pearson_correlation_coefficient Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation (optional)
+# @param number $predictive_pearson_correlation_coefficient Predictive Pearson Correlation Coefficient (optional)
+# @param int $limit Limit the number of results returned (optional)
+# @param int $offset Records from give Offset (optional)
+# @param string $sort Sort records by given field (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'correlation' => {
+        data_type => 'number',
+        description => 'Pearson correlation coefficient between cause and effect measurements',
+        required => '0',
+    },
+    'cause_id' => {
+        data_type => 'int',
+        description => 'Variable ID of the predictor variable for which the user desires correlations',
+        required => '0',
+    },
+    'effect_id' => {
+        data_type => 'int',
+        description => 'Variable ID of the outcome variable for which the user desires correlations',
+        required => '0',
+    },
+    'onset_delay' => {
+        data_type => 'int',
+        description => 'User estimated (or default number of seconds) after cause measurement before a perceivable effect is observed',
+        required => '0',
+    },
+    'duration_of_action' => {
+        data_type => 'int',
+        description => 'Number of seconds over which the predictor variable event is expected to produce a perceivable effect following the onset delay',
+        required => '0',
+    },
+    'number_of_pairs' => {
+        data_type => 'int',
+        description => 'Number of predictor/outcome data points used in the analysis',
+        required => '0',
+    },
+    'value_predicting_high_outcome' => {
+        data_type => 'number',
+        description => 'Predictor daily aggregated measurement value that predicts an above average effect measurement value (in default unit for predictor variable)',
+        required => '0',
+    },
+    'value_predicting_low_outcome' => {
+        data_type => 'number',
+        description => 'Predictor daily aggregated measurement value that predicts a below average effect measurement value (in default unit for outcome variable)',
+        required => '0',
+    },
+    'optimal_pearson_product' => {
+        data_type => 'number',
+        description => 'Optimal Pearson Product',
+        required => '0',
+    },
+    'number_of_users' => {
+        data_type => 'int',
+        description => 'Number of users whose data was used in this aggregation',
+        required => '0',
+    },
+    'number_of_correlations' => {
+        data_type => 'int',
+        description => 'Number of correlational analyses used in this aggregation',
+        required => '0',
+    },
+    'statistical_significance' => {
+        data_type => 'number',
+        description => 'A function of the effect size and sample size',
+        required => '0',
+    },
+    'cause_unit' => {
+        data_type => 'string',
+        description => 'Abbreviated unit name for the predictor variable',
+        required => '0',
+    },
+    'cause_unit_id' => {
+        data_type => 'int',
+        description => 'Unit ID for the predictor variable',
+        required => '0',
+    },
+    'cause_changes' => {
+        data_type => 'int',
+        description => 'Number of times that the predictor time series changes',
+        required => '0',
+    },
+    'effect_changes' => {
+        data_type => 'int',
+        description => 'Number of times that the predictor time series changes',
+        required => '0',
+    },
+    'aggregate_qm_score' => {
+        data_type => 'number',
+        description => 'Aggregated QM Score which is directly proportional with the relevance of each predictor or outcome',
+        required => '0',
+    },
+    'created_at' => {
+        data_type => 'string',
+        description => 'Date at which the analysis was first performed',
+        required => '0',
+    },
+    'updated_at' => {
+        data_type => 'string',
+        description => 'Date at which the analysis was last updated',
+        required => '0',
+    },
+    'status' => {
+        data_type => 'string',
+        description => 'Indicates whether an analysis is up to date (UPDATED), needs to be updated (WAITING), or had an error (ERROR)',
+        required => '0',
+    },
+    'error_message' => {
+        data_type => 'string',
+        description => 'Message describing any problems encountered during the analysis',
+        required => '0',
+    },
+    'last_successful_update_time' => {
+        data_type => 'string',
+        description => 'Last Successful update time',
+        required => '0',
+    },
+    'reverse_pearson_correlation_coefficient' => {
+        data_type => 'number',
+        description => 'Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation',
+        required => '0',
+    },
+    'predictive_pearson_correlation_coefficient' => {
+        data_type => 'number',
+        description => 'Predictive Pearson Correlation Coefficient',
+        required => '0',
+    },
+    'limit' => {
+        data_type => 'int',
+        description => 'Limit the number of results returned',
+        required => '0',
+    },
+    'offset' => {
+        data_type => 'int',
+        description => 'Records from give Offset',
+        required => '0',
+    },
+    'sort' => {
+        data_type => 'string',
+        description => 'Sort records by given field',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ aggregated_correlations_get } = { 
+    	summary => 'Get all AggregatedCorrelations',
+        params => $params,
+        returns => 'inline_response_200',
+        };
+}
 # @return inline_response_200
 #
 sub aggregated_correlations_get {
@@ -104,6 +257,9 @@ sub aggregated_correlations_get {
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
     # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }# query params
     if ( exists $args{'correlation'}) {
         $query_params->{'correlation'} = $self->{api_client}->to_query_value($args{'correlation'});
     }# query params
@@ -130,9 +286,6 @@ sub aggregated_correlations_get {
     }# query params
     if ( exists $args{'optimal_pearson_product'}) {
         $query_params->{'optimal_pearson_product'} = $self->{api_client}->to_query_value($args{'optimal_pearson_product'});
-    }# query params
-    if ( exists $args{'vote'}) {
-        $query_params->{'vote'} = $self->{api_client}->to_query_value($args{'vote'});
     }# query params
     if ( exists $args{'number_of_users'}) {
         $query_params->{'number_of_users'} = $self->{api_client}->to_query_value($args{'number_of_users'});
@@ -195,7 +348,7 @@ sub aggregated_correlations_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -208,12 +361,33 @@ sub aggregated_correlations_get {
     return $_response_object;
     
 }
+
 #
 # aggregated_correlations_post
 #
 # Store AggregatedCorrelation
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param AggregatedCorrelation $body AggregatedCorrelation that should be stored (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'AggregatedCorrelation',
+        description => 'AggregatedCorrelation that should be stored',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ aggregated_correlations_post } = { 
+    	summary => 'Store AggregatedCorrelation',
+        params => $params,
+        returns => 'inline_response_200_1',
+        };
+}
 # @return inline_response_200_1
 #
 sub aggregated_correlations_post {
@@ -237,7 +411,10 @@ sub aggregated_correlations_post {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     
     
@@ -248,7 +425,7 @@ sub aggregated_correlations_post {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -261,12 +438,33 @@ sub aggregated_correlations_post {
     return $_response_object;
     
 }
+
 #
 # aggregated_correlations_id_get
 #
 # Get AggregatedCorrelation
 # 
 # @param int $id id of AggregatedCorrelation (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of AggregatedCorrelation',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ aggregated_correlations_id_get } = { 
+    	summary => 'Get AggregatedCorrelation',
+        params => $params,
+        returns => 'inline_response_200_1',
+        };
+}
 # @return inline_response_200_1
 #
 sub aggregated_correlations_id_get {
@@ -295,7 +493,10 @@ sub aggregated_correlations_id_get {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -308,7 +509,7 @@ sub aggregated_correlations_id_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -321,13 +522,39 @@ sub aggregated_correlations_id_get {
     return $_response_object;
     
 }
+
 #
 # aggregated_correlations_id_put
 #
 # Update AggregatedCorrelation
 # 
 # @param int $id id of AggregatedCorrelation (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param AggregatedCorrelation $body AggregatedCorrelation that should be updated (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of AggregatedCorrelation',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'AggregatedCorrelation',
+        description => 'AggregatedCorrelation that should be updated',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ aggregated_correlations_id_put } = { 
+    	summary => 'Update AggregatedCorrelation',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub aggregated_correlations_id_put {
@@ -356,7 +583,10 @@ sub aggregated_correlations_id_put {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -372,7 +602,7 @@ sub aggregated_correlations_id_put {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -385,12 +615,33 @@ sub aggregated_correlations_id_put {
     return $_response_object;
     
 }
+
 #
 # aggregated_correlations_id_delete
 #
 # Delete AggregatedCorrelation
 # 
 # @param int $id id of AggregatedCorrelation (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of AggregatedCorrelation',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ aggregated_correlations_id_delete } = { 
+    	summary => 'Delete AggregatedCorrelation',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub aggregated_correlations_id_delete {
@@ -419,7 +670,10 @@ sub aggregated_correlations_id_delete {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -432,7 +686,7 @@ sub aggregated_correlations_id_delete {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,

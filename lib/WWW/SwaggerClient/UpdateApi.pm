@@ -1,5 +1,5 @@
 #
-# Copyright 2015 SmartBear Software
+# Copyright 2016 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,11 +30,14 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
+use base "Class::Data::Inheritable";
+
+__PACKAGE__->mk_classdata('method_documentation' => {});
+
 sub new {
     my $class   = shift;
-    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
-        'api_client' => $default_api_client,
+        'api_client' => WWW::SwaggerClient::ApiClient->instance,
         @_
     );
 
@@ -47,22 +50,88 @@ sub new {
 
 }
 
+
 #
 # updates_get
 #
 # Get all Updates
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param int $user_id user_id (optional)
 # @param int $connector_id connector_id (optional)
 # @param int $number_of_measurements number_of_measurements (optional)
 # @param boolean $success success (optional)
 # @param string $message message (optional)
-# @param string $created_at created_at (optional)
-# @param string $updated_at updated_at (optional)
-# @param int $limit limit (optional)
-# @param int $offset offset (optional)
-# @param string $sort sort (optional)
-# @return inline_response_200_19
+# @param string $created_at When the record was first created. Use ISO 8601 datetime format (optional)
+# @param string $updated_at When the record was last updated. Use ISO 8601 datetime format (optional)
+# @param int $limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records. (optional)
+# @param int $offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned. (optional)
+# @param string $sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order. (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'user_id' => {
+        data_type => 'int',
+        description => 'user_id',
+        required => '0',
+    },
+    'connector_id' => {
+        data_type => 'int',
+        description => 'connector_id',
+        required => '0',
+    },
+    'number_of_measurements' => {
+        data_type => 'int',
+        description => 'number_of_measurements',
+        required => '0',
+    },
+    'success' => {
+        data_type => 'boolean',
+        description => 'success',
+        required => '0',
+    },
+    'message' => {
+        data_type => 'string',
+        description => 'message',
+        required => '0',
+    },
+    'created_at' => {
+        data_type => 'string',
+        description => 'When the record was first created. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'updated_at' => {
+        data_type => 'string',
+        description => 'When the record was last updated. Use ISO 8601 datetime format',
+        required => '0',
+    },
+    'limit' => {
+        data_type => 'int',
+        description => 'The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.',
+        required => '0',
+    },
+    'offset' => {
+        data_type => 'int',
+        description => 'OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.',
+        required => '0',
+    },
+    'sort' => {
+        data_type => 'string',
+        description => 'Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ updates_get } = { 
+    	summary => 'Get all Updates',
+        params => $params,
+        returns => 'inline_response_200_7',
+        };
+}
+# @return inline_response_200_7
 #
 sub updates_get {
     my ($self, %args) = @_;
@@ -86,6 +155,9 @@ sub updates_get {
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
     # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }# query params
     if ( exists $args{'user_id'}) {
         $query_params->{'user_id'} = $self->{api_client}->to_query_value($args{'user_id'});
     }# query params
@@ -123,7 +195,7 @@ sub updates_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -132,17 +204,38 @@ sub updates_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_19', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_7', $response);
     return $_response_object;
     
 }
+
 #
 # updates_post
 #
 # Store Update
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param Update $body Update that should be stored (optional)
-# @return inline_response_200_20
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'Update',
+        description => 'Update that should be stored',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ updates_post } = { 
+    	summary => 'Store Update',
+        params => $params,
+        returns => 'inline_response_200_28',
+        };
+}
+# @return inline_response_200_28
 #
 sub updates_post {
     my ($self, %args) = @_;
@@ -165,7 +258,10 @@ sub updates_post {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     
     
@@ -176,7 +272,7 @@ sub updates_post {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -185,17 +281,38 @@ sub updates_post {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_20', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_28', $response);
     return $_response_object;
     
 }
+
 #
 # updates_id_get
 #
 # Get Update
 # 
 # @param int $id id of Update (required)
-# @return inline_response_200_20
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Update',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ updates_id_get } = { 
+    	summary => 'Get Update',
+        params => $params,
+        returns => 'inline_response_200_28',
+        };
+}
+# @return inline_response_200_28
 #
 sub updates_id_get {
     my ($self, %args) = @_;
@@ -223,7 +340,10 @@ sub updates_id_get {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -236,7 +356,7 @@ sub updates_id_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -245,17 +365,43 @@ sub updates_id_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_20', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_28', $response);
     return $_response_object;
     
 }
+
 #
 # updates_id_put
 #
 # Update Update
 # 
 # @param int $id id of Update (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param Update $body Update that should be updated (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Update',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'Update',
+        description => 'Update that should be updated',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ updates_id_put } = { 
+    	summary => 'Update Update',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub updates_id_put {
@@ -284,7 +430,10 @@ sub updates_id_put {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -300,7 +449,7 @@ sub updates_id_put {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -313,12 +462,33 @@ sub updates_id_put {
     return $_response_object;
     
 }
+
 #
 # updates_id_delete
 #
 # Delete Update
 # 
 # @param int $id id of Update (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Update',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ updates_id_delete } = { 
+    	summary => 'Delete Update',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub updates_id_delete {
@@ -347,7 +517,10 @@ sub updates_id_delete {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -360,7 +533,7 @@ sub updates_id_delete {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,

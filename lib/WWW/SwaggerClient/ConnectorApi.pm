@@ -1,5 +1,5 @@
 #
-# Copyright 2015 SmartBear Software
+# Copyright 2016 SmartBear Software
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,11 +30,14 @@ use Log::Any qw($log);
 use WWW::SwaggerClient::ApiClient;
 use WWW::SwaggerClient::Configuration;
 
+use base "Class::Data::Inheritable";
+
+__PACKAGE__->mk_classdata('method_documentation' => {});
+
 sub new {
     my $class   = shift;
-    my $default_api_client = $WWW::SwaggerClient::Configuration::api_client ? $WWW::SwaggerClient::Configuration::api_client  : WWW::SwaggerClient::ApiClient->new;
     my (%self) = (
-        'api_client' => $default_api_client,
+        'api_client' => WWW::SwaggerClient::ApiClient->instance,
         @_
     );
 
@@ -47,23 +50,94 @@ sub new {
 
 }
 
+
 #
 # connectors_get
 #
-# Get all Connectors
+# Get list of Connectors
 # 
-# @param string $name name (optional)
-# @param string $display_name display_name (optional)
-# @param string $image image (optional)
-# @param string $get_it_url get_it_url (optional)
-# @param string $short_description short_description (optional)
-# @param string $long_description long_description (optional)
-# @param boolean $enabled enabled (optional)
-# @param boolean $oauth oauth (optional)
-# @param int $limit limit (optional)
-# @param int $offset offset (optional)
-# @param string $sort sort (optional)
-# @return inline_response_200_5
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+# @param string $name Lowercase system name for the data source (optional)
+# @param string $display_name Pretty display name for the data source (optional)
+# @param string $image URL to the image of the connector logo (optional)
+# @param string $get_it_url URL to a site where one can get this device or application (optional)
+# @param string $short_description Short description of the service (such as the categories it tracks) (optional)
+# @param string $long_description Longer paragraph description of the data provider (optional)
+# @param boolean $enabled Set to 1 if the connector should be returned when listing connectors (optional)
+# @param boolean $oauth Set to 1 if the connector uses OAuth authentication as opposed to username/password (optional)
+# @param int $limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records. (optional)
+# @param int $offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned. (optional)
+# @param string $sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order. (optional)
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'name' => {
+        data_type => 'string',
+        description => 'Lowercase system name for the data source',
+        required => '0',
+    },
+    'display_name' => {
+        data_type => 'string',
+        description => 'Pretty display name for the data source',
+        required => '0',
+    },
+    'image' => {
+        data_type => 'string',
+        description => 'URL to the image of the connector logo',
+        required => '0',
+    },
+    'get_it_url' => {
+        data_type => 'string',
+        description => 'URL to a site where one can get this device or application',
+        required => '0',
+    },
+    'short_description' => {
+        data_type => 'string',
+        description => 'Short description of the service (such as the categories it tracks)',
+        required => '0',
+    },
+    'long_description' => {
+        data_type => 'string',
+        description => 'Longer paragraph description of the data provider',
+        required => '0',
+    },
+    'enabled' => {
+        data_type => 'boolean',
+        description => 'Set to 1 if the connector should be returned when listing connectors',
+        required => '0',
+    },
+    'oauth' => {
+        data_type => 'boolean',
+        description => 'Set to 1 if the connector uses OAuth authentication as opposed to username/password',
+        required => '0',
+    },
+    'limit' => {
+        data_type => 'int',
+        description => 'The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.',
+        required => '0',
+    },
+    'offset' => {
+        data_type => 'int',
+        description => 'OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.',
+        required => '0',
+    },
+    'sort' => {
+        data_type => 'string',
+        description => 'Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ connectors_get } = { 
+    	summary => 'Get list of Connectors',
+        params => $params,
+        returns => 'inline_response_200_15',
+        };
+}
+# @return inline_response_200_15
 #
 sub connectors_get {
     my ($self, %args) = @_;
@@ -87,6 +161,9 @@ sub connectors_get {
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
     # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }# query params
     if ( exists $args{'name'}) {
         $query_params->{'name'} = $self->{api_client}->to_query_value($args{'name'});
     }# query params
@@ -127,7 +204,7 @@ sub connectors_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -136,17 +213,38 @@ sub connectors_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_5', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_15', $response);
     return $_response_object;
     
 }
+
 #
 # connectors_post
 #
 # Store Connector
 # 
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param Connector $body Connector that should be stored (optional)
-# @return inline_response_200_6
+{
+    my $params = {
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'Connector',
+        description => 'Connector that should be stored',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ connectors_post } = { 
+    	summary => 'Store Connector',
+        params => $params,
+        returns => 'inline_response_200_16',
+        };
+}
+# @return inline_response_200_16
 #
 sub connectors_post {
     my ($self, %args) = @_;
@@ -169,7 +267,10 @@ sub connectors_post {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     
     
@@ -180,7 +281,7 @@ sub connectors_post {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -189,17 +290,38 @@ sub connectors_post {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_6', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_16', $response);
     return $_response_object;
     
 }
+
 #
 # connectors_id_get
 #
-# Get Connector
+# Get connector info for user
 # 
 # @param int $id id of Connector (required)
-# @return inline_response_200_6
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Connector',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ connectors_id_get } = { 
+    	summary => 'Get connector info for user',
+        params => $params,
+        returns => 'inline_response_200_16',
+        };
+}
+# @return inline_response_200_16
 #
 sub connectors_id_get {
     my ($self, %args) = @_;
@@ -227,7 +349,10 @@ sub connectors_id_get {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -240,7 +365,7 @@ sub connectors_id_get {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -249,17 +374,43 @@ sub connectors_id_get {
     if (!$response) {
         return;
     }
-    my $_response_object = $self->{api_client}->deserialize('inline_response_200_6', $response);
+    my $_response_object = $self->{api_client}->deserialize('inline_response_200_16', $response);
     return $_response_object;
     
 }
+
 #
 # connectors_id_put
 #
 # Update Connector
 # 
 # @param int $id id of Connector (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
 # @param Connector $body Connector that should be updated (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Connector',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    'body' => {
+        data_type => 'Connector',
+        description => 'Connector that should be updated',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ connectors_id_put } = { 
+    	summary => 'Update Connector',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub connectors_id_put {
@@ -288,7 +439,10 @@ sub connectors_id_put {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -304,7 +458,7 @@ sub connectors_id_put {
     }
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
@@ -317,12 +471,33 @@ sub connectors_id_put {
     return $_response_object;
     
 }
+
 #
 # connectors_id_delete
 #
 # Delete Connector
 # 
 # @param int $id id of Connector (required)
+# @param string $access_token User&#39;s OAuth2 access token (optional)
+{
+    my $params = {
+    'id' => {
+        data_type => 'int',
+        description => 'id of Connector',
+        required => '1',
+    },
+    'access_token' => {
+        data_type => 'string',
+        description => 'User&#39;s OAuth2 access token',
+        required => '0',
+    },
+    };
+    __PACKAGE__->method_documentation->{ connectors_id_delete } = { 
+    	summary => 'Delete Connector',
+        params => $params,
+        returns => 'inline_response_200_2',
+        };
+}
 # @return inline_response_200_2
 #
 sub connectors_id_delete {
@@ -351,7 +526,10 @@ sub connectors_id_delete {
     }
     $header_params->{'Content-Type'} = $self->{api_client}->select_header_content_type('application/json');
 
-    
+    # query params
+    if ( exists $args{'access_token'}) {
+        $query_params->{'access_token'} = $self->{api_client}->to_query_value($args{'access_token'});
+    }
     
     # path params
     if ( exists $args{'id'}) {
@@ -364,7 +542,7 @@ sub connectors_id_delete {
     
 
     # authentication setting, if any
-    my $auth_settings = [];
+    my $auth_settings = [qw(quantimodo_oauth2 )];
 
     # make the API Call
     my $response = $self->{api_client}->call_api($_resource_path, $_method,
