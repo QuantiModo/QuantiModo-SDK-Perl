@@ -1,3 +1,34 @@
+=begin comment
+
+QuantiModo
+
+Welcome to QuantiModo API! QuantiModo makes it easy to retrieve normalized user data from a wide array of devices and applications. [Learn about QuantiModo](https://quantimo.do) or contact us at <api@quantimo.do>.         Before you get started, you will need to: * Sign in/Sign up, and add some data at [https://app.quantimo.do/api/v2/account/connectors](https://app.quantimo.do/api/v2/account/connectors) to try out the API for yourself * Create an app to get your client id and secret at [https://app.quantimo.do/api/v2/apps](https://app.quantimo.do/api/v2/apps) * As long as you're signed in, it will use your browser's cookie for authentication.  However, client applications must use OAuth2 tokens to access the API.     ## Application Endpoints These endpoints give you access to all authorized users' data for that application. ### Getting Application Token Make a `POST` request to `/api/v2/oauth/access_token`         * `grant_type` Must be `client_credentials`.         * `clientId` Your application's clientId.         * `client_secret` Your application's client_secret.         * `redirect_uri` Your application's redirect url.                ## Example Queries ### Query Options The standard query options for QuantiModo API are as described in the table below. These are the available query options in QuantiModo API: <table>            <thead>                <tr>                    <th>Parameter</th>                    <th>Description</th>                </tr>            </thead>            <tbody>                <tr>                    <td>limit</td>                    <td>The LIMIT is used to limit the number of results returned.  So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.</td>                </tr>                <tr>                    <td>offset</td>                    <td>Suppose you wanted to show results 11-20. You'd set the    offset to 10 and the limit to 10.</td>                </tr>                <tr>                    <td>sort</td>                    <td>Sort by given field. If the field is prefixed with '-', it    will sort in descending order.</td>                </tr>            </tbody>        </table>         ### Pagination Conventions Since the maximum limit is 200 records, to get more than that you'll have to make multiple API calls and page through the results. To retrieve all the data, you can iterate through data by using the `limit` and `offset` query parameters.For example, if you want to retrieve data from 61-80 then you can use a query with the following parameters,         `/v2/variables?limit=20&offset=60`         Generally, you'll be retrieving new or updated user data. To avoid unnecessary API calls, you'll want to store your last refresh time locally.  Initially, it should be set to 0. Then whenever you make a request to get new data, you should limit the returned results to those updated since your last refresh by appending append         `?lastUpdated=(ge)&quot2013-01-D01T01:01:01&quot`         to your request.         Also for better pagination, you can get link to the records of first, last, next and previous page from response headers: * `Total-Count` - Total number of results for given query * `Link-First` - Link to get first page records * `Link-Last` - Link to get last page records * `Link-Prev` - Link to get previous records set * `Link-Next` - Link to get next records set         Remember, response header will be only sent when the record set is available. e.g. You will not get a ```Link-Last``` & ```Link-Next``` when you query for the last page.         ### Filter operators support API supports the following operators with filter parameters: <br> **Comparison operators**         Comparison operators allow you to limit results to those greater than, less than, or equal to a specified value for a specified attribute. These operators can be used with strings, numbers, and dates. The following comparison operators are available: * `gt` for `greater than` comparison * `ge` for `greater than or equal` comparison * `lt` for `less than` comparison * `le` for `less than or equal` comparison         They are included in queries using the following format:         `(<operator>)<value>`         For example, in order to filter value which is greater than 21, the following query parameter should be used:         `?value=(gt)21` <br><br> **Equals/In Operators**         It also allows filtering by the exact value of an attribute or by a set of values, depending on the type of value passed as a query parameter. If the value contains commas, the parameter is split on commas and used as array input for `IN` filtering, otherwise the exact match is applied. In order to only show records which have the value 42, the following query should be used:         `?value=42`         In order to filter records which have value 42 or 43, the following query should be used:         `?value=42,43` <br><br> **Like operators**         Like operators allow filtering using `LIKE` query. This operator is triggered if exact match operator is used, but value contains `%` sign as the first or last character. In order to filter records which category that start with `Food`, the following query should be used:         `?category=Food%` <br><br> **Negation operator**         It is possible to get negated results of a query by prefixed the operator with `!`. Some examples:         `//filter records except those with value are not 42 or 43`<br> `?value=!42,43`         `//filter records with value not greater than 21`<br> `?value=!(ge)21` <br><br> **Multiple constraints for single attribute**         It is possible to apply multiple constraints by providing an array of query filters:         Filter all records which value is greater than 20.2 and less than 20.3<br> `?value[]=(gt)20.2&value[]=(lt)20.3`         Filter all records which value is greater than 20.2 and less than 20.3 but not 20.2778<br> `?value[]=(gt)20.2&value[]=(lt)20.3&value[]=!20.2778`<br><br> 
+
+OpenAPI spec version: 2.0.6
+
+Generated by: https://github.com/swagger-api/swagger-codegen.git
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+=end comment
+
+=cut
+
+#
+# NOTE: This class is auto generated by the swagger code generator program. 
+# Do not edit the class manually.
+# Ref: https://github.com/swagger-api/swagger-codegen
+#
 package WWW::SwaggerClient::ApiClient;
 
 use strict;
@@ -20,17 +51,21 @@ use Module::Runtime qw(use_module);
 
 use WWW::SwaggerClient::Configuration;
 
-sub new
+use base 'Class::Singleton';
+
+sub _new_instance
 {
     my $class = shift;
     my (%args) = (
         'ua' => LWP::UserAgent->new,
-        'base_url' => 'https://app.quantimo.do/api/v2',
+        'base_url' => 'https://app.quantimo.do/api',
         @_
     );
   
     return bless \%args, $class;
 }
+
+sub _cfg {'WWW::SwaggerClient::Configuration'}
 
 # Set the user agent of the API client
 #
@@ -118,10 +153,12 @@ sub call_api {
     $self->{ua}->timeout($self->{http_timeout} || $WWW::SwaggerClient::Configuration::http_timeout); 
     $self->{ua}->agent($self->{http_user_agent} || $WWW::SwaggerClient::Configuration::http_user_agent);
     
+    $log->debugf("REQUEST: %s", $_request->as_string);
     my $_response = $self->{ua}->request($_request);
+    $log->debugf("RESPONSE: %s", $_response->as_string);
   
     unless ($_response->is_success) {
-        croak("API Exception(".$_response->code."): ".$_response->message);
+        croak(sprintf "API Exception(%s): %s\n%s", $_response->code, $_response->message, $_response->content);
     }
        
     return $_response->content;
@@ -286,38 +323,99 @@ sub select_header_content_type
 # @return string API key with the prefix
 sub get_api_key_with_prefix
 {
-    my ($self, $api_key) = @_;
-    if ($WWW::SwaggerClient::Configuration::api_key_prefix->{$api_key}) {
-        return $WWW::SwaggerClient::Configuration::api_key_prefix->{$api_key}." ".$WWW::SwaggerClient::Configuration::api_key->{$api_key};
-    } else {
-        return $WWW::SwaggerClient::Configuration::api_key->{$api_key};
-    }
-}
+	my ($self, $key_name) = @_;
 
-# update hearder and query param based on authentication setting
+	my $api_key = $WWW::SwaggerClient::Configuration::api_key->{$key_name};
+	
+	return unless $api_key;
+	
+	my $prefix = $WWW::SwaggerClient::Configuration::api_key_prefix->{$key_name};
+	return $prefix ? "$prefix $api_key" : $api_key;
+}	
+
+# update header and query param based on authentication setting
 #  
 # @param array $headerParams header parameters (by ref)
 # @param array $queryParams query parameters (by ref)
 # @param array $authSettings array of authentication scheme (e.g ['api_key'])
 sub update_params_for_auth {
     my ($self, $header_params, $query_params, $auth_settings) = @_;
-  
-    return if (!defined($auth_settings) || scalar(@$auth_settings) == 0);
+    
+    return $self->_global_auth_setup($header_params, $query_params) 
+    	unless $auth_settings && @$auth_settings;
   
     # one endpoint can have more than 1 auth settings
     foreach my $auth (@$auth_settings) {
         # determine which one to use
         if (!defined($auth)) {
+            # TODO show warning about auth setting not defined
         }
-        elsif ($auth eq 'quantimodo_oauth2') {
+        elsif ($auth eq 'oauth2') {
             
-            # TODO support oauth
+            if ($WWW::SwaggerClient::Configuration::access_token) {
+                $header_params->{'Authorization'} = 'Bearer ' . $WWW::SwaggerClient::Configuration::access_token;
+            }
         }
-        
+elsif ($auth eq 'quantimodo_oauth2') {
+            
+            if ($WWW::SwaggerClient::Configuration::access_token) {
+                $header_params->{'Authorization'} = 'Bearer ' . $WWW::SwaggerClient::Configuration::access_token;
+            }
+        }
+elsif ($auth eq 'basicAuth') {
+            
+            if ($WWW::SwaggerClient::Configuration::username || $WWW::SwaggerClient::Configuration::password) {
+                $header_params->{'Authorization'} = 'Basic ' . encode_base64($WWW::SwaggerClient::Configuration::username . ":" . $WWW::SwaggerClient::Configuration::password);
+            }
+        }
+elsif ($auth eq 'internalApiKey') {
+            
+            my $api_key = $self->get_api_key_with_prefix('api_key');
+            if ($api_key) {
+                $header_params->{'api_key'} = $api_key;
+            }
+        }
         else {
-            # TODO show warning about security definition not found
+       	    # TODO show warning about security definition not found
         }
     }
+}
+
+# The endpoint API class has not found any settings for auth. This may be deliberate, 
+# in which case update_params_for_auth() will be a no-op. But it may also be that the 
+# OpenAPI Spec does not describe the intended authorization. So we check in the config for any 
+# auth tokens and if we find any, we use them for all endpoints; 
+sub _global_auth_setup {
+	my ($self, $header_params, $query_params) = @_; 
+	
+	my $tokens = $self->_cfg->get_tokens;
+	return unless keys %$tokens;
+	
+	# basic
+	if (my $uname = delete $tokens->{username}) {
+		my $pword = delete $tokens->{password};
+		$header_params->{'Authorization'} = 'Basic '.encode_base64($uname.":".$pword);
+	}
+	
+	# oauth
+	if (my $access_token = delete $tokens->{access_token}) {
+		$header_params->{'Authorization'} = 'Bearer ' . $access_token;
+	}
+	
+	# other keys
+	foreach my $token_name (keys %$tokens) {
+		my $in = $tokens->{$token_name}->{in};
+		my $token = $self->get_api_key_with_prefix($token_name);
+		if ($in eq 'head') {
+			$header_params->{$token_name} = $token;
+		}
+		elsif ($in eq 'query') {
+			$query_params->{$token_name} = $token;
+		}
+		else {
+			die "Don't know where to put token '$token_name' ('$in' is not 'head' or 'query')";
+		}
+	}
 }
 
 
